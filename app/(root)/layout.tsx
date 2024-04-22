@@ -38,11 +38,12 @@ export default function RootLayout({
         {children}
         </div>
         </section>
+        {/* @ts-ignore */}
         <RightSidebar/>
       </main>
       <BottomSidebar/>
         </body>
     </html>
-    </ClerkProvider>
+   </ClerkProvider>
   )
 }

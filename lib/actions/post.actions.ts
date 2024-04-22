@@ -7,7 +7,7 @@ import Post from "../models/post.models";
 import User from "../models/user.models";
 interface props {
   text: string;
-  author: string;
+  author: string | undefined;
   communityId: string | null;
   path: string;
 }
@@ -36,30 +36,35 @@ export interface PostData{
       id: string;
       image: string;
       name: string;
-    };
+    } ;
   }[];
   
 }
 export async function createPost({ text, author, communityId, path }: props) {
   connectDB();
   try {
-    const communityIdObject = await Community.findOne(
-      { id: communityId },
-      { _id: 1 }
-    );
-    let createPost = await Post.create({
-      text,
-      author,
-      community: communityIdObject,
-    });
-    await User.findByIdAndUpdate(author, { $push: { posts: createPost._id } });
-    console.log("Post created ❤️‍🔥");
-    if (communityIdObject) {
-      // Update Community model
-      await Community.findByIdAndUpdate(communityIdObject, {
-        $push: { posts: createPost._id },
+    if(author){
+
+      const communityIdObject = await Community.findOne(
+        { id: communityId },
+        { _id: 1 }
+      );
+      
+      let createPost = await Post.create({
+        text,
+        author,
+        community: communityIdObject,
       });
-    }
+     let post= await User.findByIdAndUpdate(author, { $push: { posts: createPost._id } });
+      console.log("Post created ❤️‍🔥");
+      if (communityIdObject) {
+        // Update Community model
+        await Community.findByIdAndUpdate(communityIdObject, {
+          $push: { posts: createPost._id },
+        });
+        return post;
+      }
+      }
     revalidatePath(path);
   } catch (error: any) {
     console.log(`failed to create posts: ${error.message}`);

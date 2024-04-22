@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import * as z  from 'zod'
 import { useOrganization } from '@clerk/nextjs'
 import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PostValidation } from '@/lib/validations/post'
 
@@ -42,12 +43,20 @@ let content=p.get('p')
           name="post"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='py-4 flex gap-4 text-white'>
+              <FormLabel className='py-4 flex justify-between text-white'>
+                <div className=" flex gap-4">
+                
                 <Image src={image} alt={''} height={48} width={48} className={'rounded-full object-contain'}/>
                 <div className=" flex flex-col gap-1">
                   <h4 className=' text-body-bold'>{name}</h4>
                   <p className=' text-gray-500 text-small-regular'>@{username}</p>
                 </div>
+              </div>
+                <div className=" flex flex-col gap-1">
+                <Input type="file" className=' bg-transparent w-full'>
+                <Image src={'/assets/createimg.svg'} alt={''} height={30} width={30} className={'rounded-full object-contain'}/>
+           </Input>    
+            </div>
               </FormLabel>
               <FormControl>
                 <Textarea  placeholder="What are you thinking?" {...field} className=' account-form_input ' rows={8} />

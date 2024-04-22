@@ -13,6 +13,7 @@ interface props{
     username: string,
     name: string,
     bio: string,
+    sport:String;
     image: string,
     path: string
 }
@@ -23,6 +24,7 @@ export interface UserData{
     name: string,
     bio: string,
     image: string,
+    sport:String;
     posts:string[],
     communities:string[],
     onboarding:boolean,
@@ -42,13 +44,13 @@ export interface Result {
     posts: PostData[];
   }
 export async function updateUser (
-    { userId, username, name, bio, image, path}:props
+    { userId, username,sport, name, bio, image, path}:props
 ) : Promise<void> {
     connectDB();
     try {
     await User.findOneAndUpdate(
         {id: userId},
-        {username: username, bio: bio, name: name, image: image, onboarding:true},
+        {username: username, bio: bio,sport:sport, name: name, image: image, onboarding:true},
         {upsert: true}
     )
     console.log("Successfully updated user")

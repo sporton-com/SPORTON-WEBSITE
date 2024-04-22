@@ -2,7 +2,8 @@ import React from 'react'
 import { currentUser } from '@clerk/nextjs'
 import { fetchUser } from '@/lib/actions/user.actions';
 import { redirect } from 'next/navigation';
-import NewPost from '@/components/forms/NewPost';
+// import NewPost from '@/components/forms/NewPost';
+import PostForm from '@/components/forms/PostForm';
 const Page = async () => {
     let user = await currentUser();
     if (!user) return redirect('/sign-in');
@@ -12,8 +13,10 @@ const Page = async () => {
 
   return (
     <div >
-      
-        <NewPost userId={`${userInfo?._id}`} image={userInfo?.image} name={userInfo?.name} username={userInfo?.username} />
+      <PostForm path={''} id={'userInfo._id'} image={userInfo?.image}
+name={userInfo?.name}
+username={userInfo?.username}/>
+        {/* <NewPost userId={`${userInfo?._id}`} image={userInfo?.image} name={userInfo?.name} username={userInfo?.username} /> */}
     </div>
   )
 }

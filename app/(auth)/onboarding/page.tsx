@@ -1,7 +1,7 @@
 import { SignOutbutton } from "@/components/cards/SignOutbutton";
 import AccountProfile from "@/components/forms/AccountProfile";
 import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
 interface usData {
@@ -10,7 +10,7 @@ interface usData {
   username: string | null | undefined;
   name: string;
   bio: string;
-  sport: String;
+  sport: string;
   image: string | undefined;
   type: string;
 }

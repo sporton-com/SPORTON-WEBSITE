@@ -37,7 +37,7 @@ interface props {
     username: string | null | undefined;
     name: string;
     bio: string;
-    sport: String;
+    sport: string ;
     image: string | undefined;
     type: string;
   };
@@ -54,7 +54,7 @@ const AccountProfile = ({ userData }: props) => {
       name: userData?.name || "",
       username: userData?.username || "",
       bio: userData?.bio || "",
-      // sport: userData?.sport || "",
+      sport: userData.sport ||"",
     },
   });
 
@@ -76,6 +76,8 @@ const AccountProfile = ({ userData }: props) => {
     }
   }
   async function onSubmit(values: z.infer<typeof UserValidation>) {
+
+    console.log("Submit update user ");
     try {
       console.log("Submit update user ");
       const blob = values.profile_photo;
@@ -86,8 +88,6 @@ const AccountProfile = ({ userData }: props) => {
           values.profile_photo = imageRes[0].fileUrl;
         }
       }
-      // userData.type === "user"
-      //   ?
          await updateUser({
             userId: userData.id,
             username: values.username,
@@ -97,14 +97,6 @@ const AccountProfile = ({ userData }: props) => {
             image: values.profile_photo,
             path: pathname,
           })
-        // : await updateCommunityInfo({
-        //     communityId: userData.objectID,
-        //     username: values.username,
-        //     name: values.name,
-        //     bio: values.bio,
-        //     image: values.profile_photo,
-        //     path: pathname,
-        //   });
       if (pathname.includes("/profile/edit")) {
         router.back();
       } else {
@@ -213,20 +205,19 @@ const AccountProfile = ({ userData }: props) => {
           control={form.control}
           name="sport"
           render={({ field }) => (
-            <Select {...field}>
-           
+            <Select name={field.name} disabled={field.disabled}  onValueChange={field.onChange}   defaultValue={field.value}>
               <SelectTrigger className=" account-form_input">
                 <SelectValue placeholder="Select your sport" />
               </SelectTrigger>
               <SelectContent className="account-form_input">
                 <SelectGroup>
                   <SelectLabel>Select your sport</SelectLabel>
-                  <SelectItem value="apple">Football</SelectItem>
-                  <SelectItem value="banana">Running</SelectItem>
-                  <SelectItem value="blueberry">Tennis</SelectItem>
-                  <SelectItem value="grapes">Basketball</SelectItem>
-                  <SelectItem value="pineapple">Swimming</SelectItem>
-                  <SelectItem value="pineapple">Karate</SelectItem>
+                  <SelectItem value="Football">Football</SelectItem>
+                  <SelectItem value="Running">Running</SelectItem>
+                  <SelectItem value="Tennis">Tennis</SelectItem>
+                  <SelectItem value="Basketball">Basketball</SelectItem>
+                  <SelectItem value="Swimming">Swimming</SelectItem>
+                  <SelectItem value="Karate">Karate</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

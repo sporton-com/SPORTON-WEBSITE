@@ -1,6 +1,6 @@
 'use client'
 import * as z from "zod";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import { useForm } from "react-hook-form";
 import { useRouter,useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +28,8 @@ import  FileUploader  from "@/components/shared/FileUploader";
 // import   Loader  from "@/components/shared/Loader";
 import { PostValidation2 } from '../../lib/validations/post';
 import { createPost } from "@/lib/actions/post.actions";
+import { isBase64Image } from "@/lib/utils";
+import { useUploadThing } from "@/uploadthing";
 
 type PostFormProps = {
   post?: any;
@@ -54,31 +56,38 @@ const PostForm =  ({ post, action,path,id ,image,
       tags: post ? post.tags.join(",") : "",
     },
   });
+  let { startUpload } = useUploadThing("media");
   let SearchParams= useSearchParams()
   let sh=SearchParams.get('s')
   let [show,setShow]= useState(sh?true:false)
+  const [files, setFiles] = useState<File[]>([]);
   // Query
-
+  function handleImageChange(
+    e: File[],
+    fieldChange: (value: string) => void
+  ) {
+    let readfile = new FileReader();
+    if (e && e.length > 0) {
+      const file = e[0];
+      setFiles(Array.from(e));
+      if (!file.type.includes("image")) return;
+      readfile.onload = async (e) => {
+        const imageDataUrl = e.target?.result?.toString() || "";
+        fieldChange(imageDataUrl);
+      };
+      readfile.readAsDataURL(file);
+    }
+  }
   // Handler
   const handleSubmit = async (value: z.infer<typeof PostValidation2>) => {
-    // ACTION = UPDATE
-    // if (post && action === "Update") {
-    //   const updatedPost = await updatePost({
-    //     ...value,
-    //     postId: post.$id,
-    //     imageId: post.imageId,
-    //     imageUrl: post.imageUrl,
-    //   });
-
-    //   if (!updatedPost) {
-    //     toast({
-    //       title: `${action} post failed. Please try again.`,
-    //     });
-    //   }
-    //   return navigate.push(`/posts/${post.$id}`);
-    // }
-
-    // ACTION = CREATE
+    const blob = value.post_photo;
+    const hasImage = isBase64Image(blob);
+    if (hasImage) {
+      const imageRes = await startUpload(files);
+      if (imageRes && imageRes[0].fileUrl) {
+        value.post_photo = imageRes[0].fileUrl;
+      }
+    }
     const newPost = await createPost({
         //   ...value,
         text:'',
@@ -150,7 +159,9 @@ const PostForm =  ({ post, action,path,id ,image,
               
               <FormControl>
                 <FileUploader
-                  fieldChange={field.onChange}
+                  fieldChange={(e:File[])=>
+                    handleImageChange(e,field.onChange)
+                  }
                   mediaUrl={post?.imageUrl}
                 />
               </FormControl>

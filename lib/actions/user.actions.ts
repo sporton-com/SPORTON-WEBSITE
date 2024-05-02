@@ -1,7 +1,7 @@
 "use server";
 
 import { connectDB } from "@/mongoose";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { FilterQuery, SortOrder } from "mongoose";
 import { revalidatePath } from "next/cache";
 import Community from "../models/community.model";
@@ -24,7 +24,7 @@ export interface UserData{
     name: string,
     bio: string,
     image: string,
-    sport:String;
+    sport:string;
     posts:string[],
     communities:string[],
     onboarding:boolean,
@@ -65,17 +65,18 @@ export async function fetchUser (userId:string | undefined) {
     connectDB();
     try {
         let user :UserData|null =  await User.findOne({id:userId})
-        .populate({
-            path: 'friends',
-            model:User,
-            select:'id image name username',
-          }).lean()
+        // .populate({
+        //     path: 'friends',
+        //     model:User,
+        //     select:'id image name username',
+        //   }).lean()
         
-        console.log(user)
+        
         if(!user){
             console.log("user not found");
+            console.log("found user with id ")
         }
-        console.log("found user with id ")
+        console.log(user)
     return user;
     } catch (error:any) {
         console.log(`not found user: ${error.message}`);

@@ -25,7 +25,7 @@ export interface UserData{
     bio: string,
     image: string,
     sport:string;
-    posts:string[],
+    posts:PostData[],
     communities:string[],
     onboarding:boolean,
     friends:{
@@ -65,11 +65,11 @@ export async function fetchUser (userId:string | undefined) {
     connectDB();
     try {
         let user :UserData|null =  await User.findOne({id:userId})
-        // .populate({
-        //     path: 'friends',
-        //     model:User,
-        //     select:'id image name username',
-        //   }).lean()
+        .populate({
+            path: 'friends',
+            model:User,
+            select:'id image name username',
+          }).lean()
         
         
         if(!user){
@@ -121,11 +121,6 @@ export async function fetchUserPosts (userId:string) {
                     model:User,
                     select:'id name image'
                 }
-            },
-            {
-                path:'community',
-                model: Community,
-                select:'id name image'
             }
         ]
         }).lean()

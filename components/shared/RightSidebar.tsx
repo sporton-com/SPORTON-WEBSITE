@@ -1,4 +1,4 @@
-import { fetchCommunities } from "@/lib/actions/community.actions";
+// "use server"
 import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { SugCard } from "../cards/sugCard";
@@ -9,11 +9,6 @@ const RightSidebar = async () => {
   let users = await fetchAllUser({
     searchString: "",
     pageNum: 1,
-    pageSize: 30,
-  });
-  let communities = await fetchCommunities({
-    searchString: "",
-    pageNumber: 1,
     pageSize: 30,
   });
 

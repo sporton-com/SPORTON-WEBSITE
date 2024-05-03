@@ -13,7 +13,7 @@ const Page = async () => {
 
   return (
     <div >
-      <PostForm path={''} id={'userInfo._id'} image={userInfo?.image}
+      <PostForm action='Create' id={userInfo._id} image={userInfo?.image}
 name={userInfo?.name}
 username={userInfo?.username}/>
         {/* <NewPost userId={`${userInfo?._id}`} image={userInfo?.image} name={userInfo?.name} username={userInfo?.username} /> */}

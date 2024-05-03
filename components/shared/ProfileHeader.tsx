@@ -133,7 +133,7 @@ const ProfileHeader = ({
         {type === "User" && userId === userAuthId ? (
           <div className="max-sm:flex hidden ">
             <SignedIn>
-              <SignOutButton signOutCallback={() => router.push("/sign-in")}>
+              <SignOutButton redirectUrl="/sign-in">
                 <div className="flex gap-4 cursor-pointer">
                   <Image
                     src="/assets/logout.svg"
@@ -156,7 +156,6 @@ const ProfileHeader = ({
                   border: "1px solid #ffffff",
                   opacity: ".6",
                 }}>
-                  
                 +{friends?.length}
               </p>}
           {friends && 

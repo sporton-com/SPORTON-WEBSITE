@@ -7,7 +7,7 @@ import { fetchUser, UserData } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-
+import { fetchUserPosts } from "@/lib/actions/user.actions";
 const Page = async ({params}:{params:{id:string}}) => {
   let user = await currentUser();
   if (!user) return redirect('/sign-in');
@@ -15,7 +15,8 @@ const Page = async ({params}:{params:{id:string}}) => {
   if (!userInfo?.onboarding) redirect("/onboarding");
   let MyInfo = await fetchUser(user.id)
   let friends= params.id===user.id?MyInfo?.friends:userInfo?.friends;
-  
+  let result = await fetchUserPosts(userInfo?.id);
+  let postsAchievements=result?.posts?.filter(e=>e?.isAchievement==="1")
   return (
     <section className="">
       <ProfileHeader
@@ -26,7 +27,7 @@ const Page = async ({params}:{params:{id:string}}) => {
         friends={friends}
         name={userInfo.name}
         username={userInfo.username}
-        image={userInfo.image}
+        image={userInfo?.image}
         bio={userInfo.bio}
         type={'User'}
       />
@@ -45,7 +46,7 @@ const Page = async ({params}:{params:{id:string}}) => {
                 <p className=" max-sm:hidden">{tab.label}</p>
              
                   <p className=" bg-gray-700 rounded-full px-2 text-base-regular">
-                    {tab.label === "Posts" ? (userInfo?.posts?.length):tab.label === "Replies"?(friends?.length):null}
+                    {tab.label === "Posts" ? (userInfo?.posts?.length):tab.label === "Friends"?(friends?.length):postsAchievements?.length}
                   </p>
 
               </TabsTrigger>
@@ -56,10 +57,11 @@ const Page = async ({params}:{params:{id:string}}) => {
               key={`content-${tab.label}`}
               value={tab.value}
               className="w-full mt-8 text-light-1">
-                {tab.value==='replies' ?
+                {tab.value==='friends' ?
                 <section className="flex flex-col gap-10">
                     {userInfo.friends.map((friend:any) =>
                         <UserCard
+                        key={friend.id}
                         id={friend.id}
                         name={friend.name}
                         username={friend.username}
@@ -68,10 +70,16 @@ const Page = async ({params}:{params:{id:string}}) => {
                         />
                         )}
                 </section>
-                :
-                 /* @ts-ignore */ 
+                :tab.value==='posts'?
               <PostTab
               userId={userInfo._id}
+                result={result}
+                currentUserId={user?.id}
+                accountId={userInfo?.id}
+                accountType="User"
+              />:<PostTab
+              userId={userInfo._id}
+                result={{...result,posts:postsAchievements}}
                 currentUserId={user?.id}
                 accountId={userInfo?.id}
                 accountType="User"

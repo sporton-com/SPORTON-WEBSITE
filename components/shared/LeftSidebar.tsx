@@ -27,7 +27,7 @@ const LeftSidebar = () => {
         </div>
         <div className="px-10">
           <SignedIn>
-            <SignOutButton signOutCallback={()=>router.push('/sign-in')}>
+            <SignOutButton redirectUrl="/sign-in">
               <div className="flex gap-4 cursor-pointer">
                 <Image src='/assets/logout.svg' alt='logout' width={24} height={24}/>
                 <span className=' text-white  max-lg:hidden'>logout</span>

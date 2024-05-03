@@ -7,7 +7,7 @@ import { dark } from "@clerk/themes";
 const Topbar = () => {
   let path=usePathname();
   let show=path.split('/').pop()==='new-post';
-  console.log(show,path.split('/'))
+  // console.log(show,path.split('/'))
   return (show?<></>:
     <section className='topbar'>
         <div className='container'>

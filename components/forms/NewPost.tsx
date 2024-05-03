@@ -31,7 +31,7 @@ let content=p.get('p')
    
    async function onSubmit(values: z.infer<typeof PostValidation>) {
     
-          await createPost({text:values.post,author:userId,communityId:organization?organization.id:null,path:pathname})
+          await createPost({text:values.post,author:userId})
           router.push('/')
         }
   return (

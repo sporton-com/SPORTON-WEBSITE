@@ -1,6 +1,6 @@
 import Search from "@/components/shared/Search";
 import { fetchUser, UserData } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 const Page = async() => {
   let user = await currentUser();

@@ -2,14 +2,13 @@ import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
   text: { type: String, required: true },
+  image: { type: String },
+  video: { type: String },
+  isAchievement: { type: String },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
-  },
-  community: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Community",
   },
   createdAt: {
     type: Date,

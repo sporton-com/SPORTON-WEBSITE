@@ -6,13 +6,14 @@ import Community from "../models/community.model";
 import Post from "../models/post.models";
 import User from "../models/user.models";
 interface props {
+  isAchievement:string;
   text: string;
+  image?: string;
+  video?: string;
   author: string | undefined;
-  communityId: string | null;
-  path: string;
 }
 export interface PostData{
-
+  isAchievement:string;
   _id: string;
   parentId: string | null;
   currentId: String | undefined;
@@ -24,6 +25,8 @@ export interface PostData{
   };
   react:string[];
   text: string;
+  image: string;
+  video: string;
   community: {
     id: string;
     name: string;
@@ -40,32 +43,22 @@ export interface PostData{
   }[];
   
 }
-export async function createPost({ text, author, communityId, path }: props) {
+export async function createPost({ text,image,video, author,isAchievement}: props) {
   connectDB();
   try {
     if(author){
 
-      const communityIdObject = await Community.findOne(
-        { id: communityId },
-        { _id: 1 }
-      );
       
       let createPost = await Post.create({
         text,
-        author,
-        community: communityIdObject,
+        author,image,video,isAchievement
       });
      let post= await User.findByIdAndUpdate(author, { $push: { posts: createPost._id } });
       console.log("Post created ❤️‍🔥");
-      if (communityIdObject) {
-        // Update Community model
-        await Community.findByIdAndUpdate(communityIdObject, {
-          $push: { posts: createPost._id },
-        });
         return post;
+      
       }
-      }
-    revalidatePath(path);
+    revalidatePath('/');
   } catch (error: any) {
     console.log(`failed to create posts: ${error.message}`);
   }
@@ -208,6 +201,8 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
           $group: {
             _id: '$_id',
             text: { $first: '$text' },
+            video: { $first: '$video' },
+            image: { $first: '$image' },
             author: { $first: '$author' },
             react:{$first:'$react'},
             createdAt:{$first:'$createdAt'},

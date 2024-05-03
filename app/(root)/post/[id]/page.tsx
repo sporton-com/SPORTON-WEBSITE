@@ -16,7 +16,7 @@ const Page = async({params}:{params:{id:string}}) => {
   return (
     <section className=" relative">
      {post && (<div className="">
-      <CardPost react={post.react} id={post._id} parentId={post.parentId} userId={userInfo?._id} currentId={user.id} author={post.author} content={post.text}
+      <CardPost react={post.react} video={post?.video} image={post?.image} id={post._id} parentId={post.parentId} userId={userInfo?._id} currentId={user.id} author={post.author} content={post.text}
       createdAt={post.createdAt} community={post.community}  comments={post.children} />
       </div>)}
       {post &&

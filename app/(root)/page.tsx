@@ -18,6 +18,8 @@ export default async function Home() {
           <CardPost
             key={post?._id}
             id={post?._id}
+            video={post?.video}
+            image={post?.image}
             parentId={post?.parentId}
             react={post.react}
             currentId={user?.id}

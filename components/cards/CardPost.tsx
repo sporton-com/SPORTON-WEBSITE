@@ -6,7 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface parms {
+  isAchievement?:string;
   id: string;
+  image?: string;
+  video?: string;
   userId: string|undefined;
   parentId: string | null;
   currentId: String | undefined;
@@ -18,7 +21,7 @@ interface parms {
   };
   react:string[]|undefined;
   content: string;
-  community: {
+  community?: {
     id: string;
     name: string;
     image: string;
@@ -38,6 +41,7 @@ interface parms {
 const CardPost = ({
   id,
   parentId,
+  isAchievement,
   currentId,userId,
   author,
   content,
@@ -46,6 +50,8 @@ const CardPost = ({
   createdAt,
   comments,
   isComment,
+  video,
+  image
 }: parms) => {
   let pathname= usePathname();
   let commentsFilter=comments.filter(e=>e.author._id!==undefined)
@@ -62,7 +68,7 @@ const CardPost = ({
       }`}>
       <div className=" flex items-start justify-between">
         <div className=" flex w-full flex-1 flex-row gap-4 ">
-          <div className=" text-white flex flex-col items-center ">
+        <div className=" text-white hidden flex-col items-center lg:flex ">
             <Link href={"/profile/" + author.id} className="relative w-11 h-11">
               <Image
                 src={author.image}
@@ -74,12 +80,43 @@ const CardPost = ({
             <div className="thread-card_bar" />
           </div>
           <div className=" text-white flex flex-col gap-4 w-full ">
+            <div className="flex w-full flex-1 flex-row gap-4 ">
+          <div className=" text-white flex flex-col items-center lg:hidden ">
+            <Link href={"/profile/" + author.id} className="relative w-11 h-11">
+              <Image
+                src={author.image}
+                alt={author.name}
+                fill
+                className="cursor-pointer rounded-full"
+              />
+            </Link>
+            <div className="thread-card_bar" />
+          </div>
+          <div className="">
             <Link
               href={"/profile/" + author.id}
-              className=" cursor-pointer w-full">
+              className=" cursor-pointer w-full flex gap-4 ">
               <h6>{author.name}</h6>
+              {isAchievement==="1"?
+              <Image
+                src={"/assets/achievement.svg"}
+                alt={"achievement"}
+                height={24}
+                  width={24}
+                className="object-contain"
+              />:null}
+
             </Link>
             <p className=" text-small-regular text-light-2 ">{content}</p>
+                </div>
+                </div>
+            {image &&
+            <img
+          src={image}
+          alt="post image"
+          className="h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5"
+        />}
+        {video&&<video src={video} controls autoPlay  className="h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5"/>}
             <div className={`${isComment && "mb-10"} flex flex-col gap-3`}>
               <div className="mt-5 flex flex-row items-center gap-6">
                 <Image

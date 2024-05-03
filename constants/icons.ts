@@ -20,21 +20,21 @@ export const SidebarLinks = [
       label: "new post",
     },
     {
-      imgURL: "/assets/community.svg",
-      route: "/communities",
-      label: "Communities",
-    },
-    {
       imgURL: "/assets/user.svg",
       route: "/profile",
       label: "Profile",
+    },
+    {
+      imgURL: "/assets/settings.svg",
+      route: "/settings",
+      label: "Settings",
     },
   ];
   
   export const profileTabs = [
     { value: "posts", label: "Posts", icon: "/assets/reply.svg" },
-    { value: "replies", label: "Replies", icon: "/assets/members.svg" },
-    { value: "tagged", label: "Tagged", icon: "/assets/tag.svg" },
+    { value: "friends", label: "Friends", icon: "/assets/members.svg" },
+    { value: "achievements", label: "Achievements", icon: "/assets/achievement.svg" },
   ];
   
   export const communityTabs = [

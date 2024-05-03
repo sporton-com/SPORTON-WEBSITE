@@ -25,6 +25,7 @@ const Page = async ({params}:{params:{id:string}}) => {
         myId={MyInfo?._id}
         userAuthId={user.id}
         friends={friends}
+        sport={userInfo.sport}
         name={userInfo.name}
         username={userInfo.username}
         image={userInfo?.image}

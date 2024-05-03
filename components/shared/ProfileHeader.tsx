@@ -9,6 +9,7 @@ interface props {
   accountId: string;
   userAuthId: string | undefined;
   name: string;
+  sport:string;
   username: string;
   image: string;
   bio: string;
@@ -25,6 +26,7 @@ interface props {
 }
 const ProfileHeader = ({
   accountId,
+  sport,
   userAuthId,
   name,
   username,
@@ -72,7 +74,12 @@ const ProfileHeader = ({
               className="rounded-full object-cover shadow-2xl"
             />
             <div className="flex flex-col gap-3">
+            <div className="flex gap-3">
               <h3 className="text-white">{name}</h3>
+              ||
+              <h3 className="text-white">{sport}</h3>
+
+            </div>
               <p className=" text-subtle-medium text-gray-1">@{username}</p>
             </div>
           </div>

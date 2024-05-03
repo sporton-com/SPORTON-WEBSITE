@@ -17,6 +17,7 @@ export default async function Home() {
         {FPosts?.posts.map((post) => (
           <CardPost
             key={post?._id}
+            isAchievement={post?.isAchievement}
             id={post?._id}
             video={post?.video}
             image={post?.image}

@@ -5,13 +5,14 @@ import React from 'react'
 import { Button } from '../ui/button'
 interface props{
     id:string,
+    sport:string,
     name:string,
     username:string,
     image:string,
     personType:string
     
 }
-const UserCard = ({id,name,username,image,personType}:props) => {
+const UserCard = ({id,name,username,image,personType,sport}:props) => {
     let navigate= useRouter();
   return (
   <article className='user-card'>
@@ -19,6 +20,7 @@ const UserCard = ({id,name,username,image,personType}:props) => {
         <Image src={image} alt={name} height={48} width={48} className=' rounded-full object-contain'/>
             
             <div className=" flex-1 text-ellipsis">
+            <Image src={'/'+sport.split(' ')[0]+".svg"} alt={sport}  height={30} width={30} className="-translate-x-4"/>
                 <h3 className=' text-base-semibold text-light-1'>{name}</h3>
                 <p className=" text-small-semibold text-gray-1">@{username}</p>
             </div>

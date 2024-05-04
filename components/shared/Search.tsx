@@ -1,11 +1,13 @@
 'use client'
 import { fetchCommunities } from "@/lib/actions/community.actions";
 import { fetchAllUser } from "@/lib/actions/user.actions";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import CommunityCard from "../cards/CommunityCard";
 import UserCard from "../cards/UserCard";
 import { Input } from "../ui/input";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { sports } from "@/constants/icons";
+import Image from "next/image";
 const Search = ({
   typeS,
 }: {
@@ -18,41 +20,29 @@ const Search = ({
   const [resultC, setResultC] = useState<{ communities: any[]; isNext: boolean }>(
     { communities: [], isNext: false }
   );
+  const [show, setShow] = useState<boolean>(
+    true
+  );
+  const [showC, setShowC] = useState<boolean>(
+    true
+  );
+  let sportsLen=resultU.users.map((user) =>user?.sport)
   let handelOnFocus = async (e: string) => {
-   try{ 
-    if (typeS==='user') {
-      if (e.trim() === "") {
-        let result = await fetchAllUser({
-          searchString: "",
-          pageNum: 1,
-          pageSize: 30,
-        });
-        if (result !== undefined) {
-          setResultU(result);
-        }
-      }
-    }else if (typeS==='community') {
-      if (e.trim() === "") {
-      let result = await fetchCommunities({
-        searchString: e,
-        pageNumber: 1,
-        pageSize: 30,
-      });
-      if (result !== undefined) {
-        setResultC(result);
-      }
-    }
-    }
-  }catch(e:any) {
-    console.log('faild to fetch on focus', e);
-  }
+    // setShow(false)
   };
+  
   let handelOnChange = async (e: string) => {
     try {
       if (typeS==='user') {
-        
+        if (e===''){
+
+          setShow(true)
+          setShowC(true)
+        }else{
+          setShow(false)
+        }
           let result = await fetchAllUser({
-            searchString: "",
+            searchString:e,
             pageNum: 1,
             pageSize: 30,
           });
@@ -74,24 +64,68 @@ const Search = ({
       console.log("faild to search", e);
     }
   };
+  useEffect(()=>{
+    handelOnChange('');
+  },[])
   return (
     <section className="">
       <div className=" text-white">{typeS==='user'?'Search':'Communities'}</div>
       <div className="w-full mt-3">
         <Input
-          placeholder="Enter name or username"
+          placeholder="Enter name or username or sport"
           className=" account-form_input "
           onChange={(e) => handelOnChange(e.target.value)}
           onFocus={(e) => handelOnFocus(e.target.value)}
         />
       </div>
-      
+      {show&&<div className="mt-8">
+        <Tabs defaultValue="" className="w-full">
+          <TabsList className=" flex max-sm:gap-x-10  max-sm:flex-wrap h-auto">
+            {sports.map((tab) =>(tab.label==="Football"||tab.label==="Running"||tab.label==="Tennis"||tab.label==="Basketball"||tab.label==="Swimming"||tab.label==="Karate") &&(
+              <TabsTrigger onClick={()=>{setShowC(false)}} key={tab.label} value={tab.value} className="tab2 flex-col  justify-between">
+                <img
+                  src={tab.icon}
+                  alt={tab.label}
+                  className="object-contain max-sm:h-[3.645rem] max-sm:w-[3.645rem] h-32 w-32  "
+                />
+                <p className=" max-sm:hidden">{tab.label}</p>
+             
+                  {/* <p className="   rounded-full px-2 text-base-regular">
+                    {sportsLen.filter((s) => s===tab.value.split(" ")[0]).length}
+                  </p> */}
+
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {sports.map((tab) => (
+            <TabsContent
+              key={`content-${tab.label}`}
+              value={tab.value}
+              className="w-full mt-8 text-light-1">
+              {resultU?.users.map((person: any) => person?.sport===tab.value.split(" ")[0] &&(
+          <UserCard
+          sport={person.sport}
+          key={person.id}
+          id={person.id}
+          name={person.name}
+          username={person.username}
+          image={person.image}
+          personType="User"
+          />
+          ))}
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div> }
+      {showC&&
     <div className={` mt-14 flex flex-1   ${typeS==='community'?' flex-wrap justify-evenly max-sm:flex-col gap-7':'flex-col gap-9' }`}>
+      
       {typeS==='user' ?(resultU?.users.length === 0 ? (
         <h1>no result</h1>
         ) : (
           resultU?.users.map((person: any) => (
           <UserCard
+          sport={person.sport}
           key={person.id}
           id={person.id}
           name={person.name}
@@ -100,22 +134,8 @@ const Search = ({
           personType="User"
           />
           ))
-          )):typeS==='community'?(resultC?.communities.length === 0 ? (
-            <h1>no result</h1>
-            ) : (
-              resultC?.communities.map((community: any) => (
-              <CommunityCard
-              key={community.id}
-              id={community.id}
-              name={community.name}
-              username={community.username}
-              image={community.image}
-              personType="community"
-              members={community.members}
-              />
-              ))
-              )):null}
-    </div>
+          )):null}
+    </div>}
           </section>
   );
 };

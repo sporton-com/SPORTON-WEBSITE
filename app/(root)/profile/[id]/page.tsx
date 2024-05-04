@@ -64,6 +64,7 @@ const Page = async ({params}:{params:{id:string}}) => {
                 <section className="flex flex-col gap-10">
                     {userInfo.friends.map((friend:any) =>
                         <UserCard
+                        sport={friend.sport}
                         key={friend.id}
                         id={friend.id}
                         name={friend.name}

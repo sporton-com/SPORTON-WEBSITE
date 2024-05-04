@@ -22,8 +22,9 @@ const Topbar = () => {
         <div className='container'>
             <div className=' flex flex-row justify-between'>
                 <Link href="/" className=' flex items-center justify-between w-1/12  g-3  no-underline text-body-bold text-white' >
-                  <Image src="/logo.svg" alt='' width={30} height={30} />
-                  <p className='ms-2 max-md:hidden'> SPORTON</p></Link>
+                  <Image src="/logo2.gif" alt='' width={50} height={50} className="max-sm:scale-[2.8] scale-[3] max-sm:translate-y-0 translate-y-7"  />
+                  {/* <p className='ms-2 max-md:hidden'> SPORTON</p> */}
+                  </Link>
                   <div className="flex p-1 gap-9">
                     
                   {image&&

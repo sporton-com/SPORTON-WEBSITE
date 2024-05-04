@@ -12,7 +12,7 @@ const LeftSidebar = () => {
   let {userId} = useAuth();
   return (
     <section className='leftsidebar'>
-      <div className=" flex flex-col gap-2 px-6 mb-auto">
+      <div className=" flex flex-col gap-2 px-6 mb-auto mt-8">
       {SidebarLinks.map((link, index) =>{
         if(link.route==='/profile') link.route=`/profile/${userId}`
         let isActive=(pathname.includes(link.route)&&link.route.length>1)||pathname === link.route;

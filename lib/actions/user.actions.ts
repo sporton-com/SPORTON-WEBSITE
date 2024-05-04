@@ -69,7 +69,7 @@ export async function fetchUser (userId:string | undefined) {
         .populate({
             path: 'friends',
             model:User,
-            select:'id image name username',
+            select:'id image name username sport',
           }).lean()
         
         
@@ -92,7 +92,7 @@ export async function fetchAllUser ({searchString='',pageNum=1, pageSize=20,sort
         let regex = new RegExp(searchString,"i")
         let query :FilterQuery<typeof User> ={id:{$ne:user?.id}};
         if (searchString.trim() !=='') {
-            query.$or=[{name:{$regex:regex}},{username:{$regex:regex}}]
+            query.$or=[{name:{$regex:regex}},{username:{$regex:regex}},{sport:{$regex:regex}}]
         }
         let users = await  User.aggregate([{$match:query},
             {$sample:{size:pageSize}},

@@ -47,3 +47,23 @@ export const SidebarLinks = [
     { value: "members", label: "Members", icon: "/assets/members.svg" },
     { value: "requests", label: "Requests", icon: "/assets/request.svg" },
   ];
+  export let sports=[
+    { value: "Football", label: "Football", icon: "/Football.svg" },
+    { value: "Running", label: "Running", icon: "/Running.svg" },
+    { value: "Tennis", label: "Tennis", icon: "/Tennis.svg" },
+    { value: "Basketball", label: "Basketball", icon: "/Basketball.svg" },
+    { value: "Swimming", label: "Swimming", icon: "/Swimming.svg" },
+    { value: "Karate", label: "Karate", icon: "/Karate.svg" },
+    { value: "Diving", label: "Diving", icon: "/Diving.svg" },
+    { value: "Fitness", label: "Fitness", icon: "/Fitness.svg" },
+    { value: "Horse Riding", label: "Horse Riding", icon: "/Horse.svg" },
+    { value: "Cycling", label: "Cycling", icon: "/Cycling.svg" },
+    { value: "Skating", label: "Skating", icon: "/Skating.svg" },
+    { value: "Handball", label: "Handball", icon: "/Handball.svg" },
+    { value: "Golf", label: "Golf", icon: "/Golf.svg" },
+    { value: "Hockey", label: "Hockey", icon: "/Hockey.svg" },
+    { value: "Chess", label: "Chess", icon: "/Chess.svg" },
+    { value: "kung Fu", label: "kung Fu", icon: "/kung.svg" },
+    { value: "Boxing", label: "Boxing", icon: "/Boxing.svg" },
+    { value: "Bowling", label: "Bowling", icon: "/Bowling.svg" },
+  ]

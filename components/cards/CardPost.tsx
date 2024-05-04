@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 interface parms {
   isAchievement?:string;
   id: string;
+  Team: any[];
   image?: string;
   video?: string;
   userId: string|undefined;
@@ -18,6 +19,7 @@ interface parms {
     id: string;
     name: string;
     image: string;
+    sport:string;
   };
   react:string[]|undefined;
   content: string;
@@ -41,6 +43,7 @@ interface parms {
 const CardPost = ({
   id,
   parentId,
+  Team,
   isAchievement,
   currentId,userId,
   author,
@@ -54,6 +57,12 @@ const CardPost = ({
   image
 }: parms) => {
   let pathname= usePathname();
+  let isFriend =
+    Team?.filter(
+      (friend) => friend.id === author.id
+    ).length === 1;
+
+  console.log(Team,isFriend,currentId)
   let commentsFilter=comments.filter(e=>e.author._id!==undefined)
   let isReplay = commentsFilter.filter(e=>e.author.id===currentId).length>=1;
   let commLen=isReplay?commentsFilter.length-1:commentsFilter.length;
@@ -64,7 +73,7 @@ const CardPost = ({
   return (
     <article
       className={` flex w-full flex-col rounded-xl ${
-        isComment ? " px-0 xs:px-7" : "bg-dark-2 p-7"
+        isComment ? " px-0 xs:px-7" : "bg-dark-2 p-5"
       }`}>
       <div className=" flex items-start justify-between">
         <div className=" flex w-full flex-1 flex-row gap-4 ">
@@ -92,11 +101,22 @@ const CardPost = ({
             </Link>
             <div className="thread-card_bar" />
           </div>
-          <div className="">
+          <div className="-translate-y-3">
+          <Image src={'/'+author.sport.split(' ')[0]+".svg"} alt={author.sport}  height={30} width={30} className="-translate-x-4"/>
             <Link
               href={"/profile/" + author.id}
               className=" cursor-pointer w-full flex gap-4 ">
-              <h6>{author.name}</h6>
+              <h5>{author.name}</h5>
+              {isFriend &&
+              <Image
+                src={
+                   "/assets/members.svg" 
+                }
+                alt="add friend"
+                className=""
+                width={24}
+                height={24}
+              />}
               {isAchievement==="1"?
               <Image
                 src={"/assets/achievement.svg"}
@@ -107,9 +127,9 @@ const CardPost = ({
               />:null}
 
             </Link>
+                </div>
+                </div>
             <p className=" text-small-regular text-light-2 ">{content}</p>
-                </div>
-                </div>
             {image &&
             <img
           src={image}

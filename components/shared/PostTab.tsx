@@ -4,10 +4,10 @@ import React from "react";
 import CardPost from "../cards/CardPost";
 interface props {
   currentUserId: string | undefined;
-  accountId: string|undefined;
+  Team: any[];
   accountType: string;
   userId:string|undefined
-  result:Result | undefined|null;
+  result:Result|undefined|null;
 }
 
 interface Result {
@@ -15,20 +15,25 @@ interface Result {
   name: string;
   image: string;
   id: string;
+  sport: string;
   posts: PostData[]|undefined;
 }
 
-function PostTab({result, userId,currentUserId, accountId, accountType }: props) {
+function PostTab({result, userId,currentUserId, Team, accountType }: props) {
   return (
     <div className="flex flex-col gap-10 ">
       
-       {  result?.posts?.map((post: PostData) => (<>
+       {  result?.posts?.map((post: PostData,i:number) => (
        <CardPost
-          key={post._id}
+       
+          key={i}
           id={post._id}
+          image={post?.image}
+          video={post?.video}
           parentId={post.parentId}
           isAchievement={post?.isAchievement}
           currentId={currentUserId}
+          Team={Team?Team:[]}
           author={
             accountType === "User" && result
             ? {
@@ -36,6 +41,7 @@ function PostTab({result, userId,currentUserId, accountId, accountType }: props)
               id: result.id,
               image: result.image,
               name: result.name,
+              sport: result.sport
                 }
               : post.author
             }
@@ -45,7 +51,7 @@ function PostTab({result, userId,currentUserId, accountId, accountType }: props)
             content={post.text}
             createdAt={post.createdAt}
             />
-            </>
+  
       ))} 
     </div>
   );

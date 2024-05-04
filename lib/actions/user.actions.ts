@@ -41,6 +41,7 @@ export interface Result {
     name: string;
     image: string;
     id: string;
+    sport: string;
     posts: PostData[];
   }
 export async function updateUser (
@@ -76,6 +77,7 @@ export async function fetchUser (userId:string | undefined) {
             console.log("user not found");
             console.log("found user with id ")
         }
+        
         console.log(user)
     return user;
     } catch (error:any) {

@@ -20,7 +20,6 @@ import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/uploadthing";
 import { updateUser } from "@/lib/actions/user.actions";
 import { usePathname, useRouter } from "next/navigation";
-import { updateCommunityInfo } from "@/lib/actions/community.actions";
 import {
   Select,
   SelectContent,
@@ -42,10 +41,30 @@ interface props {
     type: string;
   };
 }
+let sports=[
+  "Football",
+"Running",
+"Tennis",
+"Basketball",
+"Swimming",
+"Karate",
+"Diving",
+"Fitness",
+"Horse Riding",
+"Cycling",
+"Skating",
+"Handball",
+"Golf",
+"Hockey",
+"Chess",
+"kung Fu",
+"Boxing",
+"Bowling",
+]
 const AccountProfile = ({ userData }: props) => {
   let pathname = usePathname();
   let router = useRouter();
-  let { startUpload } = useUploadThing("media");
+  let { startUpload } = useUploadThing("mediaPost");
   const [files, setFiles] = useState<File[]>([]);
   let form = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
@@ -207,17 +226,18 @@ const AccountProfile = ({ userData }: props) => {
           render={({ field }) => (
             <Select name={field.name} disabled={field.disabled}  onValueChange={field.onChange}   defaultValue={field.value}>
               <SelectTrigger className=" account-form_input">
-                <SelectValue placeholder="Select your sport" />
+                <SelectValue className="flex flex-row gap-5" placeholder="Select your sport" />
               </SelectTrigger>
               <SelectContent className="account-form_input">
                 <SelectGroup>
                   <SelectLabel>Select your sport</SelectLabel>
-                  <SelectItem value="Football">Football</SelectItem>
-                  <SelectItem value="Running">Running</SelectItem>
-                  <SelectItem value="Tennis">Tennis</SelectItem>
-                  <SelectItem value="Basketball">Basketball</SelectItem>
-                  <SelectItem value="Swimming">Swimming</SelectItem>
-                  <SelectItem value="Karate">Karate</SelectItem>
+                  {sports.map(e=>
+                  <SelectItem  key={e} value={e}>
+                    <div className="flex gap-5" >
+                    <Image src={'/'+e.split(' ')[0]+".svg"} alt={e}  height={30} width={30}/> {e}
+                    </div>
+                    </SelectItem>
+                  )}
                 </SelectGroup>
               </SelectContent>
             </Select>

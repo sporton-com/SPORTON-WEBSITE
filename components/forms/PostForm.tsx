@@ -44,7 +44,7 @@ const PostForm =  ({  post,action,id ,image,
   name,
   username}: PostFormProps) => {
     let SearchParams= useSearchParams()
-  let sh=SearchParams.get('s')
+  let sh=SearchParams.get('sh')
   let content=SearchParams.get('p')
   const navigate = useRouter();
   const { toast } = useToast();
@@ -55,8 +55,8 @@ const PostForm =  ({  post,action,id ,image,
     defaultValues: {
       post: content ? content : "",
       file: [],
-      location: post ? post.location : "",
-      tags: post ? post.tags.join(",") : "",
+      // location: post ? post.location : "",
+      // tags: post ? post.tags.join(",") : "",
       accountId: id,
       isAchievement: post ? post?.isAchievement :'0',
     },
@@ -130,7 +130,7 @@ const PostForm =  ({  post,action,id ,image,
           <Button
             type="submit"
             onClick={e=>console.log(form.getValues())}
-            className="bg-primary-500 h-8 hover:bg-primary-500 text-light-1 flex gap-2 whitespace-nowrap"
+            className="bg-primary-500 h-8 hover:bg-primary-500 text-[#ffffff] flex gap-2 whitespace-nowrap"
             >
             {(isLoadingCreate) && <Loader />}
              Post
@@ -205,11 +205,11 @@ const PostForm =  ({  post,action,id ,image,
 <div className="flex justify-end p-0 items-center">
               <Button
             type="button"
-            className="bg-transparent "
+            className="bg-transparent hover:bg-[#ffffff] hover:outline-primary-500 hover:outline  "
             onClick={e=>setShow(!show)}>
             <Image src={'/assets/createimg.svg'} alt={''} height={30} width={30} className={'rounded-full object-contain'}/>
           </Button></div>
-        <FormField
+        {/* <FormField
           control={form.control}
           name="location"
           render={({ field }) => (
@@ -242,7 +242,7 @@ const PostForm =  ({  post,action,id ,image,
               <FormMessage className="text-red" />
             </FormItem>
           )}
-        />
+        /> */}
 
        
       </form>

@@ -4,6 +4,18 @@
 body{
   @apply bg-dark-1;
 }
+:root{
+  --white:#000;
+  --light-1: #000000;
+        --light-2: #121417;
+        --light-3: #101012;
+        --light-4: #1F1F22;
+        --dark-1: #FFFFFF;
+        --dark-2: #EFEFEF;
+        --dark-3: #EFEFEF;
+        --dark-4: #EFEFEF;
+}
+
 @layer components {
   /* main */
   .main-container {
@@ -166,7 +178,7 @@ body{
 
 /* Tab */
 .tab {
-  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-light-2 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-light-2 !important;
+  @apply flex min-h-[50px] flex-1 items-center gap-3  text-light-2 data-[state=active]:bg-dark-1 data-[state=active]:text-light-2 !important;
 }
 
 .no-focus {

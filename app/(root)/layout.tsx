@@ -7,6 +7,7 @@ import Topbar from '@/components/shared/Topbar';
 import BottomSidebar from '@/components/shared/Bottombar';
 import LeftSidebar from '@/components/shared/LeftSidebar';
 import RightSidebar from '@/components/shared/RightSidebar';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,6 +30,12 @@ export default function RootLayout({
       >
     <html lang="en">
       <body className={inter.className}>
+      <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
       <Topbar/>
       <main className=' flex flex-row w-full'>
 
@@ -39,9 +46,10 @@ export default function RootLayout({
         </div>
         </section>
         {/* @ts-ignore */}
-        <RightSidebar/>
+        {/* <RightSidebar/> */}
       </main>
       <BottomSidebar/>
+      </ThemeProvider>
         </body>
     </html>
    </ClerkProvider>

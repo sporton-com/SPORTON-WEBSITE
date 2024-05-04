@@ -8,7 +8,8 @@ const Page = async() => {
   const userInfo : UserData | null | undefined = await fetchUser(user.id);
   if (!userInfo?.onboarding) redirect("/onboarding");
   return (
-    <Search typeS="community"/>
+    // <Search typeS="community"/>
+    <div className="">Settings</div>
   );
 };
 

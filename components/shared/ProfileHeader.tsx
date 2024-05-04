@@ -66,21 +66,23 @@ const ProfileHeader = ({
       <div className="flex flex-col justify-start">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image
+            <img
               src={image}
               alt={name}
-              width={90}
-              height={90}
-              className="rounded-full object-cover shadow-2xl"
+              // width={90}
+              // height={90}
+              className="rounded-full max-sm:w-16 max-sm:h-16 w-24 h-24 object-cover shadow-2xl"
             />
             <div className="flex flex-col gap-3">
             <div className="flex gap-3">
-              <h3 className="text-white">{name}</h3>
-              ||
-              <h3 className="text-white">{sport}</h3>
+              <h3 className="text-white ">{name}</h3>
+              
 
             </div>
-              <p className=" text-subtle-medium text-gray-1">@{username}</p>
+              <p className=" text-subtle-medium max-sm:text-[9px] text-gray-1">{'@'+username}</p>
+            </div>
+            <div className="flex items-start h-full">
+              <Image src={'/'+sport.split(' ')[0]+".svg"} alt={sport}  height={100} width={100} className=" max-sm:scale-150"/>
             </div>
           </div>
         </div>
@@ -105,23 +107,19 @@ const ProfileHeader = ({
           <div></div>
         )}
         {userId !== userAuthId  ? (
-          <div className="">
+          <div className="grow">
             <button
               className="flex no-underline gap-4 cursor-pointer"
               onClick={
-                type === "Community" ? handleAddMember : handleAddFriend
+                handleAddFriend
               }>
               <span
                 className={` text-white ${
                   isFriend ? "text-primary-500" : ""
                 } max-lg:hidden`}>
-                {type === "Community"
-                  ? isFriend
-                    ? "Subscribed"
-                    : "Subscribe"
-                  : isFriend
-                  ? "friend"
-                  : "add to friends"}
+                {isFriend
+                  ? "in your Team"
+                  : "add your Team"}
               </span>
               <Image
                 src={

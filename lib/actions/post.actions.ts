@@ -1,8 +1,6 @@
 "use server";
-
 import { connectDB } from "@/mongoose";
 import { revalidatePath } from "next/cache";
-import Community from "../models/community.model";
 import Post from "../models/post.models";
 import User from "../models/user.models";
 interface props {
@@ -22,6 +20,7 @@ export interface PostData{
     id: string;
     name: string;
     image: string;
+    sport:string;
   };
   react:string[];
   text: string;
@@ -140,7 +139,7 @@ export async function fetchPostById(id: string) {
             populate: {
               path: "author",
               model: User,
-              select: "_id id name parentId image",
+              select: "_id id name parentId image sport",
             },
           },
         ],
@@ -201,6 +200,7 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
           $group: {
             _id: '$_id',
             text: { $first: '$text' },
+            isAchievement: { $first: '$isAchievement' },
             video: { $first: '$video' },
             image: { $first: '$image' },
             author: { $first: '$author' },
@@ -212,6 +212,7 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
               $push: {
                 author: {
                   _id: '$childrenINF.authorINF._id',
+                  sport: '$childrenINF.authorINF.sport',
                    id: '$childrenINF.authorINF.id',
                    name: '$childrenINF.authorINF.name',
                    username: '$childrenINF.authorINF.username',
@@ -229,7 +230,7 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
     const totalPosts = await Post.countDocuments({
       parentId: { $in: [null, undefined] },
     });
-    const posts = await postQ.exec();
+    const posts:PostData[] = await postQ.exec();
 console.log(posts)
     console.log("success posts count: " + posts.length);
     let isNext = +totalPosts > skipAmount + posts.length;

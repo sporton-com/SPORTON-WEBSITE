@@ -1,9 +1,10 @@
+
 import UserCard from "@/components/cards/UserCard";
 import PostTab from "@/components/shared/PostTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants/icons";
-import { fetchUser, UserData } from "@/lib/actions/user.actions";
+import { fetchUser, Result, UserData } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -17,6 +18,7 @@ const Page = async ({params}:{params:{id:string}}) => {
   let friends= params.id===user.id?MyInfo?.friends:userInfo?.friends;
   let result = await fetchUserPosts(userInfo?.id);
   let postsAchievements=result?.posts?.filter(e=>e?.isAchievement==="1")
+  let result2:Result={...result,posts:postsAchievements?postsAchievements:[]};
   return (
     <section className="">
       <ProfileHeader
@@ -46,8 +48,8 @@ const Page = async ({params}:{params:{id:string}}) => {
                 />
                 <p className=" max-sm:hidden">{tab.label}</p>
              
-                  <p className=" bg-gray-700 rounded-full px-2 text-base-regular">
-                    {tab.label === "Posts" ? (userInfo?.posts?.length):tab.label === "Friends"?(friends?.length):postsAchievements?.length}
+                  <p className=" bg-dark-3 border border-light-1 rounded-full px-2 text-base-regular">
+                    {tab.label === "Posts" ? (userInfo?.posts?.length):tab.label === "Team"?(friends?.length):postsAchievements?.length}
                   </p>
 
               </TabsTrigger>
@@ -71,20 +73,24 @@ const Page = async ({params}:{params:{id:string}}) => {
                         />
                         )}
                 </section>
-                :tab.value==='posts'?
+                :tab.value==='posts'
+                ?
               <PostTab
               userId={userInfo._id}
+
                 result={result}
                 currentUserId={user?.id}
-                accountId={userInfo?.id}
+                Team={friends?friends:[]}
                 accountType="User"
-              />:<PostTab
+              />:
+              <PostTab
               userId={userInfo._id}
-                result={{...result,posts:postsAchievements}}
+                result={result2}
                 currentUserId={user?.id}
-                accountId={userInfo?.id}
+                Team={friends?friends:[]}
                 accountType="User"
-              />}
+              />
+              }
             </TabsContent>
           ))}
         </Tabs>

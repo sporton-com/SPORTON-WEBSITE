@@ -17,9 +17,9 @@ const LeftSidebar = () => {
         if(link.route==='/profile') link.route=`/profile/${userId}`
         let isActive=(pathname.includes(link.route)&&link.route.length>1)||pathname === link.route;
         return(
-          <Link key={index} href={link.route} className={`leftsidebar_link ${isActive && ' bg-primary-500'}`}>
-            <Image src={link.imgURL} alt={link.label}  height={24} width={24}/>
-            <span className=' text-white max-lg:hidden'>{link.label}</span>
+          <Link key={index} href={link.route} className={`leftsidebar_link ${isActive && ' text-[#ffffff] bg-primary-500'}`}>
+            <Image src={isActive?link.imgURL:link.imgURLh} alt={link.label}  height={24} width={24} style={{color:'#000'}}/>
+            <span className=' max-lg:hidden'>{link.label}</span>
           </Link>
         )
       }

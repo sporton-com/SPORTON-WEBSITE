@@ -1,4 +1,6 @@
 import CardPost from "@/components/cards/CardPost";
+import PostButtonHome from "@/components/cards/PostHome";
+import LocalStore from "@/components/cards/LocalStore";
 import { fetchPosts } from "@/lib/actions/post.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
@@ -8,14 +10,16 @@ export default async function Home() {
   if (!user) return redirect("/sign-in");
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarding) redirect("/onboarding");
-  const FPosts = await fetchPosts(1, 30);
-  
+  const FPosts = await fetchPosts(1, 1000);
+  let friends=userInfo?.friends;
   return (
     <main>
-      <section className="p-8 flex flex-col gap-8 max-sm:p-0">
-        
+      <section className="p-8 pt-0 flex flex-col gap-8 max-sm:p-0">
+        <LocalStore image={userInfo.image} id={user.id}/>
+        <PostButtonHome/>
         {FPosts?.posts.map((post) => (
           <CardPost
+          Team={friends}
             key={post?._id}
             isAchievement={post?.isAchievement}
             id={post?._id}

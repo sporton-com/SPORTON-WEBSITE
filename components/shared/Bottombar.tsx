@@ -19,7 +19,7 @@ const Bottombar = () => {
         let isActive=(pathname.includes(link.route)&&link.route.length>1)||pathname === link.route;
         return(
         <Link key={index} href={link.route} className={`bottombar_link ${isActive && ' bg-primary-500'}`}>
-            <Image src={link.imgURL} alt={link.label}  height={24} width={24}/>
+            <Image src={isActive?link.imgURL:link.imgURLh} alt={link.label}  height={24} width={24}/>
             <span className=' text-white hidden sm:block'>{link.label.split(/\s+/)[0]}</span>
           </Link>
         )}

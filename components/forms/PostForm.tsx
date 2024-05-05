@@ -129,7 +129,6 @@ const PostForm =  ({  post,action,id ,image,
           </Button>
           <Button
             type="submit"
-            onClick={e=>console.log(form.getValues())}
             className="bg-primary-500 h-8 hover:bg-primary-500 text-[#ffffff] flex gap-2 whitespace-nowrap"
             >
             {(isLoadingCreate) && <Loader />}
@@ -206,7 +205,7 @@ const PostForm =  ({  post,action,id ,image,
               <Button
             type="button"
             className="bg-transparent hover:bg-[#ffffff] hover:outline-primary-500 hover:outline  "
-            onClick={e=>setShow(!show)}>
+            onClick={()=>setShow(!show)}>
             <Image src={'/assets/createimg.svg'} alt={''} height={30} width={30} className={'rounded-full object-contain'}/>
           </Button></div>
         {/* <FormField

@@ -4,14 +4,14 @@ import { revalidatePath } from "next/cache";
 import Post from "../models/post.models";
 import User from "../models/user.models";
 interface props {
-  isAchievement:string;
+  isAchievement: string;
   text: string;
   image?: string;
   video?: string;
   author: string | undefined;
 }
-export interface PostData{
-  isAchievement:string;
+export interface PostData {
+  isAchievement: string;
   _id: string;
   parentId: string | null;
   currentId: String | undefined;
@@ -20,9 +20,9 @@ export interface PostData{
     id: string;
     name: string;
     image: string;
-    sport:string;
+    sport: string;
   };
-  react:string[];
+  react: string[];
   text: string;
   image: string;
   video: string;
@@ -38,28 +38,36 @@ export interface PostData{
       id: string;
       image: string;
       name: string;
-    } ;
+    };
   }[];
-  
 }
-export async function createPost({ text,image,video, author,isAchievement}: props) {
+export async function createPost({
+  text,
+  image,
+  video,
+  author,
+  isAchievement,
+}: props) {
   connectDB();
   try {
-    if(author){
-
-      
+    if (author) {
       let createPost = await Post.create({
         text,
-        author,image,video,isAchievement
+        author,
+        image,
+        video,
+        isAchievement,
       });
-     let post= await User.findByIdAndUpdate(author, { $push: { posts: createPost._id } });
+      let post = await User.findByIdAndUpdate(author, {
+        $push: { posts: createPost._id },
+      });
       console.log("Post created ❤️‍🔥");
-        return post;
-      
-      }
-    revalidatePath('/');
+      return true;
+    }
+    // revalidatePath('/');
   } catch (error: any) {
     console.log(`failed to create posts: ${error.message}`);
+    return false;
   }
 }
 export async function createCommentToPost({
@@ -97,12 +105,12 @@ export async function reactToPost({
   postId,
   react,
   userId,
-  path
+  path,
 }: {
-  postId:string;
-  userId:string|undefined;
-  react: boolean|undefined;
-  path:string
+  postId: string;
+  userId: string | undefined;
+  react: boolean | undefined;
+  path: string;
 }) {
   connectDB();
   try {
@@ -110,10 +118,9 @@ export async function reactToPost({
     if (!post) {
       console.log("Post not found");
     }
-    if (userId&&post.react) {  
-      react?  post.react.pop(userId):
-      post.react.push(userId);
-      await post.save()
+    if (userId && post.react) {
+      react ? post.react.pop(userId) : post.react.push(userId);
+      await post.save();
       revalidatePath(path);
     }
   } catch (error: any) {
@@ -123,7 +130,7 @@ export async function reactToPost({
 export async function fetchPostById(id: string) {
   connectDB();
   try {
-    const post : PostData | null  = await Post.findById(id)
+    const post: PostData | null = await Post.findById(id)
       .populate({ path: "author", model: User, select: "_id id name image" })
       .populate({
         path: "children",
@@ -143,11 +150,12 @@ export async function fetchPostById(id: string) {
             },
           },
         ],
-      }).lean()
-      if(!post){
-        console.log("post not found");
+      })
+      .lean();
+    if (!post) {
+      console.log("post not found");
     }
-      
+
     return post;
   } catch (error) {
     console.log(error);
@@ -168,61 +176,66 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
           as: "author",
         },
       },
-      {$unwind:'$author'},
+      { $unwind: "$author" },
       {
-          $lookup: {
-              from: "posts",
-              localField: "children",
-              foreignField: "_id",
-              as: "childrenINF",
-            },
+        $lookup: {
+          from: "posts",
+          localField: "children",
+          foreignField: "_id",
+          as: "childrenINF",
         },
-        {$unwind:{path:'$childrenINF',preserveNullAndEmptyArrays: true}},
-        {
-            $lookup: {
-                from: "users",
-                localField: "childrenINF.author",
-                foreignField: "_id",
-                as: "childrenINF.authorINF",
-            },
+      },
+      { $unwind: { path: "$childrenINF", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "childrenINF.author",
+          foreignField: "_id",
+          as: "childrenINF.authorINF",
         },
-        {$unwind:{path:'$childrenINF.authorINF',preserveNullAndEmptyArrays: true}},
-        {
-            $lookup: {
-                from: "communities",
-                localField: "community",
-                foreignField: "_id",
-                as: "community",
-            },
+      },
+      {
+        $unwind: {
+          path: "$childrenINF.authorINF",
+          preserveNullAndEmptyArrays: true,
         },
-        {$unwind:{path:'$community',preserveNullAndEmptyArrays: true}},
-        {
-          $group: {
-            _id: '$_id',
-            text: { $first: '$text' },
-            isAchievement: { $first: '$isAchievement' },
-            video: { $first: '$video' },
-            image: { $first: '$image' },
-            author: { $first: '$author' },
-            react:{$first:'$react'},
-            createdAt:{$first:'$createdAt'},
-            community: { $first: '$community' },
-          parentId: {$first:'$parentId'},
-            children: {
-              $push: {
-                author: {
-                  _id: '$childrenINF.authorINF._id',
-                  sport: '$childrenINF.authorINF.sport',
-                   id: '$childrenINF.authorINF.id',
-                   name: '$childrenINF.authorINF.name',
-                   username: '$childrenINF.authorINF.username',
-                   image: '$childrenINF.authorINF.image',
-                   parentId: '$childrenINF.authorINF.parentId',
-                },
+      },
+      {
+        $lookup: {
+          from: "communities",
+          localField: "community",
+          foreignField: "_id",
+          as: "community",
+        },
+      },
+      { $unwind: { path: "$community", preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: "$_id",
+          text: { $first: "$text" },
+          isAchievement: { $first: "$isAchievement" },
+          video: { $first: "$video" },
+          image: { $first: "$image" },
+          author: { $first: "$author" },
+          react: { $first: "$react" },
+          createdAt: { $first: "$createdAt" },
+          community: { $first: "$community" },
+          parentId: { $first: "$parentId" },
+          children: {
+            $push: {
+              author: {
+                _id: "$childrenINF.authorINF._id",
+                sport: "$childrenINF.authorINF.sport",
+                id: "$childrenINF.authorINF.id",
+                name: "$childrenINF.authorINF.name",
+                username: "$childrenINF.authorINF.username",
+                image: "$childrenINF.authorINF.image",
+                parentId: "$childrenINF.authorINF.parentId",
               },
             },
           },
         },
+      },
     ])
       .sort({ createdAt: "desc" })
       .skip(skipAmount)
@@ -230,8 +243,8 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
     const totalPosts = await Post.countDocuments({
       parentId: { $in: [null, undefined] },
     });
-    const posts:PostData[] = await postQ.exec();
-console.log(posts)
+    const posts: PostData[] = await postQ.exec();
+    console.log(posts);
     console.log("success posts count: " + posts.length);
     let isNext = +totalPosts > skipAmount + posts.length;
     return { posts, isNext };

@@ -23,12 +23,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider
-      appearance={{
-        baseTheme: dark,
-      }}
-      >
-    <html lang="en">
+    <ClerkProvider>
+    <html lang="en"  >
       <body className={inter.className}>
       <ThemeProvider
             attribute="class"

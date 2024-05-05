@@ -14,9 +14,9 @@ export default async function Home() {
   let friends=userInfo?.friends;
   return (
     <main>
+        <PostButtonHome/>
       <section className="p-8 pt-0 flex flex-col gap-8 max-sm:p-0">
         <LocalStore image={userInfo.image} id={user.id}/>
-        <PostButtonHome/>
         {FPosts?.posts.map((post) => (
           <CardPost
           Team={friends}

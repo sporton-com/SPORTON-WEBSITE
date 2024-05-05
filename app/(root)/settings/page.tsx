@@ -10,7 +10,7 @@ const Page = async() => {
   const userInfo : UserData | null | undefined = await fetchUser(user.id);
   if (!userInfo?.onboarding) redirect("/onboarding");
   return (<div className="">
-    <div className="mb-20">Settings</div>
+    <div className="mb-20 text-body-bold">Settings</div>
     <ul className="flex flex-col gap-9">
   <li>
       <Link href={user?.id?"/profile/edit/"+user.id:'' }className="text-primary-500 flex gap-4 hover:opacity-75 text-body-bold">

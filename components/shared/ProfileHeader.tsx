@@ -88,7 +88,7 @@ const ProfileHeader = ({
         </div>
         <p className="mt-6 max-w-lg text-subtle-medium grow text-gray-1">{bio.split(' ').map(e=>islink?.includes(e)?<a className=" underline text-primary-500 visited:text-purple-500  block hover:text-purple-400" href={e} target='_blank' rel="noreferrer" >{e.length>10?`${e.slice(0,19)}...`:e}   </a>:' '+e+' ')}</p>
         <div className="mt-12"></div>
-        <Link href="/boosting" className="text-primary-500 flex">
+        <Link href="/boosting" className="text-primary-500 hover:opacity-75 flex">
         <Image
                 src="/assets/boosting.svg"
                 alt="boosting"

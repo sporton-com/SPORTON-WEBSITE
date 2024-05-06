@@ -13,6 +13,7 @@ interface userData{
     bio:string,
     image:string,
     type:string,
+    phone:string,
     sport:string
 
 }
@@ -28,8 +29,9 @@ async function Page({params}:{params:{id:string}}) {
     name: userInfo ? userInfo?.name : user.firstName ?? "",
     bio: userInfo ? userInfo?.bio : "",
     image: userInfo ? userInfo?.image : user.imageUrl,
-    sport: userInfo ? userInfo.sport : "",
-    type:params.id.includes('org')?'community':'user',
+    sport: userInfo ? userInfo?.sport : "",
+    type:userInfo ? userInfo?.type : "player",
+    phone:userInfo ? userInfo?.phone : "",
   };
 
   return (

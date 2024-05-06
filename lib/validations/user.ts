@@ -6,5 +6,7 @@ export const UserValidation = z.object({
   username: z.string().min(3).max(30),
   bio: z.string().min(3),
   sport: z.string(),
+  type:z.string(),
+  phone:z.string(),
 });
 

@@ -4,6 +4,8 @@ const userSchema = new mongoose.Schema({
     id:{type: 'string', required: true},
     username: {type:'string', required: true},
     name: {type:'string', required: true},
+    phone: {type:'string', required: true},
+    type:{type: 'string', required: true},
     image: {type:'string'},
     bio:{type:'string'},
     sport:{type:'string'},

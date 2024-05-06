@@ -4,7 +4,6 @@ import { connectDB } from "@/mongoose";
 import { currentUser } from "@clerk/nextjs/server";
 import { FilterQuery, SortOrder } from "mongoose";
 import { revalidatePath } from "next/cache";
-import Community from "../models/community.model";
 import Post from "../models/post.models";
 import User from "../models/user.models";
 import { PostData } from "./post.actions";
@@ -15,6 +14,8 @@ interface props{
     bio: string,
     sport:String;
     image: string,
+    type: string;
+    phone: string;
     path: string
 }
 export interface UserData{
@@ -24,10 +25,12 @@ export interface UserData{
     name: string,
     bio: string,
     image: string,
-    sport:string;
+    sport:string,
+    phone: string,
     posts:PostData[],
     communities:string[],
     onboarding:boolean,
+    type:string,
     friends:{
         _id:string,
         id:string,
@@ -42,16 +45,18 @@ export interface Result {
     image: string;
     id: string;
     sport: string;
+    type: string;
+    phone: string;
     posts: PostData[];
   }
 export async function updateUser (
-    { userId, username,sport, name, bio, image, path}:props
+    { userId, username,sport, name, bio, image, path,type,phone}:props
 ) : Promise<void> {
     connectDB();
     try {
     await User.findOneAndUpdate(
         {id: userId},
-        {username: username, bio: bio,sport:sport, name: name, image: image, onboarding:true},
+        {username: username, bio: bio,sport:sport, name: name, image: image, onboarding:true,phone:phone,type:type},
         {upsert: true}
     )
     console.log("Successfully updated user")

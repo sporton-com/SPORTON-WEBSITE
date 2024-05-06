@@ -194,11 +194,11 @@ body{
 }
 
 .account-form_image-input {
-  @apply cursor-pointer border-none bg-transparent outline-none file:text-blue !important;
+  @apply cursor-pointer border-none bg-transparent text-white outline-none file:text-blue !important;
 }
 
 .account-form_input {
-  @apply border border-dark-4 bg-dark-3 text-light-1 !important;
+  @apply border border-light-4 bg-dark-3 text-light-1 !important;
 }
 
 /* Comment Form */

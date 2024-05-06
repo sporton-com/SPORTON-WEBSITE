@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import Image from "next/image";
@@ -29,6 +30,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroupItem,RadioGroup} from "../ui/radio-group";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { E164Number } from "libphonenumber-js/types.cjs";
 interface props {
   userData: {
     id: string | undefined;
@@ -38,7 +43,8 @@ interface props {
     bio: string;
     sport: string ;
     image: string | undefined;
-    type: string;
+    type: string|undefined;
+    phone: string|undefined;
   };
 }
 let sports=[
@@ -66,17 +72,20 @@ const AccountProfile = ({ userData }: props) => {
   let router = useRouter();
   let { startUpload } = useUploadThing("mediaPost");
   const [files, setFiles] = useState<File[]>([]);
+  const [Type, setType] = useState<string>('player');
+  const [Username, setUsername] = useState<string>(userData?.username?userData.username:'');
   let form = useForm<z.infer<typeof UserValidation>>({
     resolver: zodResolver(UserValidation),
     defaultValues: {
       profile_photo: userData?.image || "",
       name: userData?.name || "",
-      username: userData?.username || "",
+      username: userData?.username ||'',
       bio: userData?.bio || "",
       sport: userData.sport ||"",
+      type: userData.type ||"player",
+      phone: userData.phone ||"",
     },
   });
-
   function handleImageChange(
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
@@ -96,7 +105,7 @@ const AccountProfile = ({ userData }: props) => {
   }
   async function onSubmit(values: z.infer<typeof UserValidation>) {
 
-    console.log("Submit update user ");
+
     try {
       console.log("Submit update user ");
       const blob = values.profile_photo;
@@ -114,9 +123,12 @@ const AccountProfile = ({ userData }: props) => {
             bio: values.bio,
             sport: values.sport,
             image: values.profile_photo,
+            type: values.type,
+            phone: values.phone,
             path: pathname,
           })
       if (pathname.includes("/profile/edit")) {
+        console.log("Submit update user ");
         router.back();
       } else {
         router.push("/");
@@ -168,15 +180,70 @@ const AccountProfile = ({ userData }: props) => {
         />
         <FormField
           control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+            <RadioGroup className="flex" onChange={e=>{
+              field.onChange(e)
+              setType(e.target.value)
+            }} name={field.name} onBlur={field.onBlur} ref={field.ref} disabled={field.disabled} defaultValue={field.value}>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value={'player'} id="option-one" />
+    <Label htmlFor="option-one">Player</Label>
+  </div>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value={'agent'} id="option-two"/>
+    <Label htmlFor="option-two">Agent</Label>
+  </div>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value={'club'} id="option-three"/>
+    <Label htmlFor="option-three">Club</Label>
+  </div>
+  <div className="flex items-center space-x-2">
+    <RadioGroupItem value={'company'} id="option-four"/>
+    <Label htmlFor="option-four">Company</Label>
+  </div>
+</RadioGroup>
+</FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               {/* <FormLabel className=' text-white'>Name</FormLabel> */}
               <FormControl>
                 <Input
-                  placeholder="Enter your firstname"
-                  {...field}
-                  className=" account-form_input "
+                  placeholder={`Enter your ${Type==='club'?'Club':Type==='company'?'Company':''} name`}
+                  className=" account-form_input"
+                  name={field.name} disabled={field.disabled}  value={field.value}
+                  onChange={e=>{
+                    field.onChange(e);
+                    (Type==='company'||Type==='club')&&setUsername(e.target.value)
+                  }}
+                  />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+          />
+          <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              {/* <FormLabel className=' text-white'>Username</FormLabel> */}
+              <FormControl>
+                <Input
+                  placeholder="Enter your username"
+                  name={field.name} disabled={field.disabled}  value={(Type==='company'||Type==='club')&&Username?Username.toLowerCase():field.value}
+                  onChange={e=>{
+                    field.onChange(e);
+                    (Type==='company'||Type==='club')&&setUsername(e.target.value)
+                  }}
+                  className="account-form_input"
                 />
               </FormControl>
 
@@ -186,22 +253,24 @@ const AccountProfile = ({ userData }: props) => {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="phone"
           render={({ field }) => (
             <FormItem>
-              {/* <FormLabel className=' text-white'>Username</FormLabel> */}
+              {/* <FormLabel className=' text-white'>Name</FormLabel> */}
               <FormControl>
-                <Input
-                  placeholder="Enter your username"
-                  {...field}
-                  className="account-form_input"
-                />
+              <PhoneInput
+            
+                  className={`account-form_input px-2 bg-gray-100 w-full outline-none border rounded-lg h-10 relative transition-all `}
+                  name={field.name} disabled={field.disabled}  value={field.value}
+                  onChange={e=>{
+                    field.onChange(e);
+                  }}       />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
-        />
+          />
+        
         <FormField
           control={form.control}
           name="bio"
@@ -220,6 +289,7 @@ const AccountProfile = ({ userData }: props) => {
             </FormItem>
           )}
         />
+        {Type==='player'?
         <FormField
           control={form.control}
           name="sport"
@@ -242,7 +312,22 @@ const AccountProfile = ({ userData }: props) => {
               </SelectContent>
             </Select>
           )}
-        />
+        />:<FormField
+        control={form.control}
+        name="sport"
+        render={({ field }) => (
+          <FormItem>
+            <FormControl>
+              <Input
+                type="hidden"
+                name={field.name} disabled={field.disabled}  value={Type}
+              />
+            </FormControl>
+
+            <FormMessage />
+          </FormItem>
+        )}
+      />}
         <Button type="submit" className=" bg-primary-500">
           Submit
         </Button>

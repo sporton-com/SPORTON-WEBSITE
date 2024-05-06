@@ -12,7 +12,8 @@ interface usData {
   bio: string;
   sport: string;
   image: string | undefined;
-  type: string;
+  type: string| undefined;
+  phone: string| undefined;
 }
 const Onboarding = async () => {
   let user = await currentUser();
@@ -27,11 +28,12 @@ const Onboarding = async () => {
     bio: userInfo?.bio || "",
     sport: userInfo?.sport || "",
     image: user?.imageUrl || userInfo?.image,
-    type: "user",
+    type: userInfo?.type,
+    phone: userInfo?.phone,
   };
   return (
     <main className=" px-1 mx-auto py-12 flex flex-col max-w-3xl">
-      <div className="px-10 absolute lg:right-2  -right-4 top-10">
+      <div className="px-10 fixed rounded-full lg:right-2  -right-4 top-10">
         <SignOutbutton />
       </div>
       <h1 className="font-bold text-white">Onboarding</h1>

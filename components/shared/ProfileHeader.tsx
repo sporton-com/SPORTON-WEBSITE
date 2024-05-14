@@ -91,7 +91,7 @@ const ProfileHeader = ({
                 alt={sport}
                 height={100}
                 width={100}
-                className=" max-sm:scale-150"
+                className=" mt-20 max-sm:scale-150"
               />
             </div>
         

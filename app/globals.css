@@ -178,7 +178,7 @@ body{
 
 /* Tab */
 .tab {
-  @apply flex min-h-[50px] flex-1 items-center gap-3  text-light-2 data-[state=active]:bg-dark-1 data-[state=active]:text-light-2 !important;
+  @apply flex min-h-[50px] flex-1 items-center gap-3  text-light-2 data-[state=active]:bg-dark-1 bg-[#eaf3ff] data-[state=active]:text-light-2 !important;
 }
 .tab1 {
   @apply flex min-h-[50px] flex-1 items-center gap-3  text-light-2 data-[state=active]:bg-[#FFFFFF] bg-[#eaf3ff] data-[state=active]:text-light-2 !important;

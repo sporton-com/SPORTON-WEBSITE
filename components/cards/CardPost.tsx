@@ -61,8 +61,6 @@ const CardPost = ({
     Team?.filter(
       (friend) => friend.id === author.id
     ).length === 1;
-
-  console.log(Team,isFriend,currentId)
   let commentsFilter=comments.filter(e=>e.author._id!==undefined)
   let isReplay = commentsFilter.filter(e=>e.author.id===currentId).length>=1;
   let commLen=isReplay?commentsFilter.length-1:commentsFilter.length;
@@ -106,7 +104,16 @@ const CardPost = ({
             <Link
               href={"/profile/" + author.id}
               className=" cursor-pointer w-full flex gap-4 ">
+              <div className=" cursor-pointer w-full flex gap-[3px]">
+              <Image
+                src={"/golden.svg"}
+                alt={'golden'}
+                height={20}
+                width={20}
+                className=" max-sm:scale-150"
+              />
               <h5>{author.name}</h5>
+              </div>
               {isFriend &&
               <Image
                 src={

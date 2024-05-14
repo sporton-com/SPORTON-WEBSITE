@@ -16,7 +16,7 @@ const Page = async({params}:{params:{id:string}}) => {
   return (
     <section className=" relative">
      {post && (<div className="">
-      <CardPost react={post.react} isAchievement={post?.isAchievement} video={post?.video} image={post?.image} id={post._id} parentId={post.parentId} userId={userInfo?._id} currentId={user.id} author={post.author} content={post.text}
+      <CardPost Team={userInfo?.friends} react={post.react} isAchievement={post?.isAchievement} video={post?.video} image={post?.image} id={post._id} parentId={post.parentId} userId={userInfo?._id} currentId={user.id} author={post.author} content={post.text}
       createdAt={post.createdAt} community={post.community}  comments={post.children} />
       </div>)}
       {post &&
@@ -29,7 +29,7 @@ const Page = async({params}:{params:{id:string}}) => {
         </div>}
       <div className="mt-7">
         {post?.children.map((child:any) =>
-        <CardPost react={post?.react} id={child?._id} parentId={child?.parentId} userId={userInfo?._id} currentId={child?.id} author={child?.author} content={child?.text}
+        <CardPost Team={userInfo?.friends} react={post?.react} id={child?._id} parentId={child?.parentId} userId={userInfo?._id} currentId={child?.id} author={child?.author} content={child?.text}
         createdAt={child?.createdAt} community={child?.community}  comments={child?.children} isComment={true} />)}
         </div>
     </section>

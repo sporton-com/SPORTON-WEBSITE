@@ -180,6 +180,9 @@ body{
 .tab {
   @apply flex min-h-[50px] flex-1 items-center gap-3  text-light-2 data-[state=active]:bg-dark-1 data-[state=active]:text-light-2 !important;
 }
+.tab1 {
+  @apply flex min-h-[50px] flex-1 items-center gap-3  text-light-2 data-[state=active]:bg-[#FFFFFF] bg-[#eaf3ff] data-[state=active]:text-light-2 !important;
+}
 .tab2 {
   @apply flex min-h-[50px]  items-center  text-light-2 data-[state=active]:bg-dark-1 data-[state=active]:text-light-2 !important;
 }
@@ -198,7 +201,7 @@ body{
 }
 
 .account-form_input {
-  @apply border border-light-4 bg-dark-3 text-light-1 !important;
+  @apply border border-[#1F1F22] bg-[#ffffff] text-[#000000] !important;
 }
 
 /* Comment Form */

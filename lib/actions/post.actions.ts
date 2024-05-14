@@ -38,6 +38,7 @@ export interface PostData {
       id: string;
       image: string;
       name: string;
+      sport: string;
     };
   }[];
 }
@@ -131,14 +132,14 @@ export async function fetchPostById(id: string) {
   connectDB();
   try {
     const post: PostData | null = await Post.findById(id)
-      .populate({ path: "author", model: User, select: "_id id name image" })
+      .populate({ path: "author", model: User, select: "_id id name image sport" })
       .populate({
         path: "children",
         populate: [
           {
             path: "author",
             model: User,
-            select: "_id id name parentId image",
+            select: "_id id name parentId image sport",
           },
           {
             path: "children",

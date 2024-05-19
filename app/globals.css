@@ -19,7 +19,7 @@ body{
 @layer components {
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 max-sm:px-4;
   }
 
   /* Head Text */
@@ -29,7 +29,7 @@ body{
 
   /* Activity */
   .activity-card {
-    @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+    @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 max-sm:px-2 py-4;
   }
 
   /* No Result */

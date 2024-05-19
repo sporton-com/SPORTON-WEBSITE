@@ -99,9 +99,9 @@ fileUrl?.length>0&& handleFileUrl(fileUrl);
             alt="file upload"
           />
           <h3 className="base-medium text-light-2 mb-2 mt-6">
-            Drag photo here
+            Drag photo or video here
           </h3>
-          <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
+          <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG, mp4 </p>
 
           <Button type="button" className="shad-button_dark_4">
             Select from computer

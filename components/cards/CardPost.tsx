@@ -4,6 +4,26 @@ import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Button } from "../ui/button";
 
 interface parms {
   isAchievement?:string;
@@ -86,7 +106,7 @@ const CardPost = ({
             </Link>
             <div className="thread-card_bar" />
           </div>
-          <div className=" text-white flex flex-col gap-4 w-full ">
+          <div className=" text-white flex flex-col gap-4 w-full  ">
             <div className="flex w-full flex-1 flex-row gap-4 ">
           <div className=" text-white flex flex-col items-center lg:hidden ">
             <Link href={"/profile/" + author.id} className="relative w-11 h-11">
@@ -105,6 +125,7 @@ const CardPost = ({
               href={"/profile/" + author.id}
               className=" cursor-pointer w-full flex gap-4 ">
               <div className=" cursor-pointer w-full flex gap-[3px]">
+              <h5>{author.name}</h5>
               <Image
                 src={"/golden.svg"}
                 alt={'golden'}
@@ -112,7 +133,6 @@ const CardPost = ({
                 width={20}
                 className=" max-sm:scale-150"
               />
-              <h5>{author.name}</h5>
               </div>
               {isFriend &&
               <Image
@@ -137,12 +157,68 @@ const CardPost = ({
                 </div>
                 </div>
             <p className=" text-small-regular text-light-2 ">{content}</p>
-            {image &&
-            <img
+            {image && 
+            <AlertDialog>
+            <AlertDialogTrigger>
+            <div className="max-sm:px-0 px-16">
+
+<div className="relative max-sm:aspect-square max-md:aspect-video aspect-square  mb-5">
+<img
+  src={image}
+  alt="post image"
+  className="absolute inset-0 w-full h-full rounded-lg object-cover"
+  />
+</div>
+  </div>
+            </AlertDialogTrigger>
+            <AlertDialogContent  >
+              <AlertDialogHeader>
+                <div className=" flex justify-between">
+
+              <DropdownMenu>
+  <DropdownMenuTrigger><Image src={"/assets/points-virtical.svg"} alt={"points"} height={5} width={5} /></DropdownMenuTrigger>
+  <DropdownMenuContent >
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem>Profile</DropdownMenuItem>
+    <DropdownMenuItem>Billing</DropdownMenuItem>
+    <DropdownMenuItem>Team</DropdownMenuItem>
+    <DropdownMenuItem>Subscription</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+                <AlertDialogTitle className={"text-[#ffffff] text-center"}><h5>@{author.name}</h5></AlertDialogTitle>
+                <AlertDialogCancel><Image src={"/assets/back.svg"} alt={"points"} height={15} width={15} /></AlertDialogCancel>
+                </div>
+                <AlertDialogDescription>
+                <div className="max-sm:px-0 px-16">
+
+{/* <div className="relative max-sm:aspect-square max-md:aspect-video aspect-square  mb-5"> */}
+<img
           src={image}
           alt="post image"
           className="h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5"
-        />}
+        />
+{/* </div> */}
+  </div>
+                </AlertDialogDescription>
+                <AlertDialogDescription className={"text-[#ffffff] text-center"}>
+                
+                  {content}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+               {author._id!==userId&&<div className="flex justify-center w-full">
+              <Link href={'/messaging/'+author.id}>
+              <button className="p-2  text-[#ffffff] focus-visible:ring-2 focus-visible:ring-[#ffffff] focus-visible:ring-offset-2 bg-transparent hover:border-[#ffffff] border  dark:text-[#ffffff] inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-[#ffffff] transition-colors focus-visible:outline-none "
+              >Messaging {author.name}</button>
+              </Link>
+               </div>}
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+            
+            }
         {video&&<video src={video} controls autoPlay  className="h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5"/>}
             <div className={`${isComment && "mb-10"} flex flex-col gap-3`}>
               <div className="mt-5 flex flex-row items-center gap-6">

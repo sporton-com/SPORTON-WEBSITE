@@ -1,13 +1,10 @@
 'use client'
-import { fetchCommunities } from "@/lib/actions/community.actions";
 import { fetchAllUser } from "@/lib/actions/user.actions";
 import React, { useState,useEffect } from "react";
-import CommunityCard from "../cards/CommunityCard";
 import UserCard from "../cards/UserCard";
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { sports } from "@/constants/icons";
-import Image from "next/image";
 const Search = ({
   typeS,
 }: {
@@ -16,9 +13,6 @@ const Search = ({
   
   const [resultU, setResultU] = useState<{ users: any[]; isNext: boolean }>(
     { users: [], isNext: false }
-  );
-  const [resultC, setResultC] = useState<{ communities: any[]; isNext: boolean }>(
-    { communities: [], isNext: false }
   );
   const [show, setShow] = useState<boolean>(
     true
@@ -50,15 +44,6 @@ const Search = ({
             setResultU(result);
           }
         
-      }else if (typeS==='community') {
-        let result = await fetchCommunities({
-          searchString: e,
-          pageNumber: 1,
-          pageSize: 30,
-        });
-        if (result !== undefined) {
-          setResultC(result);
-        }
       }
     } catch (e: any) {
       console.log("faild to search", e);
@@ -80,23 +65,24 @@ const Search = ({
       </div>
       {show&&<div className="mt-8">
         <Tabs defaultValue="" className="w-full">
-          <TabsList className=" flex max-sm:gap-x-10  max-sm:flex-wrap h-auto">
-            {sports.map((tab) =>(tab.label==="Football"||tab.label==="Running"||tab.label==="Tennis"||tab.label==="Basketball"||tab.label==="Swimming"||tab.label==="Karate") &&(
-              <TabsTrigger onClick={()=>{setShowC(false)}} key={tab.label} value={tab.value} className="tab2 flex-col  justify-between">
-                <img
-                  src={tab.icon}
-                  alt={tab.label}
-                  className="object-contain max-sm:h-[3.645rem] max-sm:w-[3.645rem] h-32 w-32  "
-                />
-                <p className=" max-sm:hidden">{tab.label}</p>
-             
-                  {/* <p className="   rounded-full px-2 text-base-regular">
-                    {sportsLen.filter((s) => s===tab.value.split(" ")[0]).length}
-                  </p> */}
+        <TabsList className="grid grid-cols-3 gap-3 sm:grid-cols-6 h-auto p-3 justify-evenly">
+  {sports.map((tab) => (
+    (tab.label === "Football" || tab.label === "Running" || tab.label === "Tennis" || tab.label === "Basketball" || tab.label === "Swimming" || tab.label === "Karate") && (
+      <TabsTrigger onClick={() => { setShowC(false) }} key={tab.label} value={tab.value} className="tab2 flex-col bg-[#ffffff]">
+        <img
+          src={tab.icon}
+          alt={tab.label}
+          className="object-contain max-sm:h-[3.645rem] max-sm:w-[3.645rem] h-32 w-32"
+        />
+        <p className="max-sm:hidden">{tab.label}</p>
+        {/* <p className="rounded-full px-2 text-base-regular">
+          {sportsLen.filter((s) => s === tab.value.split(" ")[0]).length}
+        </p> */}
+      </TabsTrigger>
+    )
+  ))}
+</TabsList>
 
-              </TabsTrigger>
-            ))}
-          </TabsList>
           {sports.map((tab) => (
             <TabsContent
               key={`content-${tab.label}`}
@@ -118,7 +104,7 @@ const Search = ({
         </Tabs>
       </div> }
       {showC&&
-    <div className={` mt-14 flex flex-1   ${typeS==='community'?' flex-wrap justify-evenly max-sm:flex-col gap-7':'flex-col gap-9' }`}>
+    <div className={` mt-14 flex flex-1   ${'flex-col gap-9' }`}>
       
       {typeS==='user' ?(resultU?.users.length === 0 ? (
         <h1>no result</h1>

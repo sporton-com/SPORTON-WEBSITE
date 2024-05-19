@@ -185,7 +185,7 @@ const AccountProfile = ({ userData }: props) => {
             <FormItem>
             <RadioGroup className="flex" onChange={e=>{
               field.onChange(e)
-              setType(e.target.value)
+              setType(e.target?.value)
             }} name={field.name} onBlur={field.onBlur} ref={field.ref} disabled={field.disabled} defaultValue={field.value}>
   <div className="flex items-center space-x-2">
     <RadioGroupItem value={'player'} id="option-one" />

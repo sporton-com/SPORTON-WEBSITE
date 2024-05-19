@@ -1,10 +1,12 @@
 'use client'
 import React,{useEffect} from 'react'
-const LocalStore = ({image,id}:{image:string|undefined,id:string}) => {
+import { UserData } from '@/lib/actions/user.actions';
+const LocalStore = (props:UserData) => {
     useEffect(() =>{
-        image &&  localStorage.setItem("image",image)
-        localStorage.setItem("id",id)
-    },[image,id])
+      props.image &&  localStorage.setItem("image",props.image)
+      localStorage.setItem("id",props.id)
+      localStorage.setItem('userInfo', JSON.stringify(props))
+    },[props])
   return (
     <div></div>
   )

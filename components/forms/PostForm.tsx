@@ -153,7 +153,7 @@ const PostForm =  ({  post,action,id ,image,
               <FormControl>
                 <Textarea
                 placeholder="What are you thinking?"
-                  className={`${show?'h-20':'h-80'} bg-transparent text-white rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-transparent custom-scrollbar`}
+                  className={`${show?'h-20':'h-40'} bg-transparent text-white rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-transparent custom-scrollbar`}
                   {...field}
                 />
               </FormControl>

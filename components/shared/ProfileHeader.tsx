@@ -68,17 +68,19 @@ const ProfileHeader = ({
                 className="rounded-full max-sm:w-16 max-sm:h-16 w-24 h-24 object-cover shadow-2xl"
               />
               <div className="flex flex-col gap-3">
+              <Image src={'/'+sport.split(' ')[0]+".svg"} alt={sport}  height={30} width={30} className="-translate-x-4"/>
                 <div className="flex gap-[3px]">
-                <Image
+                
+                  <h3 className="text-white text-body-bold " style={{whiteSpace: 'nowrap',zIndex:'1000'}}>
+                    
+                    {name}</h3>
+                    <Image
                 src={"/golden.svg"}
                 alt={'golden'}
                 height={20}
                 width={20}
                 className=" max-sm:scale-150"
               />
-                  <h3 className="text-white text-body-bold " style={{whiteSpace: 'nowrap',zIndex:'1000'}}>
-                    
-                    {name}</h3>
                 </div>
                 <p className=" text-subtle-medium max-sm:text-[9px] text-gray-1">
                   {"@" + username}
@@ -86,13 +88,7 @@ const ProfileHeader = ({
               </div>
             </div>
             <div className="flex items-end h-full">
-              <Image
-                src={"/" + sport.split(" ")[0] + ".svg"}
-                alt={sport}
-                height={100}
-                width={100}
-                className=" mt-20 max-sm:scale-150"
-              />
+              
             </div>
         
         </div>

@@ -23,8 +23,12 @@ const Topbar = () => {
             <div className=' flex flex-row justify-between'>
                 <Link href="/" className=' flex items-center justify-between w-1/12  g-3  no-underline text-body-bold text-white' >
                   
-                  <Image src="/logo5.gif" alt='' width={80} height={80} className=""  />
-                  {/* <p className='ms-2 max-md:hidden'> SPORTON</p> */}
+                  <div className="flex items-center  gap-9">
+                  <div className=" max-sm:w-16 max-sm:h-16 w-20 h-20 relative ">
+                  <Image src="/logo5.gif" alt='' fill  className=""  />
+                    </div>
+                  <p className='ms-2 max-md:hidden text-[#FF971D] -translate-x-10'> SPORTON</p>
+                    </div>
                   </Link>
                   <div className="flex p-1 gap-9">
                     

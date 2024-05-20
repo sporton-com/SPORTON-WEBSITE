@@ -23,6 +23,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 import { Button } from "../ui/button";
 
 interface parms {
@@ -222,6 +229,7 @@ const CardPost = ({
         {video&&<video src={video} controls autoPlay  className="h-64 xs:h-[400px] lg:h-[450px] w-full rounded-[24px] object-cover mb-5"/>}
             <div className={`${isComment && "mb-10"} flex flex-col gap-3`}>
               <div className="mt-5 flex flex-row items-center gap-6">
+                
                 <Image
                   src={isReact?"/assets/heart-filled.svg":"/assets/heart-gray.svg"}
                   alt="heart"
@@ -230,6 +238,9 @@ const CardPost = ({
                   className=" hover:scale-125 cursor-pointer object-contain"
                   onClick={handleHeart}
                 />
+                <TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger>
                 <Link href={`/post/${id}`}>
                   <Image
                     src="/assets/reply.svg"
@@ -239,7 +250,16 @@ const CardPost = ({
                     className=" hover:scale-125 cursor-pointer object-contain"
                   />
                 </Link>
-                <Link href={`/new-post?p=${content}`}>
+                </TooltipTrigger>
+    <TooltipContent>
+      <p className="text-primary-500" >replay</p>
+    </TooltipContent>
+  </Tooltip>
+</TooltipProvider>
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger>
+                <Link href={`/new-post?p=${content}`} className="">
                 <Image
                   src="/assets/repost.svg"
                   alt="repost"
@@ -248,6 +268,12 @@ const CardPost = ({
                   className="hover:scale-125 cursor-pointer object-contain"
                   />
                   </Link>
+                  </TooltipTrigger>
+    <TooltipContent>
+      <p className="text-primary-500" >repost</p>
+    </TooltipContent>
+  </Tooltip>
+</TooltipProvider>
                 <Image
                   src="/assets/share.svg"
                   alt="share"

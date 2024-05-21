@@ -4,11 +4,11 @@ import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
 import { useState } from 'react';
 import Image from "next/image";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Boosting",
-};
+// export const metadata: Metadata = {
+//   title: "Boosting",
+// };
 const Page = () => {
   const [first, setValue] = useState<number>()
   const [first2, setValue2] = useState<number>()

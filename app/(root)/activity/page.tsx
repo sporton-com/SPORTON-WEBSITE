@@ -5,9 +5,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "SPORTEN | Activity",
-};
+// export const metadata: Metadata = {
+//   title: "SPORTEN | Activity",
+// };
 const Page = async () => {
   let user = await currentUser();
   if (!user) return redirect('/sign-in');

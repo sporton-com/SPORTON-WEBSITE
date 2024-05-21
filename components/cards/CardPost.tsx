@@ -1,5 +1,5 @@
 "use client";
-import {useState} from 'react';
+import { useState } from "react";
 import { reactToPost } from "@/lib/actions/post.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
@@ -32,7 +32,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 
 import {
   Tooltip,
@@ -96,7 +96,7 @@ const CardPost = ({
   image,
 }: parms) => {
   let pathname = usePathname();
-  let [copy,setCopy] = useState(false);
+  let [copy, setCopy] = useState(false);
   let isFriend = Team?.filter((friend) => friend.id === author.id).length === 1;
   let commentsFilter = comments.filter((e) => e.author._id !== undefined);
   let isReplay =
@@ -104,266 +104,279 @@ const CardPost = ({
   let commLen = isReplay ? commentsFilter.length - 1 : commentsFilter.length;
   let isReact =
     react !== undefined && react.filter((e) => e === userId).length >= 1;
-    //!!!!!!!! SocialShare
-    //?????????? SocialShare
-const SocialShare = ({ url, title }:{url:string,title:string}) => {
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
-  const encodedMessage = encodeURIComponent(`${title} ${url}`);
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(url);
-      alert('Link copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy: ', err);
-    }
+  //!!!!!!!! SocialShare
+  //?????????? SocialShare
+  const SocialShare = ({ url, title }: { url: string; title: string }) => {
+    const encodedUrl = encodeURIComponent(url);
+    const encodedTitle = encodeURIComponent(title);
+    const encodedMessage = encodeURIComponent(`${title} ${url}`);
+    const copyToClipboard = async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert("Link copied to clipboard!");
+      } catch (err) {
+        console.error("Failed to copy: ", err);
+      }
+    };
+    return (
+      <div className={"flex justify-center gap-5"}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <button onClick={copyToClipboard}>
+                <Image
+                  src={`/assets/copy.svg`}
+                  alt="heart"
+                  height={30}
+                  width={30}
+                  className=" hover:scale-125 cursor-pointer object-contain"
+                />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff]">
+              <p className="text-primary-500">Copy link </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Image
+                  src={`/assets/facebook.svg`}
+                  alt="heart"
+                  height={40}
+                  width={40}
+                  className=" hover:scale-125 cursor-pointer object-contain"
+                />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff]">
+              <p className="text-primary-500">Share on Facebook</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <a
+                href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Image
+                  src={`/assets/twitter.svg`}
+                  alt="heart"
+                  height={30}
+                  width={30}
+                  className=" hover:scale-125 cursor-pointer object-contain"
+                />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff]">
+              <p className="text-primary-500">Share on Twitter</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <a
+                href={`https://api.whatsapp.com/send?text=${encodedMessage}`}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Image
+                  src={`/assets/whatsapp.svg`}
+                  alt="heart"
+                  height={30}
+                  width={30}
+                  className=" hover:scale-125 cursor-pointer object-contain"
+                />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff]">
+              <p className="text-primary-500">Share on WhatsApp</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    );
   };
-  return (
-    <div className={"flex justify-center gap-5"}>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-      <button
-        onClick={copyToClipboard}
-      >
+  //?????????? end SocialShare
+  //!!!!!!!! SocialShare
+  let IconsFooter = ({
+    isMessenger,
+    isWhite,
+  }: {
+    isMessenger?: boolean;
+    isWhite?: boolean;
+  }) => (
+    <div className={`${isComment && "mt-10"} flex flex-col gap-3`}>
+      {!isComment && commentsFilter.length > 0 && (
+        <Link href={`/post/${id}`}>
+          {commLen > 0 ? (
+            <p
+              className={`mt-1 text-subtle-medium  ${
+                isWhite ? " text-[#ffffff]" : "text-gray-1"
+              }`}>
+              {isReplay && "you and "}
+              {commLen} repl{commLen > 1 ? "ies" : "y"}
+            </p>
+          ) : null}
+        </Link>
+      )}
+      <div className="mt-5 flex flex-row items-center gap-6">
         <Image
-                src={`/assets/copy.svg`}
-                alt="heart"
-                height={30}
-                width={30}
-                className=" hover:scale-125 cursor-pointer object-contain"
+          src={
+            isReact
+              ? "/assets/heart-filled.svg"
+              : `/assets/heart${isWhite ? "-white" : "-gray"}.svg`
+          }
+          alt="heart"
+          height={20}
+          width={20}
+          className=" hover:scale-125 cursor-pointer object-contain"
+          onClick={handleHeart}
+        />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Link href={`/post/${id}`}>
+                <Image
+                  src={`/assets/reply${isWhite ? "-white" : ""}.svg`}
+                  alt="heart"
+                  height={20}
+                  width={20}
+                  className=" hover:scale-125 cursor-pointer object-contain"
+                />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff]">
+              <p className="text-primary-500">replay</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Link href={`/new-post?p=${content}`} className="">
+                <Image
+                  src={`/assets/repost${isWhite ? "-white" : ""}.svg`}
+                  alt="repost"
+                  height={20}
+                  width={20}
+                  className="hover:scale-125 cursor-pointer object-contain"
+                />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff]">
+              <p className="text-primary-500">repost</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        {!isMessenger && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Link href={"/messaging/" + author.id} className="">
+                  <Image
+                    src={`/assets/messnger${isWhite ? "-white" : ""}.svg`}
+                    alt="repost"
+                    height={20}
+                    width={20}
+                    className="hover:scale-125 cursor-pointer object-contain"
+                  />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent className="bg-[#ffffff]">
+                <p className="text-primary-500">messaging {author.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+        <Drawer>
+          <DrawerTrigger>
+            <Image
+              src={`/assets/share${isWhite ? "-white" : ""}.svg`}
+              alt="share"
+              height={20}
+              width={20}
+              className="hover:scale-125 cursor-pointer object-contain"
+            />
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <div className={"absolute right-20 top-5"}>
+                <DrawerClose>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Image
+                          src={`/assets/close.svg`}
+                          alt="repost"
+                          height={30}
+                          width={30}
+                          className="hover:scale-125  cursor-pointer object-contain"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent className="bg-[#ffffff]">
+                        <p className="text-primary-500">close</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </DrawerClose>
+              </div>
+              <div className={"flex flex-col  items-center gap-5"}>
+                <DrawerTitle>It’s Time to share</DrawerTitle>
+                {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
+              </div>
+            </DrawerHeader>
+            <DrawerFooter>
+              <SocialShare
+                url={`https://sporton-brown.vercel.app/post/${id}`}
+                title={content}
               />
-      </button>
-      </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">Copy link </p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-      <a
-        href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Image
-                src={`/assets/facebook.svg`}
-                alt="heart"
-                height={40}
-                width={40}
-                className=" hover:scale-125 cursor-pointer object-contain"
-              />
-      </a>
-      </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">Share on Facebook</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-      <a
-        href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-         <Image
-                src={`/assets/twitter.svg`}
-                alt="heart"
-                height={30}
-                width={30}
-                className=" hover:scale-125 cursor-pointer object-contain"
-              />
-      </a>
-      </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">Share on Twitter</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-          <a
-        href={`https://api.whatsapp.com/send?text=${encodedMessage}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-         <Image
-                src={`/assets/whatsapp.svg`}
-                alt="heart"
-                height={30}
-                width={30}
-                className=" hover:scale-125 cursor-pointer object-contain"
-              />
-      </a>
-      </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">Share on WhatsApp</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
     </div>
   );
-};
-//?????????? end SocialShare
-//!!!!!!!! SocialShare
-    let IconsFooter=({isMessenger,isWhite}:{isMessenger?:boolean,isWhite?:boolean})=><div className={`${isComment && "mt-10"} flex flex-col gap-3`}>
-    {!isComment && commentsFilter.length > 0 && (
-      <Link href={`/post/${id}`}>
-        {commLen > 0 ? (
-          <p className={`mt-1 text-subtle-medium  ${ isWhite ?" text-[#ffffff]":"text-gray-1"}`}>
-            {isReplay && "you and "}
-            {commLen} repl{commLen > 1 ? "ies" : "y"}
-          </p>
-        ) : null}
-      </Link>
-    )}
-    <div className="mt-5 flex flex-row items-center gap-6">
-      <Image
-        src={
-          isReact
-            ? "/assets/heart-filled.svg"
-            : `/assets/heart${isWhite?"-white":"-gray"}.svg`
-        }
-        alt="heart"
-        height={20}
-        width={20}
-        className=" hover:scale-125 cursor-pointer object-contain"
-        onClick={handleHeart}
-      />
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Link href={`/post/${id}`}>
-              <Image
-                src={`/assets/reply${isWhite?"-white":""}.svg`}
-                alt="heart"
-                height={20}
-                width={20}
-                className=" hover:scale-125 cursor-pointer object-contain"
-              />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">replay</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Link href={`/new-post?p=${content}`} className="">
-              <Image
-                src={`/assets/repost${isWhite?"-white":""}.svg`}
-                alt="repost"
-                height={20}
-                width={20}
-                className="hover:scale-125 cursor-pointer object-contain"
-              />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">repost</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-     
-      {!isMessenger&&<TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Link href={"/messaging/" + author.id} className="">
-              <Image
-                src={`/assets/messnger${isWhite?"-white":""}.svg`}
-                alt="repost"
-                height={20}
-                width={20}
-                className="hover:scale-125 cursor-pointer object-contain"
-              />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">messaging {author.name}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>}
-      <Drawer>
-  <DrawerTrigger><Image
-        src={`/assets/share${isWhite?"-white":""}.svg`}
-        alt="share"
-        height={20}
-        width={20}
-        className="hover:scale-125 cursor-pointer object-contain"
-      /></DrawerTrigger>
-  <DrawerContent>
-    <DrawerHeader>
-    <div className={"absolute right-20 top-5"}>
-
-<DrawerClose>
-  <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-
-              <Image
-                src={`/assets/close.svg`}
-                alt="repost"
-                height={30}
-                width={30}
-                className="hover:scale-125  cursor-pointer object-contain"
-              />
-          </TooltipTrigger>
-          <TooltipContent className="bg-[#ffffff]">
-            <p className="text-primary-500">close</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-</DrawerClose>
-</div>
-    <div className={"flex flex-col  items-center gap-5"}>
-      <DrawerTitle>Share this post on...</DrawerTitle>
-      {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
-      </div>
-    </DrawerHeader>
-    <DrawerFooter>
-      <SocialShare url={`https://sporton-brown.vercel.app/post/${id}`} title={content}/>
-      
-    </DrawerFooter>
-  </DrawerContent>
-</Drawer>
-
-      
-    </div>
-    
-  </div>
-  let DropDown=({isBlack}:{isBlack?:boolean})=>
+  let DropDown = ({ isBlack }: { isBlack?: boolean }) => (
     <div>
-  <DropdownMenu>
-  <DropdownMenuTrigger>
-    <Image
-      src={`/assets/points-virtical${isBlack?'-white':''}.svg`}
-      alt={"points"}
-      height={5}
-      width={5}
-    />
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
-    {/* <DropdownMenuSeparator /> */}
-    <DropdownMenuItem><Link href={"/profile/" + author.id} className="flex gap-2"><Image
-                src={'/assets/edit.svg'}
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Image
+            src={`/assets/points-virtical${isBlack ? "-white" : ""}.svg`}
+            alt={"points"}
+            height={5}
+            width={5}
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+          {/* <DropdownMenuSeparator /> */}
+          <DropdownMenuItem>
+            <Link href={"/profile/" + author.id} className="flex gap-2">
+              <Image
+                src={"/assets/edit.svg"}
                 alt={author.name}
                 height={20}
                 width={20}
-              /><p>Edit post</p></Link></DropdownMenuItem>
-    <DropdownMenuItem>Billing</DropdownMenuItem>
-    <DropdownMenuItem>Team</DropdownMenuItem>
-    <DropdownMenuItem>Subscription</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-</div>;
+              />
+              <p>Edit post</p>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem>Team</DropdownMenuItem>
+          <DropdownMenuItem>Subscription</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
   let handleHeart = async () => {
     await reactToPost({
       postId: id,
@@ -392,63 +405,63 @@ const SocialShare = ({ url, title }:{url:string,title:string}) => {
           </div>
           <div className=" text-white flex flex-col gap-4 w-full  ">
             <div className="flex w-full flex-1 flex-row gap-4 ">
-            <div className="flex w-full flex-1 flex-row gap-4 ">
-              <div className=" text-white flex flex-col items-center lg:hidden ">
-                <Link
-                  href={"/profile/" + author.id}
-                  className="relative w-11 h-11">
+              <div className="flex w-full flex-1 flex-row gap-4 ">
+                <div className=" text-white flex flex-col items-center lg:hidden ">
+                  <Link
+                    href={"/profile/" + author.id}
+                    className="relative w-11 h-11">
+                    <Image
+                      src={author.image}
+                      alt={author.name}
+                      fill
+                      className="cursor-pointer rounded-full"
+                    />
+                  </Link>
+                  <div className="thread-card_bar" />
+                </div>
+                <div className="-translate-y-3">
                   <Image
-                    src={author.image}
-                    alt={author.name}
-                    fill
-                    className="cursor-pointer rounded-full"
+                    src={"/" + author.sport.split(" ")[0] + ".svg"}
+                    alt={author.sport}
+                    height={30}
+                    width={30}
+                    className="-translate-x-4"
                   />
-                </Link>
-                <div className="thread-card_bar" />
+                  <Link
+                    href={"/profile/" + author.id}
+                    className=" cursor-pointer w-full flex gap-4 ">
+                    <div className=" cursor-pointer w-full flex gap-[3px]">
+                      <h5>{author.name}</h5>
+                      <Image
+                        src={"/golden.svg"}
+                        alt={"golden"}
+                        height={20}
+                        width={20}
+                        className=" max-sm:scale-150"
+                      />
+                    </div>
+                    {isFriend && (
+                      <Image
+                        src={"/assets/members.svg"}
+                        alt="add friend"
+                        className=""
+                        width={24}
+                        height={24}
+                      />
+                    )}
+                    {isAchievement === "1" ? (
+                      <Image
+                        src={"/assets/achievement.svg"}
+                        alt={"achievement"}
+                        height={24}
+                        width={24}
+                        className="object-contain"
+                      />
+                    ) : null}
+                  </Link>
+                </div>
               </div>
-              <div className="-translate-y-3">
-                <Image
-                  src={"/" + author.sport.split(" ")[0] + ".svg"}
-                  alt={author.sport}
-                  height={30}
-                  width={30}
-                  className="-translate-x-4"
-                />
-                <Link
-                  href={"/profile/" + author.id}
-                  className=" cursor-pointer w-full flex gap-4 ">
-                  <div className=" cursor-pointer w-full flex gap-[3px]">
-                    <h5>{author.name}</h5>
-                    <Image
-                      src={"/golden.svg"}
-                      alt={"golden"}
-                      height={20}
-                      width={20}
-                      className=" max-sm:scale-150"
-                    />
-                  </div>
-                  {isFriend && (
-                    <Image
-                      src={"/assets/members.svg"}
-                      alt="add friend"
-                      className=""
-                      width={24}
-                      height={24}
-                    />
-                  )}
-                  {isAchievement === "1" ? (
-                    <Image
-                      src={"/assets/achievement.svg"}
-                      alt={"achievement"}
-                      height={24}
-                      width={24}
-                      className="object-contain"
-                    />
-                  ) : null}
-                </Link>
-              </div>
-            </div>
-            {author._id === userId&&<DropDown isBlack/>}
+              {author._id === userId && <DropDown isBlack />}
             </div>
             <p className=" text-small-regular text-light-2 ">{content}</p>
             {image && (
@@ -467,7 +480,7 @@ const SocialShare = ({ url, title }:{url:string,title:string}) => {
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <div className=" flex justify-between">
-                    {author._id === userId? <DropDown />:<div></div>}
+                      {author._id === userId ? <DropDown /> : <div></div>}
                       <AlertDialogTitle
                         className={"text-[#ffffff] text-center"}>
                         <h5>@{author.name}</h5>
@@ -499,15 +512,17 @@ const SocialShare = ({ url, title }:{url:string,title:string}) => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <div className="flex justify-center w-full">
-                    {author._id !== userId ? (
-                      <IconsFooter isWhite />
-                    ):<IconsFooter isWhite isMessenger/>}
-                        {/* <Link href={"/messaging/" + author.id}>
+                      {author._id !== userId ? (
+                        <IconsFooter isWhite />
+                      ) : (
+                        <IconsFooter isWhite isMessenger />
+                      )}
+                      {/* <Link href={"/messaging/" + author.id}>
                           <button className="p-2  text-[#ffffff] focus-visible:ring-2 focus-visible:ring-[#ffffff] focus-visible:ring-offset-2 bg-transparent hover:border-[#ffffff] border  dark:text-[#ffffff] inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-[#ffffff] transition-colors focus-visible:outline-none ">
                             Messaging {author.name}
                           </button>
                         </Link> */}
-                      </div>
+                    </div>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

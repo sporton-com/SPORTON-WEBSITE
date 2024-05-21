@@ -3,7 +3,11 @@ import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "SPORTEN | Activity",
+};
 const Page = async () => {
   let user = await currentUser();
   if (!user) return redirect('/sign-in');

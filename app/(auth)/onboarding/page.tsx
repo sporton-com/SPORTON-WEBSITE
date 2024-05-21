@@ -4,6 +4,11 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SPORTEN | onboarding",
+};
 interface usData {
   id: string | undefined;
   objectID: string | undefined;

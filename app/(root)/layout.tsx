@@ -13,7 +13,10 @@ import RightSidebar from '@/components/shared/RightSidebar';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Sporton',
+  title: {
+    default: "SPORTEN",
+    template: "%s - SPORTEN ",
+  },
   keywords:[
     "player CV",
     "sports opportunities",
@@ -48,7 +51,8 @@ export const metadata: Metadata = {
     "sports networking site"
   ],
   description: 'SPORTEN provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTEN and attract everyone\'s attention',
-  icons:'/logo.svg'
+  icons:'/logo.svg',
+
 }
 
 export default function RootLayout({

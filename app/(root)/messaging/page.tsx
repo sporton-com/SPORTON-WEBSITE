@@ -1,7 +1,11 @@
 
 
 import ChatBox from '@/components/shared/ChatBox';
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "SPORTEN | Messaging",
+};
 const ChatPage = () => {
 
   return (

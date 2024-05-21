@@ -323,8 +323,8 @@ const SocialShare = ({ url, title }:{url:string,title:string}) => {
 </DrawerClose>
 </div>
     <div className={"flex flex-col  items-center gap-5"}>
-      <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-      <DrawerDescription>This action cannot be undone.</DrawerDescription>
+      <DrawerTitle>Share this post on...</DrawerTitle>
+      {/* <DrawerDescription>This action cannot be undone.</DrawerDescription> */}
       </div>
     </DrawerHeader>
     <DrawerFooter>

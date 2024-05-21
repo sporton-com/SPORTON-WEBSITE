@@ -1,8 +1,14 @@
 'use client'
 import { addFriend, UserData} from "@/lib/actions/user.actions";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname,useRouter } from "next/navigation";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,userInfo:UserData|null|undefined})=>{
     let navigate = useRouter();
     let pathname = usePathname();
@@ -38,10 +44,12 @@ export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,u
                 <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
                 <p className=" text-small-semibold text-gray-1">@{result?.username}</p>
             </div>
-            <button
+            <TooltipProvider>
+            <Tooltip>
+          <TooltipTrigger>
+            <div
               className="flex no-underline gap-4 cursor-pointer"
               onClick={()=>handleAddMember(type,result?._id,userInfo?._id,checked)}>
-                {
               <Image
               src={checked?"/assets/user-true.svg":"/assets/user-plus.svg"}
               alt="add friend"
@@ -49,8 +57,32 @@ export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,u
               width={24}
               height={24}
               />
-            }
-            </button>
+              </div>
+              </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-primary-500">{!checked?"add":'in'} your team</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+            <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Link href={"/messaging/" + result?._id} className="">
+              <Image
+                src={`/assets/messnger-primary.svg`}
+                alt="repost"
+                height={20}
+                width={20}
+                className="hover:scale-125 cursor-pointer object-contain"
+              />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-primary-500">messaging {result?.name.split(" ")[0]}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+            
     </div>
   </article>
             )

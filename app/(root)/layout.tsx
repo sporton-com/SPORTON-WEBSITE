@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description: 'SPORTEN provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTEN and attract everyone\'s attention',
     images: [
       {
-        url: '/logo.png',
+        url: 'https://sporton-brown.vercel.app/logo.png',
         alt: 'SPORTEN LOGO',
       },
     ],

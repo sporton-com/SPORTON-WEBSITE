@@ -11,32 +11,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {Input
+} from "@/components/ui/input"
+import Link from 'next/link';
+import Image from 'next/image';
 
-const initialFriends = [
-  { id: 1, name: 'Alice', imgSrc: '/images/alice.jpg', messageUrl: 'sms:+1234567890' },
-  { id: 2, name: 'Bob', imgSrc: '/images/bob.jpg', messageUrl: 'sms:+1234567891' },
-  { id: 3, name: 'Charlie', imgSrc: '/images/charlie.jpg', messageUrl: 'sms:+1234567892' },
-  { id: 4, name: 'Dave', imgSrc: '/images/dave.jpg', messageUrl: 'sms:+1234567893' },
-  { id: 5, name: 'Eve', imgSrc: '/images/eve.jpg', messageUrl: 'sms:+1234567894' },
-  { id: 6, name: 'Frank', imgSrc: '/images/frank.jpg', messageUrl: 'sms:+1234567895' },
-  { id: 7, name: 'Grace', imgSrc: '/images/grace.jpg', messageUrl: 'sms:+1234567896' },
-  { id: 8, name: 'Hank', imgSrc: '/images/hank.jpg', messageUrl: 'sms:+1234567897' },
-  // Add more friends as needed
-];
 
-const FriendCarousel = ({ url, title,friends }:{url:string,title:string,friends:any}) => {
-  const [Friends, setFriends] = useState(initialFriends);
-  const encodedMessage = encodeURIComponent(`${title} ${url}`);
-
-  const addMoreFriends = () => {
-    const moreFriends = [
-      { id: 9, name: 'Ivy', imgSrc: '/images/ivy.jpg', messageUrl: 'sms:+1234567898' },
-      { id: 10, name: 'Jack', imgSrc: '/images/jack.jpg', messageUrl: 'sms:+1234567899' },
-      // Add more friends as needed
-    ];
-    setFriends([...Friends, ...moreFriends]);
+const FriendCarousel = ({ url, title,friends }:{url:string,title:string,friends:any[]}) => {
+  const [Friends, setFriends] = useState(friends.slice(0,7));
+  const [searchQuery, setSearchQuery] = useState('');
+  const encodedMessage = encodeURIComponent(`${title} \n ${url}`);
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
-
+  const filteredFriends = friends.filter(friend =>
+    friend.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -55,37 +45,96 @@ const FriendCarousel = ({ url, title,friends }:{url:string,title:string,friends:
       items: 4
     }
   };
-
+let frindsQ=searchQuery?filteredFriends:friends;
   return (
     <div>
       <Carousel responsive={responsive}>
         {Friends.map(friend => (
           <div key={friend.id} className="friend-card">
-            <img src={friend.imgSrc} alt={friend.name} />
-            <p className="legend">{friend.name}</p>
-            <a
-              href={`${friend.messageUrl}?body=${encodedMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="share-button"
+            <Link
+              href={`/messaging/${friend.id}?m=${encodedMessage}`}
+              className="flex flex-col items-center"
             >
-              Share with {friend.name}
-            </a>
+            <Image src={friend.image} alt={friend.name} height={80} width={80} className="rounded-full"/>
+            <p className="">{friend.name}</p>
+            </Link>
           </div>
         ))}
-      
+      {friends.length>6&&(
       <Dialog>
-  <DialogTrigger>more</DialogTrigger>
-  <DialogContent>
+  <DialogTrigger><div className="friend-card">
+            <div
+              className="flex flex-col items-center h-20 w-20 rounded-full justify-center bg-[#eeeeee]/50"
+            >
+               <Image
+            src={`/assets/points-virtical-white.svg`}
+            alt={"points"}
+            className={"rotate-90"}
+            height={5}
+            width={5}
+          />
+           
+            </div>
+        <p className="">More</p>
+          </div></DialogTrigger>
+  <DialogContent className={'bg-[#efefef]'}>
     <DialogHeader>
-      <DialogTitle>Are you absolutely sure?</DialogTitle>
+      <DialogTitle>Send to friends</DialogTitle>
+      <div> <Input
+                  placeholder="Search your friend "
+                  onChange={handleSearchChange}
+                  className=" no-focus border-none bg-dark-1 text-white"
+                /></div>
       <DialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
+      
+          <ul className="space-y-4">
+            {frindsQ.map(friend => (
+              <li key={friend.id} className="p-4 border   rounded-md flex items-center">
+                <div key={friend.id} className="flex ">
+            <Link
+              href={`/messaging/${friend.id}?m=${encodedMessage}`}
+              className="flex  items-center"
+            >
+             <div
+                    className="relative w-11 h-11">
+                    <Image
+                      src={friend.image}
+                      alt={friend.name}
+                      fill
+                      className="cursor-pointer rounded-full"
+                    />
+                  </div>
+            <div className="-translate-y-3 ps-4">
+                  <Image
+                    src={"/" + friend.sport.split(" ")[0] + ".svg"}
+                    alt={friend.sport}
+                    height={30}
+                    width={30}
+                    className="-translate-x-4"
+                  />
+                  <div
+                    className=" cursor-pointer w-full flex gap-4 ">
+                    <div className=" cursor-pointer w-full flex gap-[3px]">
+                      <h5>{friend.name}</h5>
+                      <Image
+                        src={"/golden.svg"}
+                        alt={"golden"}
+                        height={20}
+                        width={20}
+                        className=" max-sm:scale-150"
+                      />
+                    </div>
+                  </div>
+                </div>
+            </Link>
+          </div>
+              </li>
+            ))}
+          </ul>
       </DialogDescription>
     </DialogHeader>
   </DialogContent>
-</Dialog>
+</Dialog>)}
 </Carousel>
     </div>
   );

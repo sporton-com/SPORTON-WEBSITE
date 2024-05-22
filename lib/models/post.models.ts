@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const reactSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  createdAt: { type: Date, default: Date.now },
+});
+
 const postSchema = new mongoose.Schema({
   text: { type: String, required: true },
   image: { type: String },
@@ -14,7 +19,7 @@ const postSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  react: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  react: [reactSchema],
   parentId: { type: String },
   children: [
     {
@@ -23,5 +28,6 @@ const postSchema = new mongoose.Schema({
     },
   ],
 });
+
 const Post = mongoose.models.Post || mongoose.model("Post", postSchema);
 export default Post;

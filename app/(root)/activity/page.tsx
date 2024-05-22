@@ -3,7 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 
 // export const metadata: Metadata = {
 //   title: "SPORTEN | Activity",
@@ -28,7 +28,8 @@ const Page = async () => {
                 <Image src={activity.author.image} alt={activity.author.name} width={40} height={40} className=' rounded-full object-contain' />
                 <p className=" !text-small-regular text-light-1">
                   <span className="mr-1 text-primary-500">{activity.author.name}</span>
-                  {' '} replied to your post
+                  {' '} 
+                  {activity.type === 'comment' ? 'replied to your post' : 'reacted to your post'}
                 </p>
                 </article>
               </Link>

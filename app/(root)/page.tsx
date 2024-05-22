@@ -1,13 +1,19 @@
 import Home from "@/components/shared/MainHome";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { fetchPosts } from "@/lib/actions/post.actions";
+import { UserData, fetchUser } from "@/lib/actions/user.actions";
+
 export default async function HOME() {
   const user = await currentUser();
   if (!user) redirect("/sign-in");
-
+  const userInfo = await fetchUser(user.id);
+        if (!userInfo || !userInfo.onboarding) 
+          redirect("/onboarding");
+        const FPosts = await fetchPosts(1, 1000);
 
   return (
-    <Home id={user.id}/>
+    <Home id={user.id} FPosts={FPosts} userInfo={userInfo}/>
   );
 }
 

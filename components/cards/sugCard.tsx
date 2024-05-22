@@ -14,8 +14,7 @@ export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,u
     let pathname = usePathname();
     let handleAddMember=async(type:string,accountId:string,myId:string|undefined,isFriend:boolean)=>{
         await addFriend({
-          finalF: "activity",
-          finalU: "sended",
+          
           friendId: accountId,
           userId: myId,
           path: pathname,
@@ -44,6 +43,26 @@ export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,u
                 <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
                 <p className=" text-small-semibold text-gray-1">@{result?.username}</p>
             </div>
+            {checked&&
+            <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Link href={"/messaging/" + result?.id} className="">
+              <Image
+                src={`/assets/messnger-primary.svg`}
+                alt="repost"
+                height={20}
+                width={20}
+                className="hover:scale-125 cursor-pointer object-contain"
+              />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-primary-500">messaging {result?.name.split(" ")[0]}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+          }
             <TooltipProvider>
             <Tooltip>
           <TooltipTrigger>
@@ -64,25 +83,7 @@ export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,u
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-            <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>
-            <Link href={"/messaging/" + result?._id} className="">
-              <Image
-                src={`/assets/messnger-primary.svg`}
-                alt="repost"
-                height={20}
-                width={20}
-                className="hover:scale-125 cursor-pointer object-contain"
-              />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p className="text-primary-500">messaging {result?.name.split(" ")[0]}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-            
+     
     </div>
   </article>
             )

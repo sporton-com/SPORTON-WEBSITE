@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import { Button } from "../ui/button";
+import FriendCarousel from "./FriendCarousel";
 
 interface parms {
   isAchievement?: string;
@@ -103,13 +104,22 @@ const CardPost = ({
     commentsFilter.filter((e) => e.author.id === currentId).length >= 1;
   let commLen = isReplay ? commentsFilter.length - 1 : commentsFilter.length;
   let isReact =
-    react !== undefined && react.filter((e) => e === userId).length >= 1;
+    react !== undefined && react.filter((e:any) => e?.user?._id === userId).length >= 1;
+    let handleHeart = async () => {
+      console.log(react)
+      await reactToPost({
+        postId: id,
+        react: isReact,
+        userId: userId,
+        path: pathname,
+      });
+    };
   //!!!!!!!! SocialShare
   //?????????? SocialShare
   const SocialShare = ({ url, title }: { url: string; title: string }) => {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
-    const encodedMessage = encodeURIComponent(`${title} ${url}`);
+    const encodedMessage = encodeURIComponent(`${title} \n  ${url}`);
     const copyToClipboard = async () => {
       try {
         await navigator.clipboard.writeText(url);
@@ -123,7 +133,7 @@ const CardPost = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <button onClick={copyToClipboard}>
+              <div onClick={copyToClipboard}>
                 <Image
                   src={`/assets/copy.svg`}
                   alt="heart"
@@ -131,7 +141,7 @@ const CardPost = ({
                   width={30}
                   className=" hover:scale-125 cursor-pointer object-contain"
                 />
-              </button>
+              </div>
             </TooltipTrigger>
             <TooltipContent className="bg-[#ffffff]">
               <p className="text-primary-500">Copy link </p>
@@ -214,6 +224,28 @@ const CardPost = ({
     isWhite?: boolean;
   }) => (
     <div className={`${isComment && "mt-10"} flex flex-col gap-3`}>
+      <div className="flex flex-row items-center gap-6">
+      {react&&react.length > 0 ? (
+                <div className="mt-1 flex flex-row items-center">
+        <p
+        className={` text-subtle-medium  ${
+          isWhite ? " text-[#ffffff]" : "text-gray-1"
+        }`}>
+        
+        {react.length} 
+        </p>
+        <Image
+          src={
+"/assets/heart-filled.svg"
+
+          }
+          alt="heart"
+          height={20}
+          width={20}
+          className="  object-contain"
+        />
+        </div>
+      ) : null}
       {!isComment && commentsFilter.length > 0 && (
         <Link href={`/post/${id}`}>
           {commLen > 0 ? (
@@ -227,6 +259,9 @@ const CardPost = ({
           ) : null}
         </Link>
       )}
+      
+      
+      </div>
       <div className="mt-5 flex flex-row items-center gap-6">
         <Image
           src={
@@ -309,7 +344,7 @@ const CardPost = ({
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader>
-              <div className={"absolute right-20 top-5"}>
+              <div className={"absolute right-[10%] top-5"}>
                 <DrawerClose>
                   <TooltipProvider>
                     <Tooltip>
@@ -335,10 +370,18 @@ const CardPost = ({
               </div>
             </DrawerHeader>
             <DrawerFooter>
+              {Team.length>0&&(
+                <>
+              <h2 className="text-body-bold">Send to friends?</h2>
+            <FriendCarousel url={`/post/${id}`}
+                title={content} friends={Team}/>
+                </>
+                )}
               <SocialShare
                 url={`https://sporton-brown.vercel.app/post/${id}`}
                 title={content}
               />
+
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
@@ -377,14 +420,7 @@ const CardPost = ({
       </DropdownMenu>
     </div>
   );
-  let handleHeart = async () => {
-    await reactToPost({
-      postId: id,
-      react: isReact,
-      userId: userId,
-      path: pathname,
-    });
-  };
+  
   return (
     <article
       className={` flex w-full flex-col rounded-xl ${

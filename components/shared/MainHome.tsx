@@ -3,43 +3,20 @@ import { useState, useEffect } from 'react';
 import CardPost from "@/components/cards/CardPost";
 import PostButtonHome from "@/components/cards/PostHome";
 import LocalStore from "@/components/cards/LocalStore";
-import { PostData, fetchPosts } from "@/lib/actions/post.actions";
-import { UserData, fetchUser } from "@/lib/actions/user.actions";
-import { useRouter } from 'next/navigation';
+import { PostData  } from "@/lib/actions/post.actions";
+import { UserData } from "@/lib/actions/user.actions";
 import Loader from './Loader';
 
-export default function Home({id}:{id:string}) {
-  const [userInfo, setUserInfo] = useState<UserData>();
-  const [FPosts, setFPosts] = useState<{
-    posts: PostData[];
-    isNext: boolean;
-} | undefined>(undefined);
-  const [friends, setFriends] = useState<{ _id: string; id: string; name: string; username: string; image: string; }[]>();
-  const router = useRouter();
+export default function Home({id,FPosts,userInfo}:{id:string,FPosts:{
+  posts: PostData[];
+  isNext: boolean;
+} | undefined,userInfo:UserData}) {
+
+  let friends=userInfo.friends;
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-
-        const userResponse = await fetchUser(id);
-        if (!userResponse || !userResponse.onboarding) {
-          router.replace("/onboarding");
-          return;
-        }
-
-        const postsResponse = await fetchPosts(1, 1000);
-        setFPosts(postsResponse);
-        setUserInfo(userResponse);
-        setFriends(userResponse.friends);
-        console.log('success fetch data')
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        // Handle error, perhaps show a message to the user
-      }
-    }
-
-    fetchData();
-  }, []); // Empty dependency array to run only once on component mount
+    userInfo&& localStorage.setItem("userInfo",JSON.stringify(userInfo))
+  }, [userInfo]); 
 
   return (
     friends&&userInfo&&FPosts?

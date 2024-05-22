@@ -170,71 +170,44 @@ export async function fetchUserPosts(userId: string) {
     console.log(`not found user: ${error.message}`);
   }
 }
-export interface Activity {
-  _id: mongoose.Types.ObjectId;
-  type: "comment" | "reaction";
-  author: {
-    _id: mongoose.Types.ObjectId;
-    name: string;
-    image: string;
-  };
-  createdAt: Date;
-  parentId: string;
-}
-
-
-export async function getActivity(userId: string) {
-  await connectDB();  // تأكد من أن connectDB دالة تقوم بالاتصال بقاعدة البيانات
-  try {
-    const userPosts = await Post.find({ author: userId });
-    const childPostIds = userPosts.reduce((acc: mongoose.Types.ObjectId[], post) => acc.concat(post.children), []);
-
-    const replies = await Post.find({ _id: { $in: childPostIds }, author: { $ne: userId } })
-      .populate({
-        path: 'author',
-        model: User,
-        select: '_id name image',
-      })
-      .populate({
-        path: 'react.user',
-        model: User,
-        select: '_id name image',
-      })
-      .populate({
-        path: 'children',
-        model: Post,
-        populate: {
-          path: 'author',
-          model: User,
-          select: '_id name image',
-        },
-      });
-
-    return replies;
-  } catch (e: any) {
-    console.error(`Error fetching activity for user ${userId}: ${e.message}`);
-    throw new Error(e.message);
+interface ActivityData {
+    createdAt: Date;
+    text:string;
+    author:{
+      _id:string, name:string, image:string, sport:string,
+    },parentId:string,type:string
   }
+  
+  interface ReactData {
+    createdAt: Date;
+    user:{
+      _id:string, name:string, image:string, sport:string
+    },
+    _id:string,
+    type:string,parentId:string
+  }
+export async function getActivity (userId:string) {
+    connectDB();
+    try {
+        let userPosts= await Post.find({author:userId}).populate({
+            path: 'react.user',
+            model: User,
+            select: '_id name image sport'
+          }).lean();
+        let childPostIds= userPosts.reduce((acc :any , post : any) =>acc.concat(post.children),[])
+        let reacts:ReactData[]= userPosts.reduce((acc :any , post : any) =>acc.concat(post.react.map((e:{user:any,_id:string,createdAt:any})=>{return{...e,type:"react",parentId:post._id}})),[])
+        let replies :ActivityData[] = await Post.find({_id:{$in:childPostIds},author:{$ne:userId}})
+        .populate({
+            path:'author',
+            model:User,
+            select:'_id name image sport'
+        })
+        return {activity:replies,reacts};
+    }catch(e:any){
+        console.log(`not found user: ${e.message}`);
+
+    }
 }
-
-
-// export async function getActivity (userId:string) {
-//     connectDB();
-//     try {
-//         let userPosts= await Post.find({author:userId})
-//         let childPostIds= userPosts.reduce((acc :any , post : any) =>acc.concat(post.children),[])
-//         let replies = await Post.find({_id:{$in:childPostIds},author:{$ne:userId}})
-//         .populate({
-//             path:'author',
-//             model:User,
-//             select:'_id name image'
-//         })
-//         return replies;
-//     }catch(e:any){
-//         console.log(`not found user: ${e.message}`);
-
-//     }
-// }
 interface AddFriendParams {
   userId?: string;
   friendId: string;

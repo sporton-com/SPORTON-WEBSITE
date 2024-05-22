@@ -40,7 +40,19 @@ export const metadata: Metadata = {
     "sports networking site"
   ],
   description: 'SPORTEN provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTEN and attract everyone\'s attention',
-  icons:'/logo.svg'
+  icons:'/logo5.gif',
+  openGraph: {
+    type: 'website',
+    url: 'https://sporton-brown.vercel.app/',
+    title: 'SPORTEN',
+    description: 'SPORTEN provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTEN and attract everyone\'s attention',
+    images: [
+      {
+        url: '/logo.png',
+        alt: 'SPORTEN LOGO',
+      },
+    ],
+  },
 }
 
 export default function RootLayout({

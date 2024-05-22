@@ -42,7 +42,7 @@ const FriendCarousel = ({ url, title,friends }:{url:string,title:string,friends:
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
-      items: 4
+      items: 3
     }
   };
 let frindsQ=searchQuery?filteredFriends:friends;
@@ -87,7 +87,7 @@ let frindsQ=searchQuery?filteredFriends:friends;
                 /></div>
       <DialogDescription>
       
-          <ul className="space-y-4">
+          <ul className="space-y-4 overflow-scroll h-96">
             {frindsQ.map(friend => (
               <li key={friend.id} className="p-4 border   rounded-md flex items-center">
                 <div key={friend.id} className="flex ">

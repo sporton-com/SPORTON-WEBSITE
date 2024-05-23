@@ -12,8 +12,9 @@ interface props{
     personType:string
     
 }
-const UserCard = ({id,name,username,image,personType,sport}:props) => {
-    let navigate= useRouter();
+const UserCard = ({person}:{person:string}) => {
+ let {id,name,username,image,sport}:props=JSON.parse(person)
+  let navigate= useRouter();
   return (
   <article className='user-card'>
     <div className="user-card_avatar">

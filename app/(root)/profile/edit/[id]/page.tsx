@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 import AccountProfile from "@/components/forms/AccountProfile";
-import { fetchCommunityDetails } from "@/lib/actions/community.actions";
 
 interface userData{
     id:string,

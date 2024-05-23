@@ -1,5 +1,4 @@
 "use server";
-import mongoose from 'mongoose';
 import { connectDB } from "@/mongoose";
 import { currentUser } from "@clerk/nextjs/server";
 import { FilterQuery, SortOrder } from "mongoose";
@@ -7,6 +6,8 @@ import { revalidatePath } from "next/cache";
 import Post from "../models/post.models";
 import User from "../models/user.models";
 import { PostData } from "./post.actions";
+import Room from '../models/room.model';
+import { redirect } from 'next/navigation';
 interface props {
   userId: string | undefined;
   username: string;
@@ -84,10 +85,13 @@ export async function updateUser({
     console.log(`failed to update user: ${error.message}`);
   }
 }
-export async function fetchUser(userId: string | undefined) {
+export async function fetchUser(userId?: string | undefined) {
   connectDB();
   try {
-    let user: UserData | null = await User.findOne({ id: userId })
+    const user = await currentUser();
+    if (!user) return redirect("/sign-in");
+    let id=userId?userId:user.id;
+    let userInfo: UserData | null = await User.findOne({ id: id })
       .populate({
         path: "friends",
         model: User,
@@ -95,13 +99,12 @@ export async function fetchUser(userId: string | undefined) {
       })
       .lean();
 
-    if (!user) {
+    if (!userInfo) {
       console.log("user not found");
       console.log("found user with id ");
     }
 
-    console.log(user);
-    return user;
+    return userInfo;
   } catch (error: any) {
     console.log(`not found user: ${error.message}`);
   }
@@ -201,7 +204,7 @@ export async function getActivity (userId:string) {
             path:'author',
             model:User,
             select:'_id name image sport'
-        })
+        }).lean();
         return {activity:replies,reacts};
     }catch(e:any){
         console.log(`not found user: ${e.message}`);
@@ -227,19 +230,69 @@ export async function addFriend({
       return;
     }
 
-    const updateOperation = isFriend
+       const updateOperation = isFriend
       ? { $pull: { friends: friendId } }
       : { $push: { friends: friendId } };
+      const updateFriendQ = isFriend ? { $pull: { friends: userId } } : { $push: { friends: userId } }
 
-    await User.findByIdAndUpdate(userId, updateOperation);
-    await User.findByIdAndUpdate(
-      friendId,
-      isFriend ? { $pull: { friends: userId } } : { $push: { friends: userId } }
-    );
+      const ChatRoom = await Room.findOneAndUpdate(
+        { name: { $in: [`${userId}-${friendId}`, `${friendId}-${userId}`] } },
+        { $setOnInsert: { name: `${userId}-${friendId}`, users: [userId, friendId] } },
+        { upsert: true, new: true }
+      );
+      let user=await User.findById(userId);
+      let isChatAdded=user?user?.rooms?user.rooms.includes(ChatRoom._id):false:false;
+      if(ChatRoom){
+        
+        let quary=!isChatAdded?
+          { $push: { rooms: ChatRoom._id } ,
+          ...updateOperation}:
+          updateOperation
+          let quary2=!isChatAdded?{
+             $push: { rooms: ChatRoom._id } ,
+            ...updateFriendQ}:
+            updateFriendQ
+            await User.findByIdAndUpdate(userId, quary);
+            await User.findByIdAndUpdate(
+            friendId,
+            quary2
+          );
+      }
+      
 
     console.log("نجاح في إضافة/إزالة الصديق");
-    revalidatePath(path);
+    revalidatePath(path); // Assuming you have a function to revalidate the path
   } catch (error: any) {
     console.log(`فشل في إضافة/إزالة الصديق: ${error.message}`);
   }
 }
+
+// export async function addFriend({
+//   friendId,
+//   userId,
+//   path,
+//   isFriend,
+// }: AddFriendParams) {
+//   connectDB();
+//   try {
+//     if (!userId || !friendId) {
+//       console.log("userId أو friendId غير موجود");
+//       return;
+//     }
+
+//     const updateOperation = isFriend
+//       ? { $pull: { friends: friendId } }
+//       : { $push: { friends: friendId } };
+
+//     await User.findByIdAndUpdate(userId, updateOperation);
+//     await User.findByIdAndUpdate(
+//       friendId,
+//       isFriend ? { $pull: { friends: userId } } : { $push: { friends: userId } }
+//     );
+
+//     console.log("نجاح في إضافة/إزالة الصديق");
+//     revalidatePath(path);
+//   } catch (error: any) {
+//     console.log(`فشل في إضافة/إزالة الصديق: ${error.message}`);
+//   }
+// }

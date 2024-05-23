@@ -8,7 +8,6 @@ import React from 'react'
 
 const LeftSidebar = () => {
   let pathname= usePathname();
-  let router = useRouter();
   let {userId} = useAuth();
   return (
     <section className='leftsidebar'>

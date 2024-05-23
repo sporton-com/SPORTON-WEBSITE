@@ -1,19 +1,34 @@
+"use client"
 import Home from "@/components/shared/MainHome";
-import { currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { fetchPosts } from "@/lib/actions/post.actions";
-import { UserData, fetchUser } from "@/lib/actions/user.actions";
+import { fetchUser } from "@/lib/actions/user.actions";
+import { useEffect, useState } from "react";
+import Loader from "@/components/shared/Loader";
 
-export default async function HOME() {
-  const user = await currentUser();
-  if (!user) redirect("/sign-in");
-  const userInfo = await fetchUser(user.id);
-        if (!userInfo || !userInfo.onboarding) 
-          redirect("/onboarding");
+export default  function HOME() {
+  const router = useRouter();
+  const [userInfo, setUserInfo] = useState<string>();
+  const [FPosts, setFPosts  ] = useState<string>();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+
+        const userInfo = await fetchUser();
+        if (!userInfo?.onboarding) router.replace("/onboarding");
+        userInfo && setUserInfo(JSON.stringify(userInfo));
         const FPosts = await fetchPosts(1, 1000);
+        FPosts && setFPosts(JSON.stringify(FPosts))
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
 
-  return (
-    <Home id={user.id} FPosts={FPosts} userInfo={userInfo}/>
+    fetchData();
+  }, []);
+  return (FPosts&&userInfo?
+    <Home  FPosts2={FPosts} userInfo2={userInfo}/>:<Loader is />
   );
 }
 

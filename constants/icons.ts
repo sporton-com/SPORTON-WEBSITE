@@ -15,7 +15,7 @@ export const SidebarLinks = [
       imgURL: "/assets/whistle.svg",
       imgURLh: "/assets/whistle-h.svg",
       route: "/activity",
-      label: "Activity",
+      label: "Notifications",
     },
     // {
     //   imgURL: "/assets/create.svg",

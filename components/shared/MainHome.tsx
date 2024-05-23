@@ -6,12 +6,13 @@ import LocalStore from "@/components/cards/LocalStore";
 import { PostData  } from "@/lib/actions/post.actions";
 import { UserData } from "@/lib/actions/user.actions";
 import Loader from './Loader';
-
-export default function Home({id,FPosts,userInfo}:{id:string,FPosts:{
+interface FPOSTS{
   posts: PostData[];
-  isNext: boolean;
-} | undefined,userInfo:UserData}) {
-
+    isNext: boolean;
+}
+export default function Home({FPosts2,userInfo2}:{FPosts2:string,userInfo2:string}) {
+  const userInfo: UserData = JSON.parse(userInfo2);
+  const FPosts:FPOSTS= JSON.parse(FPosts2);
   let friends=userInfo.friends;
 
   useEffect(() => {

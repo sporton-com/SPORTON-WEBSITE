@@ -23,7 +23,7 @@ interface usData {
 const Onboarding = async () => {
   let user = await currentUser();
   const userInfo = await fetchUser(user?.id);
-  // console.log(user);
+
   if (userInfo?.onboarding) redirect("/");
   let userData: usData = {
     id: user?.id,

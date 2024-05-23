@@ -29,7 +29,7 @@ const Page = async({params}:{params:{id:string}}) => {
         </div>}
       <div className="mt-7">
         {post?.children.map((child:any) =>
-        <CardPost Team={userInfo?.friends} react={post?.react} id={child?._id} parentId={child?.parentId} userId={userInfo?._id} currentId={child?.id} author={child?.author} content={child?.text}
+        <CardPost Team={userInfo?.friends} react={child?.react} id={child?._id} parentId={child?.parentId} userId={userInfo?._id} currentId={child?.id} author={child?.author} content={child?.text}
         createdAt={child?.createdAt} community={child?.community}  comments={child?.children} isComment={true} />)}
         </div>
     </section>

@@ -7,7 +7,7 @@ interface props {
   Team: any[];
   accountType: string;
   userId:string|undefined
-  result:Result|undefined|null;
+  result2:string;
 }
 
 interface Result {
@@ -19,7 +19,8 @@ interface Result {
   posts: PostData[]|undefined;
 }
 
-function PostTab({result, userId,currentUserId, Team, accountType }: props) {
+function PostTab({result2, userId,currentUserId, Team, accountType }: props) {
+  let result:Result=JSON.parse(result2);
   return (
     <div className="flex flex-col gap-10 ">
       

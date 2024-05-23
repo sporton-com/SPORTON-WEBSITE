@@ -169,6 +169,7 @@ export async function fetchPostById(id: string) {
             model: User,
             select: "_id id name parentId image sport",
           },
+          { path: "react.user", model: User, select: "_id id name image sport" },
           {
             path: "children",
             model: Post,
@@ -179,7 +180,7 @@ export async function fetchPostById(id: string) {
             },
           },
         ],
-      })
+      }).populate({ path: "react.user", model: User, select: "_id id name image sport" })
       .lean();
     if (!post) {
       console.log("post not found");
@@ -290,8 +291,6 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
       parentId: { $in: [null, undefined] },
     });
     const posts: PostData[] = await postQ.exec();
-    console.log(posts);
-    console.log("success posts count: " + posts.length);
     let isNext = +totalPosts > skipAmount + posts.length;
     return { posts, isNext };
   } catch (error: any) {

@@ -223,8 +223,8 @@ const CardPost = ({
     isMessenger?: boolean;
     isWhite?: boolean;
   }) => (
-    <div className={`${isComment && "mt-10"} flex flex-col gap-3`}>
-      <div className="flex flex-row items-center gap-6">
+    <div className={`${isComment && "mb-10"} flex flex-col `}>
+      <div className="flex flex-row-reverse items-center justify-between">
       {react&&react.length > 0 ? (
                 <div className="mt-1 flex flex-row items-center">
         <p
@@ -262,7 +262,7 @@ const CardPost = ({
       
       
       </div>
-      <div className="mt-5 flex flex-row items-center gap-6">
+      <div className="mt-3 flex flex-row items-center gap-6">
         <Image
           src={
             isReact
@@ -312,7 +312,7 @@ const CardPost = ({
           </Tooltip>
         </TooltipProvider>
 
-        {!isMessenger && (
+        {!isMessenger && isFriend && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>

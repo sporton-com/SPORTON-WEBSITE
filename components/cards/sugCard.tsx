@@ -9,7 +9,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,userInfo:UserData|null|undefined})=>{
+export let SugCard=({result2,type,userInfo2}:{result2:string,type:string,userInfo2:string})=>{
+  const userInfo: UserData = JSON.parse(userInfo2);
+  const result:any[]= JSON.parse(result2);
     let navigate = useRouter();
     let pathname = usePathname();
     let handleAddMember=async(type:string,accountId:string,myId:string|undefined,isFriend:boolean)=>{
@@ -72,14 +74,14 @@ export let SugCard=({result,type,userInfo}:{result:any[]|undefined,type:string,u
               <Image
               src={checked?"/assets/user-true.svg":"/assets/user-plus.svg"}
               alt="add friend"
-              className=""
+              className="hover:scale-125 cursor-pointer object-contain"
               width={24}
               height={24}
               />
               </div>
               </TooltipTrigger>
           <TooltipContent>
-            <p className="text-primary-500">{!checked?"add":'in'} your team</p>
+            <p className="text-primary-500">{!checked?"add your team":'remove from team'} </p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

@@ -24,10 +24,15 @@ const userSchema = new mongoose.Schema({
         }
     ],
     onboarding: {type: 'boolean', default: false},
+    messages: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+    rooms: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room'
+    }],
     updatedAt: {
         type: Date,
         default: Date.now,
       },
  });
- const User = mongoose.models.User || mongoose.model('User', userSchema);
+ const User = mongoose.models?.User || mongoose.model('User', userSchema);
  export default User;

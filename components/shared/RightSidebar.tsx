@@ -25,7 +25,7 @@ const RightSidebar = async () => {
       <div className="flex flex-1 flex-col justify-start">
         <h3 className=" text-heading4-medium text-light-1 mb-6">Suggested User</h3>
          
-          <SugCard result={users?.users}  userInfo={userInfo} type={"users"} />
+        {users&& users?.users&&userInfo&&<SugCard result2={JSON.stringify(users.users)}  userInfo2={JSON.stringify(userInfo)} type={"users"} />}
       </div>
     </section>
   );

@@ -5,21 +5,17 @@ import UserCard from "../cards/UserCard";
 import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { sports } from "@/constants/icons";
-const Search = ({
-  typeS,
-}: {
-  typeS: string;
-}) => {
+const Search = () => {
   
-  const [resultU, setResultU] = useState<{ users: any[]; isNext: boolean }>(
-    { users: [], isNext: false }
-  );
+  const [result, setResultU] = useState<string>(`{ "users": [], "isNext": false }`);
   const [show, setShow] = useState<boolean>(
     true
   );
   const [showC, setShowC] = useState<boolean>(
     true
   );
+  let typeS='user'
+  let resultU:{ users: any[]; isNext: boolean } =JSON.parse(result)
   let sportsLen=resultU.users.map((user) =>user?.sport)
   let handelOnFocus = async (e: string) => {
     // setShow(false)
@@ -41,7 +37,7 @@ const Search = ({
             pageSize: 30,
           });
           if (result !== undefined) {
-            setResultU(result);
+            setResultU(JSON.stringify(result));
           }
         
       }
@@ -90,13 +86,8 @@ const Search = ({
               className="w-full mt-8 text-light-1">
               {resultU?.users.map((person: any) => person?.sport===tab.value.split(" ")[0] &&(
           <UserCard
-          sport={person.sport}
           key={person.id}
-          id={person.id}
-          name={person.name}
-          username={person.username}
-          image={person.image}
-          personType="User"
+          person={JSON.stringify(person)}
           />
           ))}
             </TabsContent>
@@ -111,13 +102,8 @@ const Search = ({
         ) : (
           resultU?.users.map((person: any) => (
           <UserCard
-          sport={person.sport}
           key={person.id}
-          id={person.id}
-          name={person.name}
-          username={person.username}
-          image={person.image}
-          personType="User"
+          person={JSON.stringify(person)}
           />
           ))
           )):null}

@@ -1,11 +1,11 @@
 const Loader = ({is}:{is?:boolean}) => (
-    <div className="flex-center w-full">
+    <div className={`${is?'flex justify-center items-center h-[80vh] ':''} w-full`}>
       <img
         src={`/assets/loader${is?'2':''}.svg`}
         alt="loader"
-        width={24}
-        height={24}
-        className={`animate-spin ${is?'scale-4':''}`}
+        width={is?100:24}
+        height={is?100:24}
+        className={`animate-spin`}
       />
     </div>
   );

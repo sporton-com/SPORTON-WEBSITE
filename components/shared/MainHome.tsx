@@ -16,7 +16,7 @@ export default function Home({FPosts2,userInfo2}:{FPosts2:string,userInfo2:strin
   let friends=userInfo.friends;
 
   useEffect(() => {
-    userInfo&& localStorage.setItem("userInfo",JSON.stringify(userInfo))
+    userInfo&& sessionStorage.setItem("userInfo",JSON.stringify(userInfo))
   }, [userInfo]); 
 
   return (

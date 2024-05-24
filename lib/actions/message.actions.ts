@@ -46,7 +46,7 @@ export const createMessage = async (
     });
     let newMessage = await newMessage0.save();
     console.log("---------------------------------------------------------------------------------------------------")
-    await Room.findOneAndUpdate( { name: { $in: [`${sender._id}-${recipientId}`, `${recipientId}-${sender._id}`] } },{
+    RoomName&&await Room.findOneAndUpdate( { name: RoomName },{
       $push: { messages: newMessage._id },
     });
   } catch (error) {

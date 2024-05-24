@@ -62,8 +62,8 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
   console.log(chat)
   useEffect(() => {
     const fetchData = async () => {
-      const userInfoJson = localStorage.getItem("userInfo");
-      const user = localStorage.getItem("id");
+      const userInfoJson = sessionStorage.getItem("userInfo");
+      const user = sessionStorage.getItem("id");
       const userInfo2 = userInfoJson ? JSON.parse(userInfoJson) : null;
       setUserInfo(userInfo2);
       if (!user) return router.replace("/sign-in");
@@ -100,7 +100,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
   }, [messages]);
 
   const handleMessageSend = async () => {
-    console.log(inputValue, frindId);
+    console.log(inputValue,chat?.chat?.name);
     if (inputValue.trim() === "") return;
     if (!userInfo) return;
     const newMessage: Message = {
@@ -225,8 +225,8 @@ export default ChatBox;
 //     let user ;
 //     const [userInfo, setUserInfo] = useState<UserData | null | undefined  >(null);
 //     useEffect(()=>{
-//       let userJson=localStorage.getItem("id")
-//       let userInfoJson=localStorage.getItem("userInfo")
+//       let userJson=sessionStorage.getItem("id")
+//       let userInfoJson=sessionStorage.getItem("userInfo")
 //       user= userJson
 //       let userInfo2=userInfoJson? JSON.parse(userInfoJson):null;
 //       setUserInfo(userInfo2);

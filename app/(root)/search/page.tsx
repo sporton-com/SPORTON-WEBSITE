@@ -7,8 +7,8 @@ import { useEffect } from "react";
 const Page = () => {
   let router= useRouter()
   useEffect(()=>{
-    let userJson=localStorage.getItem("id")
-    let userInfoJson=localStorage.getItem("userInfo")
+    let userJson=sessionStorage.getItem("id")
+    let userInfoJson=sessionStorage.getItem("userInfo")
     let user= userJson
     let userInfo:UserData=userInfoJson? JSON.parse(userInfoJson):null;
     if (!user) return router.replace('/sign-in');

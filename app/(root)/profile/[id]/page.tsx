@@ -22,7 +22,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        let userJson = localStorage.getItem("id");
+        let userJson = sessionStorage.getItem("id");
         const user = userJson;
         const userInfo: UserData | null | undefined = await fetchUser(
           params.id

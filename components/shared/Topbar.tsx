@@ -14,8 +14,8 @@ const Topbar = () => {
   const [id, setId] = useState<string|undefined|null>('')
   useEffect(()=>{
 
-    setImage(localStorage.getItem("image"))
-    setId(localStorage.getItem("id"))
+    setImage(JSON.parse(sessionStorage.getItem("userInfo")!)?.image)
+    setId(sessionStorage.getItem("id"))
   },[image])
   return (show?<></>:
     <section className='topbar'>

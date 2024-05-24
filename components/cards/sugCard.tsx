@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-export let SugCard=({result2,type,userInfo2,isChat}:{result2:string,type:string,userInfo2:string,isChat?:boolean})=>{
+export let SugCard=({result2,type,userInfo2,isChat=false}:{result2:string,type:string,userInfo2:string,isChat?:boolean})=>{
   const userInfo: UserData = JSON.parse(userInfo2);
   const result:any[]= JSON.parse(result2);
     let navigate = useRouter();
@@ -30,8 +30,7 @@ export let SugCard=({result2,type,userInfo2,isChat}:{result2:string,type:string,
             let checked=isFriend
             let route=`/profile/${result?.id}`
             return (
-              checked&&
-              isChat?(
+              checked&&isChat?(
               <Link href={"/messaging/"+userInfo._id+"-"+result?._id} className='user-card' key={result?._id}>
                 <div className="user-card_avatar">
                 <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' onClick={()=>navigate.push(route)}/>

@@ -8,6 +8,7 @@ import User from "../models/user.models";
 import { PostData } from "./post.actions";
 import Room from '../models/room.model';
 import { redirect } from 'next/navigation';
+import Message from "../models/messages.models";
 interface props {
   userId: string | undefined;
   username: string;
@@ -218,6 +219,12 @@ interface AddFriendParams {
   isFriend: boolean;
   isChat?: boolean;
 }
+interface ChatROOM {
+  _id: string;
+  name: string,
+  users: any[],
+  messages: any[]
+}
 export async function addFriend({
   friendId,
   userId,
@@ -237,15 +244,14 @@ export async function addFriend({
       : { $push: { friends: friendId } };
       const updateFriendQ = isFriend ? { $pull: { friends: userId } } : { $push: { friends: userId } }
 
-      const ChatRoom = await Room.findOneAndUpdate(
+      const ChatRoom:ChatROOM|null = await Room.findOneAndUpdate(
         { name: { $in: [`${userId}-${friendId}`, `${friendId}-${userId}`] } },
         { $setOnInsert: { name: `${userId}-${friendId}`, users: [userId, friendId] } },
         { upsert: true, new: true }
-      );
+      ).populate({path:'users',model:User,select:'_id id name image sport'}).populate({path:"messages",model:Message,populate:[{path:"sender",model:User,select:"_id id name image sport"},{path:"recipient",model:User,select:"_id id name image sport"}]}).lean();
       let user=await User.findById(userId);
-      let isChatAdded=user?user?.rooms?user.rooms.includes(ChatRoom._id):false:false;
+      let isChatAdded=user?user?.rooms?user.rooms.includes(ChatRoom?._id):false:false;
       if(ChatRoom){
-        
         let quary=!isChatAdded?
           { $push: { rooms: ChatRoom._id } ,
           ...updateOperation}:

@@ -10,13 +10,20 @@ const Topbar = () => {
   let path=usePathname();
   let show=path.split('/').pop()==='new-post';
   // console.log(show,path.split('/'))
-  const [image, setImage] = useState<string|undefined|null>('')
+  const [image, setImage] = useState<string>()
   const [id, setId] = useState<string|undefined|null>('')
   useEffect(()=>{
-
-    setImage(JSON.parse(sessionStorage.getItem("userInfo")!)?.image)
+    console.log("image")
+    
+      let et=setInterval(()=>{
+      let image=sessionStorage.getItem("image")
+    if(image){
+      setImage(image)
+      clearInterval(et)
+    }
+      },1000)
     setId(sessionStorage.getItem("id"))
-  },[image])
+  },[image,sessionStorage.getItem("image")])
   return (show?<></>:
     <section className='topbar'>
         <div className='container p-0'>

@@ -88,8 +88,8 @@ export async function updateUser({
 export async function fetchUser(userId?: string | undefined) {
   connectDB();
   try {
-    const user = await currentUser();
-    if (!user) return redirect("/sign-in");
+      const user =userId?{id:'jjj'}:await currentUser();
+      if (!user) return redirect("/sign-in");
     let id=userId?userId:user.id;
     let userInfo: UserData | null = await User.findOne({ id: id })
       .populate({

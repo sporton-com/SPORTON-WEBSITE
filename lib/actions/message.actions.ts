@@ -2,7 +2,7 @@
 import User from '../models/user.models';
 import Message from '../models/messages.models';
 import { pusherServer } from '../pusher';
-
+import Room from "../models/room.model";
 interface Message {
   content: string;
   sender: {
@@ -18,7 +18,8 @@ interface Message {
 export const createMessage = async (
   senderId: string,
   recipientId: string,
-  content: string
+  content: string,
+  RoomName: string|undefined,
 ): Promise<void> => {
   let sender=JSON.parse(senderId);
   console.log("---------------------------------------------------------------------------------------------------")
@@ -35,7 +36,7 @@ export const createMessage = async (
     recipient: recipientId,
   };
   console.log("---------------------------------------------------------------------------------------------------")
-  pusherServer.trigger("chat","message",message)
+  RoomName&& pusherServer.trigger("chat",RoomName,message)
   console.log("---------------------------------------------------------------------------------------------------")
   try {
     const newMessage0 = new Message({
@@ -45,10 +46,7 @@ export const createMessage = async (
     });
     let newMessage = await newMessage0.save();
     console.log("---------------------------------------------------------------------------------------------------")
-    await User.findByIdAndUpdate(sender._id, {
-      $push: { messages: newMessage._id },
-    });
-    await User.findByIdAndUpdate(recipientId, {
+    await Room.findOneAndUpdate( { name: { $in: [`${sender._id}-${recipientId}`, `${recipientId}-${sender._id}`] } },{
       $push: { messages: newMessage._id },
     });
   } catch (error) {

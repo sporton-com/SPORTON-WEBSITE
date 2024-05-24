@@ -24,6 +24,7 @@ const Onboarding = async () => {
   let user = await currentUser();
   const userInfo = await fetchUser(user?.id);
 
+  if (!user) redirect("/sign-in");
   if (userInfo?.onboarding) redirect("/");
   let userData: usData = {
     id: user?.id,

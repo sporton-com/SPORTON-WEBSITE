@@ -57,7 +57,8 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
   let path= usePathname()
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserData | null | undefined>(null);
-  const [chat, setChat] = useState<string>(); 
+  const [chatJSon, setChat] = useState<string>(); 
+  let chat=chatJSon&&JSON.parse(chatJSon)
   console.log(chat)
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +83,8 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
 
   useEffect(() => {
     const subscribedChannel = pusherClient.subscribe("chat");
-    subscribedChannel.bind("message", (msg: Message) => {
+    chat&&chat?.chat&&chat?.chat?.name&&
+    subscribedChannel.bind(chat.chat.name, (msg: Message) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
       // alert(JSON.stringify(msg));
     });
@@ -116,8 +118,8 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
 
     try {
       frindId &&
-        userInfo &&
-        (await createMessage(JSON.stringify(userInfo), frindId, inputValue));
+        userInfo &&chat&&
+        (await createMessage(JSON.stringify(userInfo), frindId, inputValue,chat?.chat?.name));
     } catch (error) {
       console.error("Error sending message:", error);
       return;

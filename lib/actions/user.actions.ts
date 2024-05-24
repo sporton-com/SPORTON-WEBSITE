@@ -216,12 +216,14 @@ interface AddFriendParams {
   friendId: string;
   path: string;
   isFriend: boolean;
+  isChat?: boolean;
 }
 export async function addFriend({
   friendId,
   userId,
   path,
   isFriend,
+  isChat
 }: AddFriendParams) {
   connectDB();
   try {
@@ -257,6 +259,9 @@ export async function addFriend({
             friendId,
             quary2
           );
+          if (isChat) {
+            return ChatRoom;
+          }
       }
       
 

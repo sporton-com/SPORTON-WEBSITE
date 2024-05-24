@@ -1,15 +1,15 @@
-"use client"
-import { createMessage } from '@/lib/actions/message.actions';
-import { PostData } from '@/lib/actions/post.actions';
-import React, { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
-import {useRouter} from 'next/navigation';
-import Pusher from 'pusher-js';
-import Loader from '@/components/shared/Loader';
-import { UserData } from '@/lib/actions/user.actions';
-import { formatDistanceToNow } from 'date-fns';
-import { ar } from 'date-fns/locale';
-import { pusherClient } from '@/lib/pusher';
+"use client";
+import { createMessage } from "@/lib/actions/message.actions";
+import { PostData } from "@/lib/actions/post.actions";
+import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import Loader from "@/components/shared/Loader";
+import { UserData } from "@/lib/actions/user.actions";
+import { formatDistanceToNow } from "date-fns";
+import { ar } from "date-fns/locale";
+import { pusherClient } from "@/lib/pusher";
+import { GetChat } from "@/lib/actions/room.actions";
 
 interface User {
   _id: string;
@@ -38,86 +38,94 @@ interface Friend {
 interface Message {
   content: string;
   sender: {
-    _id:string|undefined,
-    id:string|undefined,
-    name:string|undefined,
-    image:string|undefined,
-    sport:string|undefined,
+    _id: string | undefined;
+    id: string | undefined;
+    name: string | undefined;
+    image: string | undefined;
+    sport: string | undefined;
   };
   timestamp: Date;
   recipient: string;
 }
 
-const ChatBox: React.FC<{ frindId?: string }> = ({ frindId }) => {
+const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
+  let frindId=Ids?.split("-")[1];
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  let path= usePathname()
   const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserData | null | undefined>(null);
-  const [channel, setChannel] = useState(); // تعريف القناة
-
+  const [chat, setChat] = useState<string>(); 
+  console.log(chat)
   useEffect(() => {
     const fetchData = async () => {
-      const userInfoJson = localStorage.getItem('userInfo');
-      const user = localStorage.getItem('id');
+      const userInfoJson = localStorage.getItem("userInfo");
+      const user = localStorage.getItem("id");
       const userInfo2 = userInfoJson ? JSON.parse(userInfoJson) : null;
       setUserInfo(userInfo2);
-      if (!user) return router.replace('/sign-in');
-      if (!userInfo2?.onboarding) router.replace('/onboarding');
-    };
+      if (!user) return router.replace("/sign-in");
+      if (!userInfo2?.onboarding) router.replace("/onboarding");
+      if(frindId){
+      const chat=await GetChat({
+        friendId:frindId,
+        userId:userInfo2?._id,
+        path:path
+      })
+      chat && setChat(JSON.stringify(chat));
+    }
+  };
 
     fetchData();
-
   }, [router]);
 
   useEffect(() => {
-    const subscribedChannel = pusherClient.subscribe('chat-channel'); // الاشتراك في القناة
-
-    // setChannel(subscribedChannel); // تعيين القناة المشتركة
-
-    subscribedChannel.bind('chat-message', (msg: Message) => {
+    const subscribedChannel = pusherClient.subscribe("chat");
+    subscribedChannel.bind("message", (msg: Message) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
+      // alert(JSON.stringify(msg));
     });
-
     return () => {
-      pusherClient.unsubscribe('chat-channel');
+      pusherClient.unsubscribe("chat");
     };
   }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
 
   const handleMessageSend = async () => {
-    if (inputValue.trim() === '') return;
+    console.log(inputValue, frindId);
+    if (inputValue.trim() === "") return;
     if (!userInfo) return;
     const newMessage: Message = {
       content: inputValue,
-      sender:{
-        _id:userInfo?._id,
-        id:userInfo?.id,
-        name:userInfo?.name,
-        image:userInfo?.image,
-        sport:userInfo?.sport,
-      } ,
+      sender: {
+        _id: userInfo?._id,
+        id: userInfo?.id,
+        name: userInfo?.name,
+        image: userInfo?.image,
+        sport: userInfo?.sport,
+      },
       timestamp: new Date(),
-      recipient: frindId ? frindId : '',
+      recipient: frindId ? frindId : "",
     };
 
     try {
-      frindId && userInfo && await createMessage(userInfo._id, frindId, inputValue);
+      frindId &&
+        userInfo &&
+        (await createMessage(JSON.stringify(userInfo), frindId, inputValue));
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       return;
     }
 
     // frindId && userInfo && channel?.trigger('client-chat-message', newMessage); // استخدام trigger على القناة المشتركة
 
-    setInputValue('');
+    setInputValue("");
     inputRef.current?.focus();
   };
 
@@ -125,21 +133,24 @@ const ChatBox: React.FC<{ frindId?: string }> = ({ frindId }) => {
     <div className="bg-gray-100 bottom-0 p-4 rounded-lg w-full h-full flex flex-col">
       <div className="flex-1 overflow-y-auto">
         {messages.map((message, index) => {
-          const timestamp = formatDistanceToNow(message.timestamp, { locale: ar });
-          return(
-          <div key={index} className="mb-2 flex">
-            <img
-              src={message.sender.image}
-              alt={message.sender.name}
-              className="w-8 h-8 rounded-full mr-2"
-            />
-            <div className="flex flex-col">
-              <span className="font-semibold">{message.sender.name}</span>
-              <p className="text-sm">{message.content}</p>
-              <span className="text-xs text-gray-500">{timestamp}</span>
+          const timestamp = formatDistanceToNow(message.timestamp, {
+            locale: ar,
+          });
+          return (
+            <div key={index} className="mb-2 flex">
+              <img
+                src={message.sender.image}
+                alt={message.sender.name}
+                className="w-8 h-8 rounded-full mr-2"
+              />
+              <div className="flex flex-col">
+                <span className="font-semibold">{message.sender.name}</span>
+                <p className="text-sm">{message.content}</p>
+                <span className="text-xs text-gray-500">{timestamp}</span>
+              </div>
             </div>
-          </div>
-        )})}
+          );
+        })}
         <div ref={messagesEndRef} />
       </div>
       <div className="mt-4 flex absolute bottom-2 w-full">
@@ -153,8 +164,7 @@ const ChatBox: React.FC<{ frindId?: string }> = ({ frindId }) => {
         />
         <button
           onClick={handleMessageSend}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg">
           <Image src="/assets/send.svg" alt="send" height={40} width={40} />
         </button>
       </div>
@@ -165,7 +175,6 @@ const ChatBox: React.FC<{ frindId?: string }> = ({ frindId }) => {
 };
 
 export default ChatBox;
-
 
 // import React, { useState, useRef, useEffect } from 'react';
 // import  Image  from 'next/image';
@@ -188,7 +197,6 @@ export default ChatBox;
 //   type: string;
 //   friends: Friend[];
 // }
-
 
 // interface Friend {
 //   _id: string;
@@ -213,7 +221,7 @@ export default ChatBox;
 
 //   let router= useRouter()
 //     let user ;
-//     const [userInfo, setUserInfo] = useState<UserData | null | undefined  >(null); 
+//     const [userInfo, setUserInfo] = useState<UserData | null | undefined  >(null);
 //     useEffect(()=>{
 //       let userJson=localStorage.getItem("id")
 //       let userInfoJson=localStorage.getItem("userInfo")
@@ -222,7 +230,7 @@ export default ChatBox;
 //       setUserInfo(userInfo2);
 //       if (!user) return router.replace('/sign-in');
 //       if (!userInfo2?.onboarding) router.replace("/onboarding");
-      
+
 //     },[])
 //   useEffect(() => {
 //     // Scroll to the bottom of the messages list when it updates

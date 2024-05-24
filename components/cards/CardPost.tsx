@@ -316,7 +316,7 @@ const CardPost = ({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Link href={"/messaging/" + author.id} className="">
+                <Link href={"/messaging/"+userId+"-"+ author._id} className="">
                   <Image
                     src={`/assets/messnger${isWhite ? "-white" : ""}.svg`}
                     alt="repost"

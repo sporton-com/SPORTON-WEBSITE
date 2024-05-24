@@ -35,8 +35,8 @@ const Page = () => {
   }, []);
   return combinedList ? (
     <section className="">
-      <h1 className=" text-white">Notifications</h1>
-      <section className=" mt-10 flex flex-col gap-8">
+      <h1 className="mt-5  text-white text-body-bold text-[20px]">Notifications</h1>
+      <section className="mt-5 flex flex-col gap-8">
         {combinedList.length > 0 ? (
           <div className="flex flex-col bg-dark-2 rounded-lg overflow-hidden ">
             {combinedList.map((activity: any) => (

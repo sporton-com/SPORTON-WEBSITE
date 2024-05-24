@@ -7,6 +7,9 @@ const chatRoomSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    messages: [{type: mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
+    }]
 });
 
 const Room = mongoose.models?.Room || mongoose.model('Room', chatRoomSchema);

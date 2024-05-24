@@ -1,19 +1,51 @@
+"use server"
 import User from '../models/user.models';
 import Message from '../models/messages.models';
+import { pusherServer } from '../pusher';
 
-
+interface Message {
+  content: string;
+  sender: {
+    _id:string|undefined,
+    id:string|undefined,
+    name:string|undefined,
+    image:string|undefined,
+    sport:string|undefined,
+  };
+  timestamp: Date;
+  recipient: string;
+}
 export const createMessage = async (
   senderId: string,
   recipientId: string,
   content: string
 ): Promise<void> => {
+  let sender=JSON.parse(senderId);
+  console.log("---------------------------------------------------------------------------------------------------")
+  const message: Message = {
+    content: content,
+    sender:{
+      _id:sender._id,
+      id:sender.id,
+      name:sender.name,
+      image:sender.image,
+      sport:sender.sport,
+    } ,
+    timestamp: new Date(),
+    recipient: recipientId,
+  };
+  console.log("---------------------------------------------------------------------------------------------------")
+  pusherServer.trigger("chat","message",message)
+  console.log("---------------------------------------------------------------------------------------------------")
   try {
-    const newMessage = await Message.create({
-      content,
-      sender: senderId,
+    const newMessage0 = new Message({
+      content:content,
+      sender: sender._id,
       recipient: recipientId,
     });
-    await User.findByIdAndUpdate(senderId, {
+    let newMessage = await newMessage0.save();
+    console.log("---------------------------------------------------------------------------------------------------")
+    await User.findByIdAndUpdate(sender._id, {
       $push: { messages: newMessage._id },
     });
     await User.findByIdAndUpdate(recipientId, {

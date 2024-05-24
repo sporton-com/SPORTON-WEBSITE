@@ -49,7 +49,7 @@ export let SugCard=({result2,type,userInfo2}:{result2:string,type:string,userInf
             <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
-            <Link href={"/messaging/" + result?.id} className="">
+            <Link href={"/messaging/" +userInfo?._id+"-"+ result?._id} className="">
               <Image
                 src={`/assets/messnger-primary.svg`}
                 alt="repost"

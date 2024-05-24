@@ -6,6 +6,7 @@ import ChatBox from '@/components/shared/ChatBox';
 // export const metadata: Metadata = {
 //   title: "SPORTEN | Messaging",
 // };
+export const dynamic = 'force-dynamic'
 const ChatPage = () => {
 
   return (

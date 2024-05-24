@@ -141,7 +141,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
     inputRef.current?.focus();
   };
   return userInfo && chat ? (
-    <div className="bg-gray-100 bottom-0 p-4 pb-16 rounded-lg w-full h-full flex flex-col">
+    <div className=" bottom-0 p-4 pb-16 rounded-lg w-full h-full flex flex-col">
       <div className="flex-1 overflow-y-auto">
         {messages.map((message, index) => {
           const timestamp = formatDistanceToNow(message.timestamp);

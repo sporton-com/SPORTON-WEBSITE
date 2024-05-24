@@ -1,12 +1,14 @@
 
 
 import ChatBox from '@/components/shared/ChatBox';
+import RightSidebar from '@/components/shared/RightSidebar';
 
 const ChatPage = ({ params }: { params: { id: string } }) => {
 
   return (
 
-    <div className="flex relative justify-center items-center overflow-hidden h-[70vh]  lg:h-[80vh]">
+    <div className="flex relative justify-center items-center overflow-hidden h-[100vh]  lg:h-[100vh]">
+      <RightSidebar isChat/>
       <ChatBox Ids={params.id}/>
     </div>
   );

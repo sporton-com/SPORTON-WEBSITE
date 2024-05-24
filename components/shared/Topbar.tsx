@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { dark } from "@clerk/themes";
 import { useEffect, useState } from 'react';
 import ModeToggle from '@/components/shared/ToggleMode'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 const Topbar = () => {
   let path=usePathname();
   let show=path.split('/').pop()==='new-post';
@@ -37,7 +38,25 @@ const Topbar = () => {
                   <p className='ms-2 text-[#FF971D] -translate-x-10'>SPORTON</p>
                     </div>
                   </Link>
-                  <div className="flex p-1 gap-9">
+                  <div className="flex items-center p-1 lg:gap-9 gap-2">
+                  <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Link href={"/messaging/"} className="">
+              <Image
+                src={`/assets/messnger-primary.svg`}
+                alt="repost"
+                height={30}
+                width={30}
+                className="hover:scale-125 cursor-pointer object-contain"
+              />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-primary-500">Go Messaging</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
                   {image&&
                   <Link href={"/profile/"+id} className=' p-0'>
                   <Image src={image} alt={''} height={40} width={40} className={'rounded-full object-contain'}/></Link>}

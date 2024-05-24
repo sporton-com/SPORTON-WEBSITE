@@ -134,10 +134,7 @@ export async function fetchAllUser({
         { sport: { $regex: regex } },
       ];
     }
-    let users = await User.aggregate([
-      { $match: query },
-      { $sample: { size: pageSize } },
-    ])
+    let users = await User.find(query )
       .sort({ createdAt: "desc" })
       .skip(skipAmount)
       .limit(pageSize)

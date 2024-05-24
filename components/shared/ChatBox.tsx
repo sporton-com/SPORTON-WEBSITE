@@ -3,6 +3,7 @@ import { createMessage } from "@/lib/actions/message.actions";
 import { PostData } from "@/lib/actions/post.actions";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Loader from "@/components/shared/Loader";
 import { UserData } from "@/lib/actions/user.actions";
@@ -125,7 +126,6 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
     if (!userInfo) return;
     try {
       if (frindId && userInfo && chat) {
-        console.log("kdjhfjdkkkkkkkk")
         await createMessage(
           JSON.stringify(userInfo),
           frindId,
@@ -140,8 +140,26 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
     setInputValue("");
     inputRef.current?.focus();
   };
-  return userInfo && chat ? (
-    <div className=" bottom-0 p-4 pb-16 rounded-lg w-full h-full flex flex-col">
+  if(userInfo && chat ){
+  let result=chat.chat.users.filter((user:{_id:string}) => user._id !==userId)[0];
+  return  (
+    <div className=" bottom-0 p-4 pb-16 relative rounded-lg w-full h-full flex flex-col">
+      <div className=" bg-dark-1 flex absolute top-0 left-0 right-0">
+      <Link
+          href={"/messaging"}
+          className="px-2 py-2 bg-blue-500 text-white rounded-lg">
+          <Image src="/assets/Goback.svg" alt="Goback" height={20} width={20} />
+        </Link>
+        <div className="user-card_avatar">
+                <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain'/>
+            <div className=" flex-1 text-ellipsis">
+                <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
+                {/* <p className=" text-small-semibold text-gray-1">@{result?.username}</p> */}
+            </div>
+     
+    </div>
+        
+      </div>
       <div className="flex-1 overflow-y-auto">
         {messages.map((message, index) => {
           const timestamp = formatDistanceToNow(message.timestamp);
@@ -162,7 +180,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
         })}
         <div ref={messagesEndRef} />
       </div>
-      <div className="mt-4 flex absolute bottom-2 w-full">
+      <div className="mt-4 flex absolute bottom-2 left-2 right-0">
         <input
           ref={inputRef}
           type="text"
@@ -178,9 +196,11 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
         </button>
       </div>
     </div>
-  ) : (
-    <Loader is />
-  );
+  ) }else{
+
+   return <Loader is />
+  } 
+  
 };
 
 export default ChatBox;

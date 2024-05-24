@@ -1,25 +1,71 @@
-// "use server"
-import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
+"use client"
 import { currentUser } from "@clerk/nextjs/server";
+import { useState, useEffect } from 'react';
+import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
 import { SugCard } from "../cards/sugCard";
 
-const RightSidebar = async ({isChat}:{isChat?:boolean}) => {
-  let user = await currentUser();
-  let userInfo = await fetchUser(user?.id);
-  let users = await fetchAllUser({
-    searchString: "",
-    pageNum: 1,
-    pageSize: 30,
-  });
+interface Props {
+  isChat?: boolean;
+  Ids?: string;
+  isxl?: boolean;
+}
+
+const RightSidebar: React.FC<Props> = ({ isChat, Ids, isxl }) => {
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [users, setUsers] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userInfo = await fetchUser();
+        const users = await fetchAllUser({
+          searchString: "",
+          pageNum: 1,
+          pageSize: 100,
+        });
+        setUserInfo(userInfo);
+        setUsers(users);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <section className={`rightsidebar custom-scrollbar${isChat?" p-0 px-1 w-96":""}`}>
+    <section className={`rightsidebar custom-scrollbar  ${isxl ? "w-full" : "max-xl:hidden"}  ${isChat ? ` p-0 ${!Ids && " px-1"} w-96` : "p-3 pt-28 w-72"}`}>
       <div className="flex flex-1 flex-col justify-start">
-        {!isChat&&<h3 className=" text-heading4-medium text-light-1 mb-6">Suggested User</h3>}
-        {users&& users?.users&&userInfo&&<SugCard result2={JSON.stringify(users.users)}  userInfo2={JSON.stringify(userInfo)} type={"users"} isChat={isChat}/>}
+        {!isChat && <h3 className=" text-heading4-medium text-light-1 mb-6">Player</h3>}
+        {users && users.users && userInfo &&
+          <SugCard result2={JSON.stringify(users.users)} userInfo2={JSON.stringify(userInfo)} type={"users"} isChat={isChat} Ids={Ids ? Ids : ''} />}
       </div>
     </section>
   );
 };
 
 export default RightSidebar;
+
+// import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
+// import { SugCard } from "../cards/sugCard";
+
+// const RightSidebar = async ({isChat,Ids,isxl}:{isChat?:boolean,Ids?:string,isxl?:boolean}) => {
+//   let user = await currentUser();
+//   let userInfo = await fetchUser(user?.id);
+//   let users = await fetchAllUser({
+//     searchString: "",
+//     pageNum: 1,
+//     pageSize: 100,
+//   });
+
+//   return (
+//     <section className={`rightsidebar custom-scrollbar ${isxl?"w-full":"max-xl:hidden"}  ${isChat?` p-0 ${!Ids&&" px-1"} w-96`:""}`}>
+//       <div className="flex flex-1 flex-col justify-start">
+//         {!isChat&&<h3 className=" text-heading4-medium text-light-1 mb-6">Suggested User</h3>}
+//         {users&& users?.users&&userInfo&&<SugCard result2={JSON.stringify(users.users)}  userInfo2={JSON.stringify(userInfo)} type={"users"} isChat={isChat} Ids={Ids?Ids:''}/>}
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default RightSidebar;

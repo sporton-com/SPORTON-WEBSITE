@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-export let SugCard=({result2,type,userInfo2,isChat=false}:{result2:string,type:string,userInfo2:string,isChat?:boolean})=>{
+export let SugCard=({result2,type,userInfo2,isChat=false,Ids}:{result2:string,type:string,userInfo2:string,isChat?:boolean,Ids?:string})=>{
   const userInfo: UserData = JSON.parse(userInfo2);
   const result:any[]= JSON.parse(result2);
     let navigate = useRouter();
@@ -25,28 +25,71 @@ export let SugCard=({result2,type,userInfo2,isChat=false}:{result2:string,type:s
       
     return(
       <div className=" flex flex-col gap-6 w-full scroll-auto">
+        {isChat&&<Link href="/" className=' flex items-center justify-between  g-3  no-underline text-body-bold text-white' >
+                  
+                  <div className="flex items-center  gap-9">
+                  <div className=" max-sm:w-16 max-sm:h-16 w-20 h-20 relative ">
+                  <Image src="/logo5.gif" alt='' fill  className=""  />
+                    </div>
+                  <p className='ms-2 text-[#FF971D] -translate-x-10'>SPORTON CHAT</p>
+                    </div>
+                  </Link>}
           {result?.map(result=>{
             let isFriend :boolean=userInfo?.friends.filter(e=>e.id===result?.id).length ===1;
             let checked=isFriend
             let route=`/profile/${result?.id}`
             return (
               checked&&isChat?(
-              <Link href={"/messaging/"+userInfo._id+"-"+result?._id} className='user-card' key={result?._id}>
+              <Link href={"/messaging/"+userInfo._id+"-"+result?._id} className={`user-card ${Ids===userInfo._id+"-"+result?._id?"bg-[#b3b3b380] rounded-s-full":""}`} key={result?._id}>
                 <div className="user-card_avatar">
-                <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' onClick={()=>navigate.push(route)}/>
-            <div className=" flex-1 text-ellipsis">
-                <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
-                <p className=" text-small-semibold text-gray-1">@{result?.username}</p>
+                <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' />
+                <div className="  relative ">
+            <Image
+                    src={"/" + result?.sport.split(" ")[0] + ".svg"}
+                    alt={result?.sport}
+                    height={30}
+                    width={30}
+                    className="-translate-x-4 -translate-y-4 top-0 left-0 absolute"
+                  />
+                  <div className=" cursor-pointer w-full flex gap-[3px]">
+                      <h5 className=' text-base-semibold text-light-1'>{result?.name?.length>11?result?.name?.slice(0,11)+"...":result?.name}</h5>
+                      <Image
+                        src={"/golden.svg"}
+                        alt={"golden"}
+                        height={20}
+                        width={20}
+                        className=" max-sm:scale-150"
+                      />
+                    </div>
+
+                <p className=" text-small-semibold text-gray-1">@{result?.username?.length>11?result?.username?.slice(0,11)+"...":result?.username}</p>
             </div>
      
     </div>
-  </Link>):
+  </Link>):!isChat&&
   (<article className='user-card' key={result?._id}>
                 <div className="user-card_avatar">
                 <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' onClick={()=>navigate.push(route)}/>
-            <div className=" flex-1 text-ellipsis">
-                <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
-                <p className=" text-small-semibold text-gray-1">@{result?.username}</p>
+            <div className="  relative ">
+            <Image
+                    src={"/" + result?.sport.split(" ")[0] + ".svg"}
+                    alt={result?.sport}
+                    height={30}
+                    width={30}
+                    className="-translate-x-4 -translate-y-4 top-0 left-0 absolute"
+                  />
+                  <div className=" cursor-pointer w-full flex gap-[3px]">
+                      <h5 className=' text-base-semibold text-light-1'>{result?.name?.length>11?result?.name?.slice(0,11)+"...":result?.name}</h5>
+                      <Image
+                        src={"/golden.svg"}
+                        alt={"golden"}
+                        height={20}
+                        width={20}
+                        className=" max-sm:scale-150"
+                      />
+                    </div>
+
+                <p className=" text-small-semibold text-gray-1">@{result?.username?.length>11?result?.username?.slice(0,11)+"...":result?.username}</p>
             </div>
             {checked&&
             <TooltipProvider>
@@ -55,7 +98,7 @@ export let SugCard=({result2,type,userInfo2,isChat=false}:{result2:string,type:s
             <Link href={"/messaging/" +userInfo?._id+"-"+ result?._id} className="">
               <Image
                 src={`/assets/messnger-primary.svg`}
-                alt="repost"
+                alt="messnger"
                 height={20}
                 width={20}
                 className="hover:scale-125 cursor-pointer object-contain"

@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-export let SugCard=({result2,type,userInfo2,isChat,Ids,islg}:{result2:string,type:string,userInfo2:string,isChat?:boolean,Ids?:string,islg?:boolean})=>{
+export let SugCard=({result2,type,userInfo2,isChat,Ids,islg,refrish}:{result2:string,type:string,userInfo2:string,isChat?:boolean,Ids?:string,islg?:boolean,refrish?:any})=>{
   const userInfo: UserData = JSON.parse(userInfo2);
   const result:any[]= JSON.parse(result2);
     let navigate = useRouter();
@@ -21,6 +21,7 @@ export let SugCard=({result2,type,userInfo2,isChat,Ids,islg}:{result2:string,typ
           path: pathname,
           isFriend:isFriend
         })
+        refrish(Math.random())
       }
       let handelloaded=(e:string)=>{
         islg && navigate.push(e)
@@ -47,7 +48,7 @@ export let SugCard=({result2,type,userInfo2,isChat,Ids,islg}:{result2:string,typ
                   i===0&& handelloaded("/messaging/"+userInfo._id+"-"+result?._id)
                 }} >
                 <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' />
-                <div className="  relative ">
+                <div className="flex-1 text-ellipsis  relative ">
             <Image
                     src={"/" + result?.sport.split(" ")[0] + ".svg"}
                     alt={result?.sport}
@@ -74,16 +75,17 @@ export let SugCard=({result2,type,userInfo2,isChat,Ids,islg}:{result2:string,typ
   (<article className='user-card' key={result?._id}>
                 <div className="user-card_avatar">
                 <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' onClick={()=>navigate.push(route)}/>
-            <div className="  relative ">
+            <div className="flex-1 text-ellipsis relative ">
             <Image
                     src={"/" + result?.sport.split(" ")[0] + ".svg"}
                     alt={result?.sport}
-                    height={30}
-                    width={30}
+                    height={result?.sport==="kung Fu"?20:30}
+                    width={result?.sport==="kung Fu"?20:30}
                     className="-translate-x-4 -translate-y-4 top-0 left-0 absolute"
                   />
                   <div className=" cursor-pointer w-full flex gap-[3px]">
                       <h5 className=' text-base-semibold text-light-1'>{result?.name?.length>11?result?.name?.slice(0,11)+"...":result?.name}</h5>
+                      
                       <Image
                         src={"/golden.svg"}
                         alt={"golden"}
@@ -92,8 +94,7 @@ export let SugCard=({result2,type,userInfo2,isChat,Ids,islg}:{result2:string,typ
                         className=" max-sm:scale-150"
                       />
                     </div>
-
-                <p className=" text-small-semibold text-gray-1">@{result?.username?.length>11?result?.username?.slice(0,11)+"...":result?.username}</p>
+                <p className="text-small-semibold text-gray-1">@{result?.username?.length>11?result?.username?.slice(0,11)+"...":result?.username}</p>
             </div>
             {checked&&
             <TooltipProvider>

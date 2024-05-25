@@ -166,7 +166,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
           const timestamp2 = formatDistanceToNow(message.timestamp);
           return (
             <div key={index} className={`mb-2 flex ${message.sender._id===userId?"":"flex-row-reverse"}`}>
-              <div className={`flex relative w-fit min-w-[15rem] pb-3 rounded-lg ${message.sender._id===userId?"bg-[#FF971D] pe-3":" bg-primary-500 text-[#ffffff] ps-3"}`}>
+              <div className={`flex relative w-fit min-w-[15rem] pb-3 pe-3 rounded-lg ${message.sender._id===userId?"bg-[#FF971D] ":" bg-primary-500 text-[#ffffff] "}`}>
 
               <div className="">
                 

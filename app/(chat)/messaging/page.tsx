@@ -1,7 +1,9 @@
 
 
+"use client"
 import ChatBox from '@/components/shared/ChatBox';
 import RightSidebar from '@/components/shared/RightSidebar';
+import { useEffect, useState } from 'react';
 // import { Metadata } from "next";
 
 // export const metadata: Metadata = {
@@ -9,19 +11,23 @@ import RightSidebar from '@/components/shared/RightSidebar';
 // };
 export const dynamic = 'force-dynamic'
 const ChatPage = () => {
+  const [size, setSize] = useState<number>()
+useEffect(() => {
 
+    setSize(window.innerWidth)
+    window.addEventListener('resize',()=>{setSize(window.innerWidth)})
+}, [size])
   return (
     <div className=" bg-[url(/assets/bg.jpg)] bg-center max-sm:bg-cover bg-[length:100%_100%] bg-no-repeat">
       {/* sm and md */}
-      <div className="max-xl:flex  hidden  relative justify-center items-center overflow-hidden h-[100vh] ">
-    <RightSidebar isChat isxl />
-      </div>
+    { size&&size<1280&& <div className="flex relative justify-center items-center overflow-hidden h-[100vh] ">
+    <RightSidebar isChat isxl islg={false} />
+      </div>}
       {/* lg */}
-      <div className="flex max-xl:hidden relative justify-center items-center overflow-hidden h-[100vh] ">
-
-    <RightSidebar isChat islg />
+     { size&&size>=1280&& <div className="flex relative justify-center items-center overflow-hidden h-[100vh] ">
+    <RightSidebar isChat islg={true} />
     <ChatBox/>
-      </div>
+      </div>}
   </div>
   );
 };

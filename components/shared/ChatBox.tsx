@@ -8,7 +8,6 @@ import { usePathname, useRouter } from "next/navigation";
 import Loader from "@/components/shared/Loader";
 import { UserData } from "@/lib/actions/user.actions";
 import { formatDistanceToNow,format } from "date-fns";
-
 import { pusherClient } from "@/lib/pusher";
 import { GetChat } from "@/lib/actions/room.actions";
 
@@ -143,8 +142,8 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
   if(userInfo && chat ){
   let result=chat.chat.users.filter((user:{_id:string}) => user._id !==userId)[0];
   return  (
-    <div className=" bottom-0 p-4 pb-16 relative rounded-lg w-full h-full flex flex-col">
-      <div className=" bg-dark-1 flex absolute top-0 left-0 right-0">
+    <div className=" bottom-0 p-4 pb-10 relative rounded-lg w-full h-full flex flex-col">
+      <div className=" bg-dark-1 flex z-50 absolute top-0 left-0 right-0">
       <Link
           href={"/messaging"}
           className="px-2 py-2 bg-blue-500 text-white rounded-lg max-xl:block hidden">
@@ -187,9 +186,9 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
             </div>
           );
         })}
-        <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} className="mb-16"/>
       </div>
-      <div className="mt-4 flex absolute bottom-2 left-2 right-0">
+      <div className=" flex fixed bottom-2 lg:left-80 left-2 right-0">
         <input
           ref={inputRef}
           type="text"

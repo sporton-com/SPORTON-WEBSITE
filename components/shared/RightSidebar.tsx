@@ -1,5 +1,4 @@
 "use client"
-import { currentUser } from "@clerk/nextjs/server";
 import { useState, useEffect } from 'react';
 import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
 import { SugCard } from "../cards/sugCard";

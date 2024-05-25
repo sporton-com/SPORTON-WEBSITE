@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 const ChatPage = () => {
 
   return (
-    <div className=" ">
+    <div className=" bg-[url(/assets/bg.jpg)] bg-center max-sm:bg-cover bg-[length:100%_100%] bg-no-repeat">
       {/* sm and md */}
       <div className="max-xl:flex  hidden  relative justify-center items-center overflow-hidden h-[100vh] ">
     <RightSidebar isChat isxl />
@@ -19,7 +19,7 @@ const ChatPage = () => {
       {/* lg */}
       <div className="flex max-xl:hidden relative justify-center items-center overflow-hidden h-[100vh] ">
 
-    <RightSidebar isChat />
+    <RightSidebar isChat islg />
     <ChatBox/>
       </div>
   </div>

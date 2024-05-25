@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-export let SugCard=({result2,type,userInfo2,isChat=false,Ids}:{result2:string,type:string,userInfo2:string,isChat?:boolean,Ids?:string})=>{
+export let SugCard=({result2,type,userInfo2,isChat,Ids,islg}:{result2:string,type:string,userInfo2:string,isChat?:boolean,Ids?:string,islg?:boolean})=>{
   const userInfo: UserData = JSON.parse(userInfo2);
   const result:any[]= JSON.parse(result2);
     let navigate = useRouter();
@@ -22,7 +22,9 @@ export let SugCard=({result2,type,userInfo2,isChat=false,Ids}:{result2:string,ty
           isFriend:isFriend
         })
       }
-      
+      let handelloaded=(e:string)=>{
+        islg && navigate.push(e)
+      }
     return(
       <div className=" flex flex-col gap-6 w-full scroll-auto">
         {isChat&&<Link href="/" className=' flex items-center justify-between  g-3  no-underline text-body-bold text-white' >
@@ -34,14 +36,16 @@ export let SugCard=({result2,type,userInfo2,isChat=false,Ids}:{result2:string,ty
                   <p className='ms-2 text-[#FF971D] -translate-x-10'>SPORTON CHAT</p>
                     </div>
                   </Link>}
-          {result?.map(result=>{
+          {result?.map((result,i)=>{
             let isFriend :boolean=userInfo?.friends.filter(e=>e.id===result?.id).length ===1;
             let checked=isFriend
             let route=`/profile/${result?.id}`
             return (
               checked&&isChat?(
               <Link href={"/messaging/"+userInfo._id+"-"+result?._id} className={`user-card ${Ids===userInfo._id+"-"+result?._id?"bg-[#b3b3b380] rounded-s-full":""}`} key={result?._id}>
-                <div className="user-card_avatar">
+                <div className="user-card_avatar" onLoad={()=>{
+                  i===0&& handelloaded("/messaging/"+userInfo._id+"-"+result?._id)
+                }} >
                 <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain' />
                 <div className="  relative ">
             <Image

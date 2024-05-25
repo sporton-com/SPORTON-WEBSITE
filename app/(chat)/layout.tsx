@@ -67,7 +67,7 @@ export default function RootLayout({
     <html lang="en"  >
       <body className={inter.className}>
       <main className=' flex flex-row w-full '>
-        <section className="main-container p-0 bg-[url(/assets/bg.jpg)] bg-cover bg-no-repeat">
+        <section className="main-container p-0" >
         <div className=" w-full ">
         {children}
         </div>

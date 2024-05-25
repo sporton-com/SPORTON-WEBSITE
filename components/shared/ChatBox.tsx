@@ -7,8 +7,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Loader from "@/components/shared/Loader";
 import { UserData } from "@/lib/actions/user.actions";
-import { formatDistanceToNow } from "date-fns";
-import  en  from "date-fns/locale/en-US";
+import { formatDistanceToNow,format } from "date-fns";
+
 import { pusherClient } from "@/lib/pusher";
 import { GetChat } from "@/lib/actions/room.actions";
 
@@ -147,10 +147,10 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
       <div className=" bg-dark-1 flex absolute top-0 left-0 right-0">
       <Link
           href={"/messaging"}
-          className="px-2 py-2 bg-blue-500 text-white rounded-lg">
+          className="px-2 py-2 bg-blue-500 text-white rounded-lg max-xl:block hidden">
           <Image src="/assets/Goback.svg" alt="Goback" height={20} width={20} />
         </Link>
-        <div className="user-card_avatar">
+        <div className="user-card_avatar max-xl:p-0 p-1">
                 <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain'/>
             <div className=" flex-1 text-ellipsis">
                 <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
@@ -160,21 +160,30 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
     </div>
         
       </div>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 pt-16 overflow-y-auto">
         {messages.map((message, index) => {
-          const timestamp = formatDistanceToNow(message.timestamp);
+          const timestamp = format(message.timestamp,"HH:mm");
+          const timestamp2 = formatDistanceToNow(message.timestamp);
           return (
             <div key={index} className={`mb-2 flex ${message.sender._id===userId?"":"flex-row-reverse"}`}>
-              <img
-                src={message.sender.image}
-                alt={message.sender.name}
-                className="w-8 h-8 rounded-full mr-2"
-              />
+              <div className={`flex relative w-fit min-w-[15rem] pb-3 rounded-lg ${message.sender._id===userId?"bg-[#FF971D] pe-3":" bg-primary-500 text-[#ffffff] ps-3"}`}>
+
+              <div className="">
+                
+              <Image
+                src={message.sender.image!}
+                alt={message.sender.name!}
+                height={40}
+                width={40}
+                className="rounded-full mr-2"
+                />
+                </div>
               <div className="flex flex-col">
                 <span className="font-semibold">{message.sender.name}</span>
-                <p className="text-sm">{message.content}</p>
-                <span className="text-xs text-gray-500">{timestamp}</span>
+                <p className="text-sm py-3">{message.content}</p>
+                <span className={`text-xs absolute bottom-0 right-1  ${message.sender._id===userId?"text-gray-500":" text-gray-300"}`}>{timestamp}</span>
               </div>
+                </div>
             </div>
           );
         })}

@@ -8,9 +8,10 @@ interface Props {
   isChat?: boolean;
   Ids?: string;
   isxl?: boolean;
+  islg?: boolean;
 }
 
-const RightSidebar: React.FC<Props> = ({ isChat, Ids, isxl }) => {
+const RightSidebar: React.FC<Props> = ({ isChat, Ids, isxl,islg }) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [users, setUsers] = useState<any>(null);
 
@@ -38,7 +39,7 @@ const RightSidebar: React.FC<Props> = ({ isChat, Ids, isxl }) => {
       <div className="flex flex-1 flex-col justify-start">
         {!isChat && <h3 className=" text-heading4-medium text-light-1 mb-6">Player</h3>}
         {users && users.users && userInfo &&
-          <SugCard result2={JSON.stringify(users.users)} userInfo2={JSON.stringify(userInfo)} type={"users"} isChat={isChat} Ids={Ids ? Ids : ''} />}
+          <SugCard result2={JSON.stringify(users.users)} userInfo2={JSON.stringify(userInfo)} type={"users"} isChat={isChat} Ids={Ids ? Ids : ''} islg={islg} />}
       </div>
     </section>
   );

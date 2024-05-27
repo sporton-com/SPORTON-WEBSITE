@@ -44,8 +44,6 @@ const ProfileHeader = ({
     ).length === 1;
   let handleAddFriend = async () => {
     await addFriend({
-      finalF: "activity",
-      finalU: "sended",
       friendId: accountId,
       userId: myId,
       path: pathname,

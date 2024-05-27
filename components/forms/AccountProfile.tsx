@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/uploadthing";
@@ -183,7 +183,7 @@ const AccountProfile = ({ userData }: props) => {
           name="type"
           render={({ field }) => (
             <FormItem>
-            <RadioGroup className="flex" onChange={e=>{
+            <RadioGroup className="flex" onChange={(e:any)=>{
               field.onChange(e)
               setType(e.target?.value)
             }} name={field.name} onBlur={field.onBlur} ref={field.ref} disabled={field.disabled} defaultValue={field.value}>

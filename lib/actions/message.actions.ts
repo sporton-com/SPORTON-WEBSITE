@@ -3,6 +3,7 @@ import User from '../models/user.models';
 import Message from '../models/messages.models';
 import { pusherServer } from '../pusher';
 import Room from "../models/room.model";
+import { connectDB } from '@/mongoose';
 interface Message {
   content: string;
   sender: {
@@ -38,6 +39,7 @@ export const createMessage = async (
   console.log("---------------------------------------------------------------------------------------------------")
   RoomName&& pusherServer.trigger("chat",RoomName,message)
   console.log("---------------------------------------------------------------------------------------------------")
+  connectDB();
   try {
     const newMessage0 = new Message({
       content:content,

@@ -378,7 +378,7 @@ const CardPost = ({
                 </>
                 )}
               <SocialShare
-                url={`https://sporton-brown.vercel.app/post/${id}`}
+                url={`https://www.sporton.website/post/${id}`}
                 title={content}
               />
 

@@ -31,15 +31,15 @@ export const metadata: Metadata = {
       "Gain Recognition",
       "Sports Platform",
     ],
-  description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports',
+  description: 'SPORTON is a sports community platform that includes all athletes from Egypt in various sports, and on the other hand, player agents and clubs and institutions that will receive their talents will be present.',
   openGraph: {
     type: 'website',
-    url: 'https://sporton-brown.vercel.app/',
+    url: 'https://www.sporton.website/',
     title: 'SPORTON',
-    description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports',
+    description: 'SPORTON is a sports community platform that includes all athletes from Egypt in various sports, and on the other hand, player agents and clubs and institutions that will receive their talents will be present.',
     images: [
       {
-        url: 'https://sporton-brown.vercel.app/logo.png',
+        url: 'https://www.sporton.website/logo.png',
         alt: 'SPORTON LOGO',
       },
     ],

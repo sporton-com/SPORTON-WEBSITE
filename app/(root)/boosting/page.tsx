@@ -19,7 +19,7 @@ const Page = () => {
   }
   return (<div className="">
     {/* <div className="mb-10">Boosting Profile</div> */}
-    <div className=" flex justify-center"><h2 className="text-body-bold  px-4 py-1">Boosting Profile</h2></div>
+    <div className=" flex justify-center"><h1 className="text-body-bold  px-4 py-1">Boosting Profile</h1></div>
     {NextB?<>
     <div className=" flex justify-center"><h3 className="border-primary-500 border-2 text-[#ffffff] rounded-full bg-primary-500 px-4 py-1">Budget | Duration</h3></div>
           <div className="flex flex-col gap-3">

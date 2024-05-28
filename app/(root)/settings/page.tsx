@@ -24,7 +24,7 @@ const Page = () => {
     fetchData();
   }, []);
   return (<div className="">
-    <div className="mb-20 text-body-bold">Settings</div>
+    <h1 className="mb-20 text-body-bold">Settings</h1>
     <ul className="flex flex-col gap-9">
   <li>
       <Link href={id?"/profile/edit/"+id:'' }className="text-primary-500 flex gap-4 hover:opacity-75 text-body-bold">

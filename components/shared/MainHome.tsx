@@ -22,6 +22,7 @@ export default function Home({FPosts2,userInfo2}:{FPosts2:string,userInfo2:strin
   return (
     friends&&userInfo&&FPosts?
     <main>
+      <h1 className="hidden">SPORTON Home</h1>
       <PostButtonHome />
       <section className="p-16 pt-0 flex flex-col gap-8 max-sm:p-0">
         <LocalStore {...userInfo}/>

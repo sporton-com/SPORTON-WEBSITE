@@ -63,6 +63,7 @@ result&&
 result2&&
 postsAchievements?
     <section className="">
+      <h1 className="hidden">{userInfo.name}</h1>
       <ProfileHeader
         accountId={userInfo._id}
         userId={userInfo.id}

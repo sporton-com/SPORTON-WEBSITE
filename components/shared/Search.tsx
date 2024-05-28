@@ -50,7 +50,7 @@ const Search = () => {
   },[])
   return (
     <section className="">
-      <div className=" text-white">{typeS==='user'?'Search':'Communities'}</div>
+      <h1 className=" text-white">{'Search'}</h1>
       <div className="w-full mt-3">
         <Input
           placeholder="Enter name or username or sport"

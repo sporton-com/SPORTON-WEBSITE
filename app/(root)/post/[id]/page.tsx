@@ -15,6 +15,7 @@ const Page = async({params}:{params:{id:string}}) => {
   let post : PostData | null | undefined = await fetchPostById(params.id);
   return (
     <section className=" relative">
+      <h1 className="hidden">{post?.text}</h1>
      {post && (<div className="">
       <CardPost Team={userInfo?.friends} react={post.react} isAchievement={post?.isAchievement} video={post?.video} image={post?.image} id={post._id} parentId={post.parentId} userId={userInfo?._id} currentId={user.id} author={post.author} content={post.text}
       createdAt={post.createdAt} community={post.community}  comments={post.children} />

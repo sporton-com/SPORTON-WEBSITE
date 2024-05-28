@@ -12,7 +12,8 @@ const Page = async () => {
 
 
   return (
-    <div >
+    <div>
+      <h1 className='hidden'>Add Post</h1>
       <PostForm action='Create' id={userInfo._id} image={userInfo?.image}
 name={userInfo?.name}
 username={userInfo?.username}/>

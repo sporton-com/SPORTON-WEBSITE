@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import '../globals.css'
+import { GoogleTagManager } from '@next/third-parties/google'
 const inter = Inter({ subsets: ['latin'] })
-
 export const metadata: Metadata = {
   title: 'SPORTON',
   keywords:[
@@ -67,6 +67,7 @@ export default function RootLayout({
         <div className=" min-h-screen flex w-full items-center justify-center" style={{background:'url(/assets/bg.jpg) fixed'}}>
         {children}
         </div>
+      <GoogleTagManager gtmId="GTM-WB4S5V8V" />
         </body>
     </html>
       </ClerkProvider>

@@ -5,7 +5,7 @@ import '../globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'SPORTEN',
+  title: 'SPORTON',
   keywords:[
     "player CV",
     "sports opportunities",
@@ -39,17 +39,17 @@ export const metadata: Metadata = {
     "athlete opportunities",
     "sports networking site"
   ],
-  description: 'SPORTEN provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTEN and attract everyone\'s attention',
+  description: 'SPORTON provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTON and attract everyone\'s attention',
   icons:'/logo5.gif',
   openGraph: {
     type: 'website',
     url: 'https://sporton-brown.vercel.app/',
-    title: 'SPORTEN',
-    description: 'SPORTEN provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTEN and attract everyone\'s attention',
+    title: 'SPORTON',
+    description: 'SPORTON provides an opportunity for talented individuals who struggle to get into clubs and show their abilities. Highlight your skills and achievements on SPORTON and attract everyone\'s attention',
     images: [
       {
         url: 'https://sporton-brown.vercel.app/logo.png',
-        alt: 'SPORTEN LOGO',
+        alt: 'SPORTON LOGO',
       },
     ],
   },

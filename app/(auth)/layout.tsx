@@ -5,39 +5,12 @@ import '../globals.css'
 import { GoogleTagManager } from '@next/third-parties/google'
 const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
-  title: 'SPORTON | Auth - Login and Sign-up for Sports Enthusiasts',
+  title: {
+    default: "SPORTON | Auth - Login and Sign-up for Sports Enthusiasts ",
+    template: "%s - SPORTON ",
+  },
   keywords:[
-    "player CV",
-    "sports opportunities",
-    "sports clubs",
-    "player profiles",
-    "showcase achievements",
-    "connect with clubs",
-    "sports talent",
-    "sports recognition",
-    "athlete portfolio",
-    "sports scouting",
-    "sports networking",
-    "talent showcase",
-    "sports recruitment",
-    "athlete profiles",
-    "sports career",
-    "sports management",
-    "talent discovery",
-    "sports networking platform",
-    "athletic achievements",
-    "talent identification",
-    "sports resume",
-    "athlete connections",
-    "sports community",
-    "talent promotion",
-    "sports talent search",
-    "athlete recruitment",
-    "sports showcase",
-    "talent evaluation",
-    "sports talent pool",
-    "athlete opportunities",
-    "sports networking site"
+    "SPORTON", "Auth", "Login"," Sign-up"," Sports Enthusiasts"," Talent Showcase", "Sports Clubs"," Sports Networking", "Athlete Recognition"
   ],
   description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports',
   openGraph: {

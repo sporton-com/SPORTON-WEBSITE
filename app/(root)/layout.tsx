@@ -7,6 +7,7 @@ import Topbar from '@/components/shared/Topbar';
 import BottomSidebar from '@/components/shared/Bottombar';
 import LeftSidebar from '@/components/shared/LeftSidebar';
 import RightSidebar from '@/components/shared/RightSidebar';
+import { GoogleTagManager } from '@next/third-parties/google';
 // import { ThemeProvider } from '@/components/providers/theme-provider';
 
 
@@ -73,9 +74,6 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      
-
-
     <html lang="en"  >
       <body className={inter.className}>
 
@@ -93,6 +91,7 @@ export default function RootLayout({
         <RightSidebar/>
       </main>
       <BottomSidebar/>
+      <GoogleTagManager gtmId="GTM-WB4S5V8V" />
         </body>
     </html>
 

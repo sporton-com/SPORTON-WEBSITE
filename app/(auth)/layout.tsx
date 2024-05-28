@@ -39,12 +39,12 @@ export const metadata: Metadata = {
     "athlete opportunities",
     "sports networking site"
   ],
-  description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports community!',
+  description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports',
   openGraph: {
     type: 'website',
     url: 'https://sporton-brown.vercel.app/',
     title: 'SPORTON',
-    description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports community!',
+    description: 'SPORTON offers a platform for showcasing your talent and achievements, connecting with clubs, and gaining recognition. Join now and stand out in the sports',
     images: [
       {
         url: 'https://sporton-brown.vercel.app/logo.png',

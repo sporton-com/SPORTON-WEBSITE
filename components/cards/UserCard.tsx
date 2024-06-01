@@ -18,8 +18,15 @@ const UserCard = ({person}:{person:string}) => {
   return (
   <article className='user-card'>
     <div className="user-card_avatar">
-        <Image src={image} alt={name} height={48} width={48} className=' rounded-full object-contain'/>
+        {/* <Image src={image} alt={name} height={48} width={48} className=' rounded-full object-contain'/> */}
             
+            <div className="relative aspect-square h-[48px] w-[48px]">
+                      <img
+                        src={image}
+                        alt={name}
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
             <div className=" flex-1 text-ellipsis">
             <Image src={'/'+sport.split(' ')[0]+".svg"} alt={sport}  height={30} width={30} className="-translate-x-4"/>
                 <h3 className=' text-base-semibold text-light-1'>{name}</h3>

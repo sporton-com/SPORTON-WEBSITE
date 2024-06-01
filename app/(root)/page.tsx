@@ -8,6 +8,7 @@ import Loader from "@/components/shared/Loader";
 
 export default  function HOME() {
   const router = useRouter();
+  const [action, setAction] = useState();
   const [userInfo, setUserInfo] = useState<string>();
   const [FPosts, setFPosts  ] = useState<string>();
 
@@ -26,9 +27,9 @@ export default  function HOME() {
     }
 
     fetchData();
-  }, []);
+  }, [action]);
   return (FPosts&&userInfo?
-    <Home  FPosts2={FPosts} userInfo2={userInfo}/>:<Loader is />
+    <Home  FPosts2={FPosts} userInfo2={userInfo} setAction={setAction}/>:<Loader is />
   );
 }
 

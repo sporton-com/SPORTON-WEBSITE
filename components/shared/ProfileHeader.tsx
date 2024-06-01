@@ -58,13 +58,20 @@ const ProfileHeader = ({
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             
-              <img
+          <div className="relative aspect-square  max-sm:w-16 max-sm:h-16 w-24 h-24  shadow-2xl">
+                      <img
+                        src={image}
+                        alt={name}
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+              {/* <img
                 src={image}
                 alt={name}
                 // width={90}
                 // height={90}
                 className="rounded-full max-sm:w-16 max-sm:h-16 w-24 h-24 object-cover shadow-2xl"
-              />
+              /> */}
               <div className="flex flex-col gap-3">
               <Image src={'/'+sport.split(' ')[0]+".svg"} alt={sport}  height={30} width={30} className="-translate-x-4"/>
                 <div className="flex gap-[3px]">

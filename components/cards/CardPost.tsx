@@ -77,6 +77,7 @@ interface parms {
     };
   }[];
   isComment?: boolean;
+  setAction?:any;
 }
 
 const CardPost = ({
@@ -95,6 +96,7 @@ const CardPost = ({
   isComment,
   video,
   image,
+  setAction
 }: parms) => {
   let pathname = usePathname();
   let [copy, setCopy] = useState(false);
@@ -113,6 +115,7 @@ const CardPost = ({
         userId: userId,
         path: pathname,
       });
+      setAction&& setAction(Math.random())
     };
   //!!!!!!!! SocialShare
   //?????????? SocialShare

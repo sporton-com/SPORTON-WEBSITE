@@ -107,7 +107,7 @@ export let SugCard = ({
                   className="-translate-x-4 -translate-y-4 top-0 left-0 absolute"
                 />
                 <div className=" cursor-pointer w-full flex gap-[3px]">
-                  <h5 className=" text-base-semibold text-light-1">
+                  <h5 className=" text-base-semibold text-light-1 z-20">
                     {result?.name?.length > 11
                       ? result?.name?.slice(0, 11) + "..."
                       : result?.name}
@@ -158,7 +158,7 @@ export let SugCard = ({
                     className="-translate-x-4 -translate-y-4 top-0 left-0 absolute"
                   />
                   <div className=" cursor-pointer w-full flex gap-[3px]">
-                    <h5 className=" text-base-semibold text-light-1">
+                    <h5 className=" text-base-semibold text-light-1 z-20">
                       {result?.name?.length > 11
                         ? result?.name?.slice(0, 11) + "..."
                         : result?.name}

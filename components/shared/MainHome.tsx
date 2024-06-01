@@ -10,7 +10,7 @@ interface FPOSTS{
   posts: PostData[];
     isNext: boolean;
 }
-export default function Home({FPosts2,userInfo2}:{FPosts2:string,userInfo2:string}) {
+export default function Home({FPosts2,userInfo2,setAction}:{FPosts2:string,userInfo2:string,setAction:any}) {
   const userInfo: UserData = JSON.parse(userInfo2);
   const FPosts:FPOSTS= JSON.parse(FPosts2);
   let friends=userInfo.friends;
@@ -28,6 +28,7 @@ export default function Home({FPosts2,userInfo2}:{FPosts2:string,userInfo2:strin
         <LocalStore {...userInfo}/>
         {FPosts?.posts.map((post) => (
           <CardPost
+          setAction={setAction}
             Team={friends}
             key={post?._id}
             isAchievement={post?.isAchievement}

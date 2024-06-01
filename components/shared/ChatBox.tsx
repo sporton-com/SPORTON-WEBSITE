@@ -150,7 +150,14 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
           <Image src="/assets/Goback.svg" alt="Goback" height={20} width={20} />
         </Link>
         <div className="user-card_avatar max-xl:p-0 p-1">
-                <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain'/>
+        <div className="relative   aspect-square h-[48px] w-[48px]  ">
+                      <img
+                        src={result?.image}
+                        alt="post image"
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                {/* <Image src={result?.image} alt={result?.name} height={48} width={48} className=' cursor-pointer rounded-full object-contain'/> */}
             <div className=" flex-1 text-ellipsis">
                 <h3 className=' text-base-semibold text-light-1'>{result?.name}</h3>
                 {/* <p className=" text-small-semibold text-gray-1">@{result?.username}</p> */}
@@ -168,14 +175,20 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
               <div className={`flex relative w-fit min-w-[15rem] pb-3 pe-3 rounded-lg ${message.sender._id===userId?"bg-[#FF971D] ":" bg-primary-500 text-[#ffffff] "}`}>
 
               <div className="">
-                
-              <Image
+              <div className="relative   aspect-square h-[40px] w-[40px]  mr-2 ">
+                      <img
+                        src={message.sender.image!}
+                        alt={message.sender.name!}
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+              {/* <Image
                 src={message.sender.image!}
                 alt={message.sender.name!}
                 height={40}
                 width={40}
                 className="rounded-full mr-2"
-                />
+                /> */}
                 </div>
               <div className="flex flex-col">
                 <span className="font-semibold">{message.sender.name}</span>

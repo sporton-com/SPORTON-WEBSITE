@@ -39,7 +39,7 @@ export default function RootLayout({
         <div className=" min-h-screen flex w-full items-center justify-center" style={{background:'url(/assets/bg.jpg) fixed'}}>
         {children}
         </div>
-      <GoogleTagManager gtmId="GTM-WB4S5V8V" />
+      {/* <GoogleTagManager gtmId="GTM-WB4S5V8V" /> */}
         </body>
     </html>
       </ClerkProvider>

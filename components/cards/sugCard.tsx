@@ -84,13 +84,20 @@ export let SugCard = ({
                     "/messaging/" + userInfo._id + "-" + result?._id
                   );
               }}>
-              <Image
+                <div className="relative   aspect-square h-10 w-10  ">
+                      <img
+                        src={result?.image}
+                        alt="post image"
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+              {/* <Image
                 src={result?.image}
                 alt={result?.name}
                 height={48}
                 width={48}
                 className=" cursor-pointer rounded-full object-contain"
-              />
+              /> */}
               <div className="flex-1 text-ellipsis  relative ">
                 <Image
                   src={"/" + result?.sport.split(" ")[0] + ".svg"}
@@ -127,14 +134,21 @@ export let SugCard = ({
           !isChat && (
             <article className="user-card" key={result?._id}>
               <div className="user-card_avatar">
-                <Image
+              <div className="relative   aspect-square  h-10 w-10 ">
+                      <img
+                        src={result?.image}
+                        alt="post image"
+                        onClick={() => navigate.push(route)}
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+                {/* <Image
                   src={result?.image}
                   alt={result?.name}
                   height={48}
                   width={48}
-                  className=" cursor-pointer rounded-full object-contain"
-                  onClick={() => navigate.push(route)}
-                />
+                  className=" cursor-pointer  object-contain"
+                /> */}
                 <div className="flex-1 text-ellipsis relative ">
                   <Image
                     src={"/" + result?.sport.split(" ")[0] + ".svg"}

@@ -86,6 +86,7 @@ const AccountProfile = ({ userData }: props) => {
       phone: userData.phone ||"",
     },
   });
+  console.log(userData.phone)
   function handleImageChange(
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void

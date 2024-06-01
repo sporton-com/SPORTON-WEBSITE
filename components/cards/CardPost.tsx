@@ -430,12 +430,19 @@ const CardPost = ({
         <div className=" flex w-full flex-1 flex-row gap-4 ">
           <div className=" text-white hidden flex-col items-center lg:flex ">
             <Link href={"/profile/" + author.id} className="relative w-11 h-11">
-              <Image
+            <div className="relative   aspect-square h-10 w-10  ">
+                      <img
+                        src={author.image}
+                        alt={author.name}
+                        className="absolute inset-0 w-full h-full rounded-full object-cover"
+                      />
+                    </div>
+              {/* <Image
                 src={author.image}
                 alt={author.name}
                 fill
                 className="cursor-pointer rounded-full"
-              />
+              /> */}
             </Link>
             <div className="thread-card_bar" />
           </div>

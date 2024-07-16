@@ -3,9 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { dark } from "@clerk/themes";
 import { useEffect, useState } from 'react';
-import ModeToggle from '@/components/shared/ToggleMode'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 const Topbar = () => {
   let path=usePathname();

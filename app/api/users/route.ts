@@ -8,7 +8,7 @@ export const GET = async (req: NextRequest) => {
     await connectDB();
     const users = await User.find({});
 
-    return NextResponse.json(users, { status: 200 });
+    // return NextResponse.json(users, { status: 200 });
   } catch (err) {
     console.log("[customerId_GET", err);
     return new NextResponse("Internal Server Error", { status: 500 });

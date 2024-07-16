@@ -2,6 +2,7 @@
 import UserCard from "@/components/cards/UserCard";
 import PostTab from "@/components/shared/PostTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
+import Chart from "@/components/chart/chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants/icons";
 import { fetchUser, Result, UserData } from "@/lib/actions/user.actions";
@@ -90,16 +91,20 @@ postsAchievements?
                   className="object-contain"
                 />
                 <p className=" max-sm:hidden">{tab.label}</p>
-
+                {tab.label !== "Analytics"&&
                 <p className=" bg-dark-3 border border-light-1 rounded-full px-2 text-base-regular">
                   {tab.label === "Posts"
                     ? userInfo?.posts?.length
                     : tab.label === "Team"
                     ? friends?.length
-                    : postsAchievements?.length}
-                </p>
+                    : tab.label === "Achievements"?
+                    postsAchievements?.length
+                    : null
+                    }
+                </p>}
               </TabsTrigger>
             ))}
+
           </TabsList>
           {profileTabs.map((tab) => (
             <TabsContent
@@ -122,7 +127,7 @@ postsAchievements?
                     accountType="User"
                   />
                 )
-              ) : (
+              ) :tab.value === "analytics" ? <Chart/>:(
                 result2 && (
                   <PostTab
                     userId={userInfo._id}

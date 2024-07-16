@@ -36,7 +36,7 @@ export default function RootLayout({
       <ClerkProvider>
     <html lang="en" >
       <body className={inter.className +''} >
-        <div className=" min-h-screen flex w-full items-center justify-center" style={{background:'url(/assets/bg.jpg) fixed'}}>
+        <div className=" min-h-screen flex w-full items-center justify-center " style={{background:'url(/assets/bg.jpg) ',backgroundSize:"100% 100%"}}>
         {children}
         </div>
       {/* <GoogleTagManager gtmId="GTM-WB4S5V8V" /> */}

@@ -3,6 +3,7 @@ import AccountProfile from "../../../components/forms/AccountProfile";
 import { fetchUser } from "../../../lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { connectDB } from "@/mongoose";
 import React from "react";
 // import { Metadata } from "next";
 
@@ -17,13 +18,13 @@ interface usData {
   bio: string;
   sport: string;
   image: string | undefined;
-  type: string| undefined;
-  phone: string| undefined;
+  type: string | undefined;
+  phone: string | undefined;
 }
 const Onboarding = async () => {
+  await connectDB();
   let user = await currentUser();
-  const userInfo = await fetchUser(user?.id);
-
+  const userInfo = await fetchUser();
   if (!user) redirect("/sign-in");
   if (userInfo?.onboarding) redirect("/");
   let userData: usData = {

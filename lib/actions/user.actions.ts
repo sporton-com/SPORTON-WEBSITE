@@ -89,8 +89,8 @@ export async function updateUser({
   }
 }
 export async function fetchUser(userId?: string | undefined) {
-  connectDB();
   try {
+     await connectDB();
       const user =userId?{id:'jjj'}:await currentUser();
       if (!user) return redirect("/sign-in");
     let id=userId?userId:user.id;
@@ -237,7 +237,6 @@ export async function addFriend({
       console.log("userId أو friendId غير موجود");
       return;
     }
-
        const updateOperation = isFriend
       ? { $pull: { friends: friendId } }
       : { $push: { friends: friendId } };

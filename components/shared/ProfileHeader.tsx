@@ -58,7 +58,7 @@ const ProfileHeader = ({
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             
-          <div className="relative aspect-square  max-sm:w-16 max-sm:h-16 w-24 h-24  shadow-2xl">
+          <div className="relative aspect-square  max-sm:w-16 max-sm:h-16 w-24 h-24  shadow-2xl rounded-full">
                       <img
                         src={image}
                         alt={name}

@@ -17,11 +17,12 @@ export const SidebarLinks = [
       route: "/activity",
       label: "Notifications",
     },
-    // {
-    //   imgURL: "/assets/create.svg",
-    //   route: "/new-post",
-    //   label: "new post",
-    // },
+    {
+      imgURL: "/assets/store.svg",
+      imgURLh: "/assets/store-h.svg",
+      route: "/store",
+      label: "Store",
+    },
     {
       imgURL: "/assets/user.svg",
       imgURLh: "/assets/user-h.svg",
@@ -40,6 +41,7 @@ export const SidebarLinks = [
     { value: "posts", label: "Posts", icon: "/assets/reply.svg" },
     { value: "friends", label: "Team", icon: "/assets/members.svg" },
     { value: "achievements", label: "Achievements", icon: "/assets/achievement.svg" },
+    { value: "analytics", label: "Analytics", icon: "/assets/graph.svg" },
   ];
   
   export const communityTabs = [

@@ -1,8 +1,6 @@
 "use client"
-
 import styles from './chart.module.css'
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
 const data = [
   {
     name: "Sun",

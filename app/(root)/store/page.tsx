@@ -52,7 +52,7 @@ const exampleParms: Parms = {
   userId: "user123",
   author: exampleAuthor,
   content: "  جزمه كوره نايك المقاس 43/44 سعره ٤٠٠ جنيه",
-  image:"https://postcdn.haraj.com.sa/userfiles30/2024-07-16/1350x1800_415802F2-119B-4DDA-9DBC-B65E513B7A53.jpg/900/webp",
+  image:"https://mimg6cdn.haraj.com.sa/userfiles30/2024-04-28/1350x1800_8D0C2732-4604-431B-AEA1-9F95E48316B2.jpg",
   createdAt: getRandomDate(new Date(2020, 0, 1), new Date()), // Random date between Jan 1, 2020 and now
 };
 const exampleParms2: Parms = {

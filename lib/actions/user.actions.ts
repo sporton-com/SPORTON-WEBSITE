@@ -64,11 +64,11 @@ export async function updateUser({
 }: props): Promise<void> {
   connectDB();
   try {
-    const user =await currentUser();
+    const user = await currentUser();
     await User.findOneAndUpdate(
       { id: userId },
       {
-        email:user?.emailAddresses,
+        email:user?.emailAddresses!,
         username: username,
         bio: bio,
         sport: sport,

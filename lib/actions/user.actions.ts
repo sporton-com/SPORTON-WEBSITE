@@ -68,7 +68,7 @@ export async function updateUser({
     await User.findOneAndUpdate(
       { id: userId },
       {
-        email:user?.emailAddresses[0]!,
+        email:user?.emailAddresses[0].emailAddress!,
         username: username,
         bio: bio,
         sport: sport,

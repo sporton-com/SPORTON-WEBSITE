@@ -191,10 +191,10 @@ export async function fetchPostById(id: string) {
     console.log(error);
   }
 }
-export async function fetchPosts(pageNum = 1, pageSize = 20) {
+export async function fetchPosts(pageNum = 0, pageSize = 20) {
   await connectDB();
   try {
-    let skipAmount = (pageNum - 1) * pageSize;
+    // let skipAmount = (pageNum - 1) * pageSize;
     const postQ = Post.aggregate([
       { $match: { parentId: { $in: [null, undefined] } } },
       { $sample: { size: pageSize } },
@@ -283,109 +283,17 @@ export async function fetchPosts(pageNum = 1, pageSize = 20) {
         },
       },
       { $sort: { createdAt: -1 } }, // Sort by createdAt
-      { $skip: skipAmount },
+      { $skip: pageNum },
       { $limit: pageSize }
     ]);
-
     const totalPosts = await Post.countDocuments({
       parentId: { $in: [null, undefined] },
-    });
+    }).lean();
     const posts: PostData[] = await postQ.exec();
-    let isNext = +totalPosts > skipAmount + posts.length;
+    console.log(posts)
+    let isNext = +totalPosts > pageNum + posts.length;
     return { posts, isNext };
   } catch (error: any) {
     console.log("failed to fetch posts" + error.message);
   }
 }
-
-// export async function fetchPosts(pageNum = 1, pageSize = 20) {
-//   connectDB();
-//   try {
-//     let skipAmount = (pageNum - 1) * pageSize;
-//     const postQ = Post.aggregate([
-//       { $match: { parentId: { $in: [null, undefined] } } },
-//       { $sample: { size: pageSize } },
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "author",
-//           foreignField: "_id",
-//           as: "author",
-//         },
-//       },
-//       { $unwind: "$author" },
-//       {
-//         $lookup: {
-//           from: "posts",
-//           localField: "children",
-//           foreignField: "_id",
-//           as: "childrenINF",
-//         },
-//       },
-//       { $unwind: { path: "$childrenINF", preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "childrenINF.author",
-//           foreignField: "_id",
-//           as: "childrenINF.authorINF",
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$childrenINF.authorINF",
-//           preserveNullAndEmptyArrays: true,
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "communities",
-//           localField: "community",
-//           foreignField: "_id",
-//           as: "community",
-//         },
-//       },
-//       { $unwind: { path: "$community", preserveNullAndEmptyArrays: true } },
-//       {
-//         $group: {
-//           _id: "$_id",
-//           text: { $first: "$text" },
-//           isAchievement: { $first: "$isAchievement" },
-//           video: { $first: "$video" },
-//           image: { $first: "$image" },
-//           author: { $first: "$author" },
-//           react: { $first: "$react" },
-//           createdAt: { $first: "$createdAt" },
-//           community: { $first: "$community" },
-//           parentId: { $first: "$parentId" },
-//           children: {
-//             $push: {
-//               author: {
-//                 _id: "$childrenINF.authorINF._id",
-//                 sport: "$childrenINF.authorINF.sport",
-//                 id: "$childrenINF.authorINF.id",
-//                 name: "$childrenINF.authorINF.name",
-//                 username: "$childrenINF.authorINF.username",
-//                 image: "$childrenINF.authorINF.image",
-//                 parentId: "$childrenINF.authorINF.parentId",
-//               },
-//             },
-//           },
-//         },
-//       },
-//     ])
-//       .sort({ createdAt: "desc" })
-//       .skip(skipAmount)
-//       .limit(pageSize);
-//     const totalPosts = await Post.countDocuments({
-//       parentId: { $in: [null, undefined] },
-//     });
-//     const posts: PostData[] = await postQ.exec();
-//     console.log(posts);
-//     console.log("success posts count: " + posts.length);
-//     let isNext = +totalPosts > skipAmount + posts.length;
-//     return { posts, isNext };
-//   } catch (error: any) {
-//     console.log("failed to fetch posts" + error.message);
-//   }
-// }

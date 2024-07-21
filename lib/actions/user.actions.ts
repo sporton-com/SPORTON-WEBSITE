@@ -68,7 +68,7 @@ export async function updateUser({
     await User.findOneAndUpdate(
       { id: userId },
       {
-        email:user?.emailAddresses!,
+        email:user?.emailAddresses[0]!,
         username: username,
         bio: bio,
         sport: sport,
@@ -79,7 +79,7 @@ export async function updateUser({
         type: type,
       },
       { upsert: true }
-    );
+    ).lean();
     console.log("Successfully updated user");
     if (path.includes("/profile/edit")) {
       revalidatePath(path);
@@ -139,7 +139,7 @@ export async function fetchAllUser({
     let users = await User.find(query )
       .sort({ createdAt: "desc" })
       .skip(skipAmount)
-      .limit(pageSize)
+      .limit(pageSize).lean()
       .exec();
     const totalUsers = await User.countDocuments(query);
     let isNext = +totalUsers > skipAmount + users.length;
@@ -258,11 +258,11 @@ export async function addFriend({
              $push: { rooms: ChatRoom._id } ,
             ...updateFriendQ}:
             updateFriendQ
-            await User.findByIdAndUpdate(userId, quary);
+            await User.findByIdAndUpdate(userId, quary).lean();
             await User.findByIdAndUpdate(
             friendId,
             quary2
-          );
+          ).lean();
           if (isChat) {
             return ChatRoom;
           }

@@ -1,34 +1,38 @@
-"use client"
-import { useState, useEffect } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 import CardPost from "@/components/cards/CardPost";
 import PostButtonHome from "@/components/cards/PostHome";
 import LocalStore from "@/components/cards/LocalStore";
-import { PostData  } from "@/lib/actions/post.actions";
+import { PostData } from "@/lib/actions/post.actions";
 import { UserData } from "@/lib/actions/user.actions";
-import Loader from './Loader';
-interface FPOSTS{
-  posts: PostData[];
-    isNext: boolean;
-}
-export default function Home({FPosts2,userInfo2,setAction}:{FPosts2:string,userInfo2:string,setAction:any}) {
+import Loader from "./Loader";
+
+export default function Home({
+  FPosts2,
+  userInfo2,
+  setAction,
+}: {
+  FPosts2: string;
+  userInfo2: string;
+  setAction: any;
+}) {
   const userInfo: UserData = JSON.parse(userInfo2);
-  const FPosts:FPOSTS= JSON.parse(FPosts2);
-  let friends=userInfo.friends;
+  const FPosts:PostData[]  = JSON.parse(FPosts2);
+  let friends = userInfo.friends;
 
   useEffect(() => {
-    userInfo&& sessionStorage.setItem("userInfo",JSON.stringify(userInfo))
-  }, [userInfo]); 
+    userInfo && sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+  }, [userInfo]);
 
-  return (
-    friends&&userInfo&&FPosts?
+  return friends && userInfo && FPosts ? (
     <main>
       <h1 className="hidden">SPORTON Home</h1>
       <PostButtonHome />
       <section className="p-16 pt-0 flex flex-col gap-8 max-sm:p-0">
-        <LocalStore {...userInfo}/>
-        {FPosts?.posts.map((post) => (
+        <LocalStore {...userInfo} />
+        {FPosts?.map((post) => (
           <CardPost
-          setAction={setAction}
+            setAction={setAction}
             Team={friends}
             key={post?._id}
             isAchievement={post?.isAchievement}
@@ -47,7 +51,8 @@ export default function Home({FPosts2,userInfo2,setAction}:{FPosts2:string,userI
           />
         ))}
       </section>
-    </main>:<Loader is/>
+    </main>
+  ) : (
+    <Loader is />
   );
 }
-

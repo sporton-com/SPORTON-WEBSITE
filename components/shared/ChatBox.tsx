@@ -139,7 +139,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
       );
 
       notification.onclick = () => {
-        window.location.href = `https://sporton-brown.vercel.app/messaging?ids=${userId+"-"+frindId}`
+        window.location.href = `https://sporton.website/messaging?ids=${userId+"-"+frindId}`
         window.focus();
       };
     }

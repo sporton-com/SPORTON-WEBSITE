@@ -17,6 +17,7 @@ export let SugCard = ({
   Ids,
   islg,
   refrish,
+  setChat
 }: {
   result2: string;
   type: string;
@@ -25,6 +26,7 @@ export let SugCard = ({
   Ids?: string;
   islg?: boolean;
   refrish?: any;
+  setChat?: any;
 }) => {
   const userInfo: UserData = JSON.parse(userInfo2);
   const result: any[] = JSON.parse(result2);
@@ -43,9 +45,6 @@ export let SugCard = ({
       isFriend: isFriend,
     });
     refrish(Math.random());
-  };
-  let handelloaded = (e: string) => {
-    navigate.push(e);
   };
   return (
     <div className=" flex flex-col gap-6 w-full scroll-auto">
@@ -67,9 +66,9 @@ export let SugCard = ({
         let checked = isFriend;
         let route = `/profile/${result?.id}`;
         return checked && isChat ? (
-          <Link
-            href={"/messaging/" + userInfo._id + "-" + result?._id}
-            className={`user-card ${
+          <div
+            onClick={()=>{if(islg){setChat(`${userInfo._id + "-" + result?._id}`)}else{navigate.push("/messaging/" + userInfo._id + "-" + result?._id)}}}
+            className={`user-card cursor-pointer ${
               Ids === userInfo._id + "-" + result?._id
                 ? "bg-[#b3b3b380] rounded-s-full"
                 : ""
@@ -77,13 +76,13 @@ export let SugCard = ({
             key={result?._id}>
             <div
               className="user-card_avatar"
+              // onClick={()=>setChat(`${userInfo._id + "-" + result?._id}`)}
               onLoad={() => {
                 i === 0 &&
-                  islg &&
-                  handelloaded(
-                    "/messaging/" + userInfo._id + "-" + result?._id
-                  );
-              }}>
+                  islg &&Ids?.length===0&&
+                  setChat(`${userInfo._id + "-" + result?._id}`)
+              }}
+              >
                 <div className="relative   aspect-square h-10 w-10  ">
                       <img
                         src={result?.image}
@@ -129,7 +128,7 @@ export let SugCard = ({
                 </p>
               </div>
             </div>
-          </Link>
+          </div>
         ) : (
           !isChat && (
             <article className="user-card" key={result?._id}>

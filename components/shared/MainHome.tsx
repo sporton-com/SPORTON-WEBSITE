@@ -12,12 +12,12 @@ export default function Home({
   userInfo2,
   setAction,
 }: {
-  FPosts2: string;
-  userInfo2: string;
+  FPosts2: PostData[];
+  userInfo2: UserData;
   setAction: any;
 }) {
-  const userInfo: UserData = JSON.parse(userInfo2);
-  const FPosts:PostData[]  = JSON.parse(FPosts2);
+  const userInfo: UserData = userInfo2;
+  const FPosts:PostData[]  = FPosts2;
   let friends = userInfo.friends;
 
   useEffect(() => {

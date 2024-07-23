@@ -11,13 +11,7 @@ interface Props {
   setChat?: any;
 }
 
-const RightSidebar: React.FC<Props> = ({
-  isChat,
-  Ids,
-  isxl,
-  islg,
-  setChat,
-}) => {
+const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [users, setUsers] = useState<any>(null);
   const [refrish, setrefrish] = useState<any>(null);

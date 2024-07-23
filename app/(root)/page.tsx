@@ -51,7 +51,7 @@ export default function HOME() {
 
   useEffect(() => {
     loadPosts();
-  }, [action, loadPosts]);
+  }, [action]);
 
   useEffect(() => {
     const handleScroll = () => {

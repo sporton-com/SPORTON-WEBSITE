@@ -81,27 +81,3 @@ const RightSidebar: React.FC<Props> = ({
 };
 
 export default RightSidebar;
-
-// import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
-// import { SugCard } from "../cards/sugCard";
-
-// const RightSidebar = async ({isChat,Ids,isxl}:{isChat?:boolean,Ids?:string,isxl?:boolean}) => {
-//   let user = await currentUser();
-//   let userInfo = await fetchUser(user?.id);
-//   let users = await fetchAllUser({
-//     searchString: "",
-//     pageNum: 1,
-//     pageSize: 100,
-//   });
-
-//   return (
-//     <section className={`rightsidebar custom-scrollbar ${isxl?"w-full":"max-xl:hidden"}  ${isChat?` p-0 ${!Ids&&" px-1"} w-96`:""}`}>
-//       <div className="flex flex-1 flex-col justify-start">
-//         {!isChat&&<h3 className=" text-heading4-medium text-light-1 mb-6">Suggested User</h3>}
-//         {users&& users?.users&&userInfo&&<SugCard result2={JSON.stringify(users.users)}  userInfo2={JSON.stringify(userInfo)} type={"users"} isChat={isChat} Ids={Ids?Ids:''}/>}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default RightSidebar;

@@ -9,8 +9,8 @@ import Loader from "@/components/shared/Loader";
 export default function HOME() {
   const router = useRouter();
   const [action, setAction] = useState();
-  const [userInfo, setUserInfo] = useState<any>();
-  const [FPosts, setFPosts] = useState<any[]>([]);
+  const [userInfo, setUserInfo] = useState<string>();
+  const [FPosts, setFPosts] = useState<string>();
   const [skip, setSkip] = useState(0);
   const [isNext, setisNext] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,18 +26,21 @@ export default function HOME() {
       const userInfo = await fetchUser();
       if (!userInfo?.onboarding) {
         router.replace("/onboarding");
-        return;
       }
-      setUserInfo(userInfo);
+      userInfo && setUserInfo(JSON.stringify(userInfo));
 
       const FPosts = await fetchPosts(skip, PAGE_SIZE);
-      if (FPosts?.posts) {
-        setFPosts((prevPosts) => [...prevPosts, ...FPosts.posts]);
-        setisNext(FPosts?.isNext);
-        setSkip((prevSkip) => prevSkip + PAGE_SIZE);
-        if (FPosts.posts.length < PAGE_SIZE) {
-          setHasMore(false);
-        }
+      FPosts &&
+        setFPosts((prevPosts) =>
+          prevPosts && prevPosts.length > 0
+            ? JSON.stringify([...JSON.parse(prevPosts), ...FPosts.posts])
+            : JSON.stringify([...FPosts.posts])
+        );
+      FPosts && setisNext(FPosts?.isNext);
+
+      setSkip((prevSkip) => prevSkip + PAGE_SIZE);
+      if (FPosts?.posts && FPosts.posts.length < PAGE_SIZE) {
+        setHasMore(false);
       }
     } catch (error) {
       console.error("Error loading posts:", error);
@@ -64,7 +67,7 @@ export default function HOME() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadPosts]);
 
-  return FPosts.length > 0 && userInfo ? (
+  return FPosts && userInfo ? (
     <Home FPosts2={FPosts} userInfo2={userInfo} setAction={setAction} />
   ) : (
     <Loader is />

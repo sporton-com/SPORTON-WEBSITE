@@ -67,13 +67,14 @@ export let SugCard = ({
         let route = `/profile/${result?.id}`;
         return checked && isChat ? (
           <div
+          
             onClick={()=>{if(islg){setChat(`${userInfo._id + "-" + result?._id}`)}else{navigate.push("/messaging/" + userInfo._id + "-" + result?._id)}}}
             className={`user-card cursor-pointer ${
               Ids === userInfo._id + "-" + result?._id
                 ? "bg-[#b3b3b380] rounded-s-full"
                 : ""
             }`}
-            key={result?._id}>
+            key={i}>
             <div
               className="user-card_avatar"
               // onClick={()=>setChat(`${userInfo._id + "-" + result?._id}`)}

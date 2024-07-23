@@ -12,12 +12,12 @@ export default function Home({
   userInfo2,
   setAction,
 }: {
-  FPosts2: PostData[];
-  userInfo2: UserData;
+  FPosts2: string;
+  userInfo2: string;
   setAction: any;
 }) {
-  const userInfo: UserData = userInfo2;
-  const FPosts:PostData[]  = FPosts2;
+  const userInfo: UserData = JSON.parse(userInfo2);
+  const FPosts:PostData[]  = JSON.parse(FPosts2);
   let friends = userInfo.friends;
 
   useEffect(() => {
@@ -30,11 +30,11 @@ export default function Home({
       <PostButtonHome />
       <section className="p-16 pt-0 flex flex-col gap-8 max-sm:p-0">
         <LocalStore {...userInfo} />
-        {FPosts?.map((post) => (
+        {FPosts?.map((post,i) => (
           <CardPost
             setAction={setAction}
             Team={friends}
-            key={post?._id}
+            key={i}
             isAchievement={post?.isAchievement}
             id={post?._id}
             video={post?.video}

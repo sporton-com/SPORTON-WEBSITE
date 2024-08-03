@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
 import { SugCard } from "../cards/sugCard";
+import { toast } from "react-toastify";
 
 interface Props {
   isChat?: boolean;
@@ -17,18 +18,18 @@ const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
   const [refrish, setrefrish] = useState<any>(null);
 
   useEffect(() => {
-    // if (
-    //   Notification.permission !== "granted" &&
-    //   Notification.permission !== "denied"
-    // ) {
-    //   Notification.requestPermission().then((permission) => {
-    //     if (permission === "granted") {
-    //       console.log("Notification permission granted.");
-    //     } else {
-    //       console.log("Notification permission denied.");
-    //     }
-    //   });
-    // }
+    if (
+      Notification?.permission !== "granted" &&
+      Notification?.permission !== "denied"
+    ) {
+      Notification?.requestPermission()?.then((permission) => {
+        if (permission === "granted") {
+          toast.success("Notification permission granted.");
+        } else {
+          toast.error("Notification permission denied.");
+        }
+      });
+    }
   }, []);
   useEffect(() => {
     const fetchData = async () => {

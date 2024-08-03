@@ -132,7 +132,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
   }, [chat]);
   const showNotification = (msg: Message) => {
     toast.info(<CardToster content={msg.content} image={msg.sender.image!} name={msg.sender.name!} link={`https://sporton.website/messaging?ids=${userId+"-"+frindId}`} />)
-    if (Notification.permission === "granted") {
+    // if (Notification.permission === "granted") {
       const notification = new Notification(
         `New message from ${msg.sender.name}`,
         {
@@ -144,22 +144,22 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
         window.location.href = `https://sporton.website/messaging?ids=${userId+"-"+frindId}`
         window.focus();
       };
-    }
+    // }
   };
-  useEffect(() => {
-    if (
-      Notification.permission !== "granted" &&
-      Notification.permission !== "denied"
-    ) {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          console.log("Notification permission granted.");
-        } else {
-          console.log("Notification permission denied.");
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     Notification.permission !== "granted" &&
+  //     Notification.permission !== "denied"
+  //   ) {
+  //     Notification.requestPermission().then((permission) => {
+  //       if (permission === "granted") {
+  //         console.log("Notification permission granted.");
+  //       } else {
+  //         console.log("Notification permission denied.");
+  //       }
+  //     });
+  //   }
+  // }, []);
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });

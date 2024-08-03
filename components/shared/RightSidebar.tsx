@@ -17,36 +17,36 @@ const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
   const [refrish, setrefrish] = useState<any>(null);
 
   useEffect(() => {
-    if (
-      Notification.permission !== "granted" &&
-      Notification.permission !== "denied"
-    ) {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          console.log("Notification permission granted.");
-        } else {
-          console.log("Notification permission denied.");
-        }
-      });
-    }
+    // if (
+    //   Notification.permission !== "granted" &&
+    //   Notification.permission !== "denied"
+    // ) {
+    //   Notification.requestPermission().then((permission) => {
+    //     if (permission === "granted") {
+    //       console.log("Notification permission granted.");
+    //     } else {
+    //       console.log("Notification permission denied.");
+    //     }
+    //   });
+    // }
   }, []);
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const userInfo = await fetchUser();
-    //     const users = await fetchAllUser({
-    //       searchString: "",
-    //       pageNum: 1,
-    //       pageSize: 100,
-    //     });
-    //     setUserInfo(userInfo);
-    //     setUsers(users);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
+    const fetchData = async () => {
+      try {
+        const userInfo = await fetchUser();
+        const users = await fetchAllUser({
+          searchString: "",
+          pageNum: 1,
+          pageSize: 100,
+        });
+        setUserInfo(userInfo);
+        setUsers(users);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-    // fetchData();
+    fetchData();
   }, [refrish]);
   return (
     <section

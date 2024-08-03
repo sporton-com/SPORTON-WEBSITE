@@ -7,8 +7,6 @@ import BottomSidebar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: {
     default:
@@ -50,20 +48,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <Topbar />
-          <main className=" flex flex-row w-full">
-            <LeftSidebar />
-            <section className="main-container">
-              <div className=" w-full max-w-4xl">{children}</div>
-            </section>
-            <RightSidebar />
-          </main>
-          <BottomSidebar />
-        </body>
-      </html>
-    </ClerkProvider>
+    <>
+      <Topbar />
+      <main className=" flex flex-row w-full">
+        <LeftSidebar />
+        <section className="main-container">
+          <div className=" w-full max-w-4xl">{children}</div>
+        </section>
+        <RightSidebar />
+      </main>
+      <BottomSidebar />
+    </>
   );
 }

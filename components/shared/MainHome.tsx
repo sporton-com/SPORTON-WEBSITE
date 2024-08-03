@@ -23,7 +23,6 @@ export default function Home({
   useEffect(() => {
     userInfo && sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
   }, [userInfo]);
-
   return friends && userInfo && FPosts ? (
     <main>
       <h1 className="hidden">SPORTON Home</h1>

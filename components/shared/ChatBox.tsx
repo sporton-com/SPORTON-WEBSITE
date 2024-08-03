@@ -10,7 +10,9 @@ import { UserData } from "@/lib/actions/user.actions";
 import { formatDistanceToNow, format } from "date-fns";
 import { pusherClient } from "@/lib/pusher";
 import { GetChat } from "@/lib/actions/room.actions";
-
+import { toast } from "react-toastify";
+import { FaEnvelope } from 'react-icons/fa';
+import CardToster from "../cards/CardToster";
 interface User {
   _id: string;
   id: string;
@@ -129,6 +131,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
     };
   }, [chat]);
   const showNotification = (msg: Message) => {
+    toast.info(<CardToster content={msg.content} image={msg.sender.image!} name={msg.sender.name!} link={`https://sporton.website/messaging?ids=${userId+"-"+frindId}`} />)
     if (Notification.permission === "granted") {
       const notification = new Notification(
         `New message from ${msg.sender.name}`,
@@ -137,14 +140,12 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
           icon: msg.sender.image,
         }
       );
-
       notification.onclick = () => {
         window.location.href = `https://sporton.website/messaging?ids=${userId+"-"+frindId}`
         window.focus();
       };
     }
   };
-
   useEffect(() => {
     if (
       Notification.permission !== "granted" &&
@@ -220,7 +221,7 @@ const ChatBox: React.FC<{ Ids?: string }> = ({ Ids }) => {
           </div>
         </div>
         <div className="flex-1 pt-16 overflow-y-auto">
-          {messages.map((message, index) => {
+          {messages.slice((messages.length/2)).map((message, index) => {
             const timestamp = format(message.timestamp, "HH:mm");
             const timestamp2 = formatDistanceToNow(message.timestamp);
             return (

@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
 import "../globals.css";
 import Topbar from "@/components/shared/Topbar";
 import BottomSidebar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
-
+import { ToastContainer } from "react-toastify";
 export const metadata: Metadata = {
   title: {
     default:
@@ -57,6 +55,7 @@ export default function RootLayout({
             </div>
         </section>
         <RightSidebar />
+        <ToastContainer />
       </main>
       <BottomSidebar />
     </>

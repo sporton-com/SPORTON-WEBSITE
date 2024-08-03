@@ -5,6 +5,7 @@ import "./globals.css";
 import React from "react";
 const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/react";
+import { ToastContainer } from "react-toastify";
 export const metadata: Metadata = {
   title: {
     default:
@@ -49,7 +50,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          <div className=" w-full">{children}</div>
+          <div className=" w-full">{children}
+          <ToastContainer />
+          </div>
           <Analytics />
         </body>
       </html>

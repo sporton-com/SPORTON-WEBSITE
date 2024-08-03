@@ -48,17 +48,17 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <Topbar />
+      {/* <Topbar /> */}
       <main className=" flex flex-row w-full">
-        <LeftSidebar />
+        {/* <LeftSidebar /> */}
         <section className="main-container">
           <div className=" w-full max-w-4xl">
-            {/* {children} */}
+            {children}
             </div>
         </section>
-        <RightSidebar />
+        {/* <RightSidebar /> */}
       </main>
-      <BottomSidebar />
+      {/* <BottomSidebar /> */}
     </>
   );
 }

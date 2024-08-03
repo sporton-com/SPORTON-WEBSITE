@@ -31,22 +31,22 @@ const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
     }
   }, []);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userInfo = await fetchUser();
-        const users = await fetchAllUser({
-          searchString: "",
-          pageNum: 1,
-          pageSize: 100,
-        });
-        setUserInfo(userInfo);
-        setUsers(users);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const userInfo = await fetchUser();
+    //     const users = await fetchAllUser({
+    //       searchString: "",
+    //       pageNum: 1,
+    //       pageSize: 100,
+    //     });
+    //     setUserInfo(userInfo);
+    //     setUsers(users);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
   }, [refrish]);
   return (
     <section

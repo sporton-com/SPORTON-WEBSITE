@@ -56,7 +56,7 @@ export default function RootLayout({
             {children}
             </div>
         </section>
-        {/* <RightSidebar /> */}
+        <RightSidebar />
       </main>
       <BottomSidebar />
     </>

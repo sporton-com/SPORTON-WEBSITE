@@ -22,13 +22,13 @@ const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
       Notification?.permission !== "granted" &&
       Notification?.permission !== "denied"
     ) {
-      Notification?.requestPermission()?.then((permission) => {
-        if (permission === "granted") {
-          toast.success("Notification permission granted.");
-        } else {
-          toast.error("Notification permission denied.");
-        }
-      });
+      // Notification?.requestPermission()?.then((permission) => {
+      //   if (permission === "granted") {
+      //     toast.success("Notification permission granted.");
+      //   } else {
+      //     toast.error("Notification permission denied.");
+      //   }
+      // });
     }
   }, []);
   useEffect(() => {

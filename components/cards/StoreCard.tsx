@@ -288,7 +288,7 @@ const StoreCard = ({
                   </Link>
                   <IconsFooter />
                 </div>
-                <p className="text-gray-300 mt-1 text-sm">{content}</p>
+                <p className="text-gray-700 mt-1 text-sm">{content}</p>
                 {image && (
                   <div className="relative w-full h-80 mt-4 rounded-lg">
                     <Image

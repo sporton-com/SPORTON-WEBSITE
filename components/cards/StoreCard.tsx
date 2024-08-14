@@ -156,8 +156,9 @@ const StoreCard = ({
       </div>
     );
   };
-
+ 
   
+
   let IconsFooter = ({
     isMessenger,
     isWhite,

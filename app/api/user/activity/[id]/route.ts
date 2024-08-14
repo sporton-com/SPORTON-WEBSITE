@@ -22,8 +22,3 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Adjust based on whether you need body parsing
-  },
-};

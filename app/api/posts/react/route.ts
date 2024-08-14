@@ -13,8 +13,4 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: false, // Adjust depending on your needs
-  },
-};
+

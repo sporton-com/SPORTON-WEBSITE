@@ -5,7 +5,7 @@ import Home from "@/components/shared/MainHome";
 import { useRouter } from "next/navigation";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Loader from "@/components/shared/Loader";
 import { PostData } from '@/lib/actions/post.actions';
 
@@ -27,7 +27,8 @@ const fetchPosts = async ({ pageParam = 0 }): Promise<FetchPostsResponse> => {
 export default function HOME() {
   const router = useRouter();
   const sentinelRef = useRef<HTMLDivElement>(null);
-
+  const [action, setAction] = useState();
+  
   // Fetch user information
   const { data: userInfo, error: userError } = useSWR("/api/user/1", fetcher, {
     onSuccess: (data: { onboarding: boolean; }) => {
@@ -97,7 +98,7 @@ export default function HOME() {
       <Home
         FPosts2={JSON.stringify(posts)}
         userInfo2={JSON.stringify(userInfo)}
-        setAction={() => {}}
+        setAction={setAction}
       />
       {hasNextPage && !isFetchingNextPage && <div ref={sentinelRef} style={{ height: "1px" }} />}
       {isFetchingNextPage && <Loader is />}

@@ -1,3 +1,4 @@
+"use client"
 import StoreCard from '@/components/cards/StoreCard'
 import React from 'react'
 interface Author {
@@ -78,6 +79,7 @@ const Page = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 p-4">
+      <></>
         {arr.map(page =>
     <StoreCard key={page.id} {...page} />
         )}

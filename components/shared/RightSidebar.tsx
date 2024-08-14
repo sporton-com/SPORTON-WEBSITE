@@ -1,7 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
-import { fetchAllUser, fetchUser } from "@/lib/actions/user.actions";
-import { SugCard } from "../cards/sugCard";
+import { useQuery } from '@tanstack/react-query';
+import { UserData, fetchAllUser, fetchUser } from '@/lib/actions/user.actions';
+import { SugCard } from '../cards/sugCard';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   isChat?: boolean;
@@ -12,60 +13,54 @@ interface Props {
 }
 
 const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
-  const [userInfo, setUserInfo] = useState<any>(null);
-  const [users, setUsers] = useState<any>(null);
-  const [refrish, setrefrish] = useState<any>(null);
+  // استخدام React Query لجلب بيانات المستخدمين
+  const { data: userInfo, error: userInfoError, isLoading: userInfoLoading } = useQuery({
+    queryKey: ["userInfo"],
+    queryFn: ()=> fetchUser(),
+  });
 
-  // useEffect(() => {
-  //   if (
-  //     Notification?.permission !== "granted" &&
-  //     Notification?.permission !== "denied"
-  //   ) {
-  //     Notification?.requestPermission()?.then((permission) => {
-  //       if (permission === "granted") {
-  //         toast.success("Notification permission granted.");
-  //       } else {
-  //         toast.error("Notification permission denied.");
-  //       }
-  //     });
-  //   }
-  // }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userInfo = await fetchUser();
-        const users = await fetchAllUser({
-          searchString: "",
-          pageNum: 1,
-          pageSize: 100,
-        });
-        setUserInfo(userInfo);
-        setUsers(users);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const { data: users, error: usersError, isLoading: usersLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => fetchAllUser({
+      searchString: "",
+      pageNum: 1,
+      pageSize: 100,
+    }),
+  });
+  const router = useRouter();
+  if (userInfoLoading || usersLoading) {
+    return <div>Loading...</div>;
+  }
+  interface redirectType {
+    redirect: string;
+  }
+  if ((userInfo as redirectType ).redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
+  }
+  if (userInfoError || usersError) {
+    console.error('Error fetching data:', userInfoError || usersError);
+    return <div>Error occurred while fetching data.</div>;
+  }
 
-    fetchData();
-  }, [refrish]);
   return (
     <section
-      className={`rightsidebar custom-scrollbar  ${
+      className={`rightsidebar custom-scrollbar ${
         isxl ? "w-full" : "max-xl:hidden"
-      }  ${isChat ? ` p-0 ${!Ids && " px-1"} w-96` : "p-3 pt-28 w-72"}`}>
+      } ${isChat ? ` p-0 ${!Ids && " px-1"} w-96` : "p-3 pt-28 w-72"}`}>
       <div className="flex flex-1 flex-col justify-start">
         {!isChat && (
-          <h1 className=" text-heading4-medium text-light-1 mb-6">Player</h1>
+          <h1 className="text-heading4-medium text-light-1 mb-6">Player</h1>
         )}
         {users && users.users && userInfo && (
           <SugCard
             result2={JSON.stringify(users.users)}
-            userInfo2={JSON.stringify(userInfo)}
+            userInfo2={JSON.stringify((userInfo as UserData))}
             type={"users"}
             isChat={isChat}
             Ids={Ids ? Ids : ""}
             islg={islg}
-            refrish={setrefrish}
+            refrish={() => { /* handle refresh logic here if needed */ }}
             setChat={setChat}
           />
         )}

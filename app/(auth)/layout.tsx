@@ -3,18 +3,18 @@ import "../globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "SPORTON | Auth - Login and Sign-up for Sports Enthusiasts ",
-    template: "%s - SPORTON ",
+    default: "SPORTON | Auth - Login and Sign-up for Sports Enthusiasts",
+    template: "%s - SPORTON",
   },
   keywords: [
     "SPORTON",
     "Auth",
     "Login",
-    " Sign-up",
-    " Sports Enthusiasts",
-    " Talent Showcase",
+    "Sign-up",
+    "Sports Enthusiasts",
+    "Talent Showcase",
     "Sports Clubs",
-    " Sports Networking",
+    "Sports Networking",
     "Athlete Recognition",
   ],
   description:
@@ -41,10 +41,13 @@ export default function RootLayout({
 }) {
   return (
     <div
-      className=" min-h-screen flex w-full bg-[length:100%_100%] items-center justify-center "
-      style={{
-        background: "url(/assets/bg.jpg)",
-      }}>
+      className="
+        min-h-screen flex w-full items-center justify-center
+        bg-cover bg-center bg-no-repeat
+        bg-[url('/assets/bg.jpg')]  lg:bg-[size:100%_100%]
+         sm:bg-[size:auto]
+      "
+    >
       {children}
     </div>
   );

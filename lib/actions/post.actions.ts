@@ -1,5 +1,5 @@
 "use server";
-import { connectDB } from "@/mongoose";
+import { closeConnection, connectDB, connectToDatabase } from "@/mongoose";
 import { revalidatePath } from "next/cache";
 import Post from "../models/post.models";
 import User from "../models/user.models";
@@ -211,13 +211,11 @@ export async function fetchPostById(id: string) {
 
 
 
-const url = process.env.mongoose_url; // استبدل بعنوان الاتصال الخاص بك
-const client = new MongoClient(url!);
 
 export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string) {
+  let db;
   try {
-    await client.connect();
-    const db = client.db('test'); // استبدل باسم قاعدة البيانات
+    db = await connectToDatabase();
     const postsCollection = db.collection('posts');
 
     // حساب عدد المنشورات التي سيتم تخطيها بناءً على رقم الصفحة وحجم الصفحة
@@ -243,7 +241,7 @@ export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string
           as: 'author',
         },
       },
-      { $unwind: '$author' },
+      { $unwind: { path: '$author', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: 'posts',
@@ -261,12 +259,7 @@ export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string
           as: 'childrenINF.authorINF',
         },
       },
-      {
-        $unwind: {
-          path: '$childrenINF.authorINF',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
+      { $unwind: { path: '$childrenINF.authorINF', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from: 'communities',
@@ -325,14 +318,14 @@ export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string
     });
 
     // تحديد ما إذا كانت هناك صفحة تالية بناءً على العدد الإجمالي للمنشورات وعدد المنشورات في الصفحة الحالية
-    const isNext = totalPosts > pageNum * pageSize + posts.length;
+    const hasMore = totalPosts > pageNum * pageSize + posts.length;
 
-    return { posts, hasMore: isNext, nextPage: pageNum + 1 };
+    return { posts, hasMore, nextPage: pageNum + 1 };
   } catch (error: any) {
     console.error('Failed to fetch posts:', error.message);
     throw error; // رمي الخطأ لتمريره إلى الأعلى
   } finally {
-    await client.close(); // تأكد من إغلاق الاتصال بعد الانتهاء
+    if (db) await closeConnection(); // تأكد من إغلاق الاتصال بعد الانتهاء
   }
 }
 

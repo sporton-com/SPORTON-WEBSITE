@@ -21,6 +21,8 @@ interface props {
   path: string;
 }
 export interface UserData {
+
+  redirect: string;
   _id: string;
   id: string;
   username: string;
@@ -92,7 +94,7 @@ export async function fetchUser(userId?: string | undefined) {
   try {
      await connectDB();
       const user =userId?{id:'jjj'}:await currentUser();
-      if (!user) return redirect("/sign-in");
+      if (!user) return { redirect: '/sign-in' };
     let id=userId?userId:user.id;
     let userInfo: UserData | null = await User.findOne({ id: id })
       .populate({
@@ -102,11 +104,11 @@ export async function fetchUser(userId?: string | undefined) {
       })
       .lean();
 
-    if (!userInfo) {
+    if (!userInfo||!userInfo?.onboarding) {
       console.log("user not found");
       console.log("found user with id ");
+      return { redirect: '/onboarding' };
     }
-
     return userInfo;
   } catch (error: any) {
     console.log(`not found user: ${error.message}`);

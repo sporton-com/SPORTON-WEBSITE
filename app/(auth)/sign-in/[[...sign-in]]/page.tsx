@@ -33,7 +33,6 @@ if(isSignedIn) router.replace('/')
             </h1>
           </header>
           <Clerk.GlobalError className="block text-sm text-red-400" />
-
           <div className="flex justify-evenly">
             <div className="space-y-2 w-1/4">
               <Clerk.Connection
@@ -113,40 +112,15 @@ if(isSignedIn) router.replace('/')
           </p>
         </SignIn.Step>
       </SignIn.Root>
-      <SignIn.Root>
-        <SignIn.Step
-          name="start"
-          className="">
-          <Clerk.GlobalError className="block text-sm text-red-400" />
-          <div className="space-y-4">
-            <Clerk.Field name="identifier" className="">
-              <Clerk.Input
-                type="hidden"
-                name="email"
-                required
-                value="guest@sporton.website"
+     
+<div className="bg-[#ffffff] p-0 my-2  rounded-md">
 
-              />
-              <Clerk.FieldError className="block text-sm text-red-400" />
-            </Clerk.Field>
-            <Clerk.Field name="password" className="">
-              <Clerk.Input
-                type="hidden"
-                name="password"
-                value="sporton123654789sporton"
-                required
-                
-              />
-              <Clerk.FieldError className="block text-sm text-red-400" />
-            </Clerk.Field>
-          </div>
-          <SignIn.Action
-            submit
+          <Link
+            href={"/sign-in-guest"}
             className="w-full gap-4 flex justify-center items-center rounded-md bg-primary-500 px-3.5 py-2 text-center text-sm font-medium text-[#ffffff] shadow outline-none ring-1 ring-inset ring-primary-500 hover:bg-primary-500/80 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-primary-500 active:text-[#ffffff]/70">
             <FaUserAlt /> Sign In guest 
-          </SignIn.Action>
-        </SignIn.Step>
-      </SignIn.Root>
+          </Link>
+              </div>
     </div>
   );
 }

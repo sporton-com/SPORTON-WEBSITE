@@ -1,8 +1,8 @@
 "use client"
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/actions/user.actions";
-import { redirect } from "next/navigation";
+import { UserData, fetchUser } from "@/lib/actions/user.actions";
+import { redirect, useRouter } from "next/navigation";
 import PostForm from "@/components/forms/PostForm";
 import Loader from "@/components/shared/Loader";
 
@@ -11,12 +11,17 @@ const Page = () => {
     queryKey: ["user"],
     queryFn: () => fetchUser(),
   });
-
+  const router = useRouter();
   if (isLoading) return <Loader is />;
-  if (error || !userInfo?.onboarding) {
-    // Redirect to onboarding or show error message
-    redirect("/onboarding");
-    return null; // Prevent rendering in case of redirect
+  if (error ) {
+    return null
+  }
+  interface redirectType {
+    redirect: string;
+  }
+  if ((userInfo as redirectType ).redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
   }
 
   return (
@@ -24,10 +29,10 @@ const Page = () => {
       <h1 className="hidden">Add Post</h1>
       <PostForm
         action="Create"
-        id={userInfo._id}
-        image={userInfo?.image}
-        name={userInfo?.name}
-        username={userInfo?.username}
+        id={(userInfo as UserData)._id}
+        image={(userInfo as UserData)?.image}
+        name={(userInfo as UserData)?.name}
+        username={(userInfo as UserData)?.username}
       />
     </div>
   );

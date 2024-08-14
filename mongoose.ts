@@ -1,3 +1,4 @@
+import { MongoClient } from 'mongodb';
 import mongoose from 'mongoose'
 let isconected = false;
 
@@ -14,3 +15,24 @@ export const connectDB = async () => {
         console.log(error)
     }
 }
+const url = process.env.mongoose_url!;
+const client = new MongoClient(url);
+
+export async function connectToDatabase() {
+  try {
+    if (!client.connect()) await client.connect();
+    return client.db('test'); // استبدل باسم قاعدة البيانات
+  } catch (error:any) {
+    console.error('Failed to connect to the database:', error.message);
+    throw error;
+  }
+}
+
+export async function closeConnection() {
+  try {
+    await client.close();
+  } catch (error:any) {
+    console.error('Failed to close the database connection:', error.message);
+  }
+}
+

@@ -7,9 +7,13 @@ import { useEffect, useRef, useState } from "react";
 import Loader from "@/components/shared/Loader";
 import { PostData } from '@/lib/actions/post.actions';
 import { fetchUser } from '@/lib/actions/user.actions';
+import { currentUser } from "@clerk/nextjs/server";
 
 
 
+interface redirectType {
+  redirect: string;
+}
 interface FetchPostsResponse {
   posts: PostData[];
   hasMore: boolean;
@@ -37,8 +41,13 @@ export default function HOME() {
     queryKey: ["user"],
     queryFn: () => fetchUser(),
   });
-
-
+  const {
+    data: user,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => currentUser(),
+  });
+  
   // Fetch posts using useInfiniteQuery
   const {
     data: postsData,
@@ -55,13 +64,13 @@ export default function HOME() {
     },
     initialPageParam: 0,
   });
-
+  
   const loadMorePosts = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   };
-
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -75,25 +84,31 @@ export default function HOME() {
         threshold: 1.0,
       }
     );
-
+    
     const sentinelElement = sentinelRef.current;
     if (sentinelElement) {
       observer.observe(sentinelElement);
     }
-
+    
     return () => {
       if (sentinelElement) {
         observer.unobserve(sentinelElement);
       }
     };
   }, [loadMorePosts, hasNextPage, isFetchingNextPage]);
-
+  
   if (userError|| postsError) return <div>Error loading data...</div>;
   if ( userLoading|| !postsData) return <Loader is />;
-
+  
   // Explicitly cast postsData.pages to FetchPostsResponse[]
   const posts = postsData.pages.flatMap((page) => (page as FetchPostsResponse).posts);
-
+  if (!userInfo) return <Loader is />;
+  if ((userInfo as redirectType ).redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
+  }
+  
+  if (!user) router.replace("/sign-in");
   return (
     <div>
       <Home

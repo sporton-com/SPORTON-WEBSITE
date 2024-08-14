@@ -3,7 +3,7 @@ import { closeConnection, connectDB, connectToDatabase } from "@/mongoose";
 import { revalidatePath } from "next/cache";
 import Post from "../models/post.models";
 import User from "../models/user.models";
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 interface props {
   isAchievement: string;
   text: string;
@@ -216,7 +216,7 @@ export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string
   let db;
   try {
     db = await connectToDatabase();
-    const postsCollection = db.collection('posts');
+    const postsCollection = (db as Db).collection('posts');
 
     // حساب عدد المنشورات التي سيتم تخطيها بناءً على رقم الصفحة وحجم الصفحة
     const skipAmount = pageNum * pageSize;

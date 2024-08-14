@@ -88,7 +88,7 @@ export default function HOME() {
   }, [loadMorePosts, hasNextPage, isFetchingNextPage]);
 
   if ( postsError) return <div>Error loading data...</div>;
-  if (!userInfo || !postsData) return <Loader is />;
+  if ( !postsData) return <Loader is />;
 
   // Explicitly cast postsData.pages to FetchPostsResponse[]
   const posts = postsData.pages.flatMap((page) => (page as FetchPostsResponse).posts);

@@ -1,6 +1,6 @@
 
 import { fetchPosts } from "@/lib/actions/post.actions";
-import { fetchAllUser } from "@/lib/actions/user.actions";
+import {  fetchAllUser } from "@/lib/actions/user.actions";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -21,7 +21,7 @@ if(!posts ||!users){
     changeFrequency:"daily",
     priority:1
   }));
-  const usersEntries: MetadataRoute.Sitemap = users.users.map((user:{id:string,updatedAt:Date}) => ({
+  const usersEntries: MetadataRoute.Sitemap = users.users.map((user) => ({
     url: `https://www.sporton.website/profile/${user.id}`,
     lastModified: new Date(user.updatedAt),
     changeFrequency:"daily",

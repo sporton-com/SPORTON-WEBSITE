@@ -1,15 +1,14 @@
 "use client";
-
-import useSWR from 'swr';
 import Home from "@/components/shared/MainHome";
 import { useRouter } from "next/navigation";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Loader from "@/components/shared/Loader";
 import { PostData } from '@/lib/actions/post.actions';
+import { fetchUser } from '@/lib/actions/user.actions';
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 
 interface FetchPostsResponse {
   posts: PostData[];
@@ -30,13 +29,15 @@ export default function HOME() {
   const [action, setAction] = useState();
   
   // Fetch user information
-  const { data: userInfo, error: userError } = useSWR("/api/user/1", fetcher, {
-    onSuccess: (data: { onboarding: boolean; }) => {
-      if (!data?.onboarding) {
-        router.replace("/onboarding");
-      }
-    },
+  const {
+    data: userInfo,
+    error: userError,
+    isLoading: userLoading,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => fetchUser(),
   });
+
 
   // Fetch posts using useInfiniteQuery
   const {
@@ -87,8 +88,8 @@ export default function HOME() {
     };
   }, [loadMorePosts, hasNextPage, isFetchingNextPage]);
 
-  if ( postsError) return <div>Error loading data...</div>;
-  if ( !postsData) return <Loader is />;
+  if (userError|| postsError) return <div>Error loading data...</div>;
+  if ( userLoading|| !postsData) return <Loader is />;
 
   // Explicitly cast postsData.pages to FetchPostsResponse[]
   const posts = postsData.pages.flatMap((page) => (page as FetchPostsResponse).posts);

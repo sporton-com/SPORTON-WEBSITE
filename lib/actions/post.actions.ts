@@ -1,9 +1,8 @@
 "use server";
-import { closeConnection, connectDB, connectToDatabase } from "@/mongoose";
+import {  connectDB } from "@/mongoose";
 import { revalidatePath } from "next/cache";
 import Post from "../models/post.models";
 import User from "../models/user.models";
-import { Db, MongoClient } from 'mongodb';
 interface props {
   isAchievement: string;
   text: string;
@@ -209,10 +208,11 @@ export async function fetchPostById(id: string) {
   }
 }
 
-
-
-
-export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string) {
+export async function fetchPosts(
+  pageNum = 0,
+  pageSize = 20,
+  lastPostId?: string
+) {
   await connectDB();
 
   try {
@@ -233,81 +233,81 @@ export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string
       { $limit: pageSize },
       {
         $lookup: {
-          from: 'users',
-          localField: 'author',
-          foreignField: '_id',
-          as: 'author',
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          as: "author",
         },
       },
-      { $unwind: '$author' },
+      { $unwind: "$author" },
       {
         $lookup: {
-          from: 'posts',
-          localField: 'children',
-          foreignField: '_id',
-          as: 'childrenINF',
+          from: "posts",
+          localField: "children",
+          foreignField: "_id",
+          as: "childrenINF",
         },
       },
-      { $unwind: { path: '$childrenINF', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$childrenINF", preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
-          from: 'users',
-          localField: 'childrenINF.author',
-          foreignField: '_id',
-          as: 'childrenINF.authorINF',
+          from: "users",
+          localField: "childrenINF.author",
+          foreignField: "_id",
+          as: "childrenINF.authorINF",
         },
       },
       {
         $unwind: {
-          path: '$childrenINF.authorINF',
+          path: "$childrenINF.authorINF",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: 'communities',
-          localField: 'community',
-          foreignField: '_id',
-          as: 'community',
+          from: "communities",
+          localField: "community",
+          foreignField: "_id",
+          as: "community",
         },
       },
-      { $unwind: { path: '$community', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$community", preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
-          from: 'users',
-          localField: 'react.user',
-          foreignField: '_id',
-          as: 'reactUsers',
+          from: "users",
+          localField: "react.user",
+          foreignField: "_id",
+          as: "reactUsers",
         },
       },
-      { $unwind: { path: '$reactUsers', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: "$reactUsers", preserveNullAndEmptyArrays: true } },
       {
         $group: {
-          _id: '$_id',
-          text: { $first: '$text' },
-          isAchievement: { $first: '$isAchievement' },
-          video: { $first: '$video' },
-          image: { $first: '$image' },
-          author: { $first: '$author' },
+          _id: "$_id",
+          text: { $first: "$text" },
+          isAchievement: { $first: "$isAchievement" },
+          video: { $first: "$video" },
+          image: { $first: "$image" },
+          author: { $first: "$author" },
           react: {
             $push: {
-              user: '$reactUsers',
-              createdAt: '$createdAt',
+              user: "$reactUsers",
+              createdAt: "$createdAt",
             },
           },
-          createdAt: { $first: '$createdAt' },
-          community: { $first: '$community' },
-          parentId: { $first: '$parentId' },
+          createdAt: { $first: "$createdAt" },
+          community: { $first: "$community" },
+          parentId: { $first: "$parentId" },
           children: {
             $push: {
               author: {
-                _id: '$childrenINF.authorINF._id',
-                sport: '$childrenINF.authorINF.sport',
-                id: '$childrenINF.authorINF.id',
-                name: '$childrenINF.authorINF.name',
-                username: '$childrenINF.authorINF.username',
-                image: '$childrenINF.authorINF.image',
-                parentId: '$childrenINF.authorINF.parentId',
+                _id: "$childrenINF.authorINF._id",
+                sport: "$childrenINF.authorINF.sport",
+                id: "$childrenINF.authorINF.id",
+                name: "$childrenINF.authorINF.name",
+                username: "$childrenINF.authorINF.username",
+                image: "$childrenINF.authorINF.image",
+                parentId: "$childrenINF.authorINF.parentId",
               },
             },
           },
@@ -325,244 +325,10 @@ export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string
 
     return { posts, hasMore: isNext, nextPage: pageNum + 1 };
   } catch (error: any) {
-    console.error('Failed to fetch posts:', error.message);
+    console.error("Failed to fetch posts:", error.message);
     throw error; // رمي الخطأ لتمريره إلى الأعلى
   }
 }
-
-// export async function fetchPosts(pageNum = 0, pageSize = 20, lastPostId?: string) {
-//   let db;
-//   try {
-//     db = await connectToDatabase();
-//     const postsCollection = (db as Db).collection('posts');
-
-//     // حساب عدد المنشورات التي سيتم تخطيها بناءً على رقم الصفحة وحجم الصفحة
-//     const skipAmount = pageNum * pageSize;
-
-//     // بناء الاستعلام لتجنب تكرار البوستات
-//     const matchConditions: any = { parentId: { $in: [null, undefined] } };
-//     if (lastPostId) {
-//       matchConditions._id = { $ne: lastPostId }; // تجنب جلب البوستات بنفس المعرف
-//     }
-
-//     // استعلام لتجميع المنشورات
-//     const posts = await postsCollection.aggregate([
-//       { $match: matchConditions },
-//       { $sort: { createdAt: -1 } }, // ترتيب المنشورات بناءً على تاريخ الإنشاء
-//       { $skip: skipAmount },
-//       { $limit: pageSize },
-//       {
-//         $lookup: {
-//           from: 'users',
-//           localField: 'author',
-//           foreignField: '_id',
-//           as: 'author',
-//         },
-//       },
-//       { $unwind: { path: '$author', preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: 'posts',
-//           localField: 'children',
-//           foreignField: '_id',
-//           as: 'childrenINF',
-//         },
-//       },
-//       { $unwind: { path: '$childrenINF', preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: 'users',
-//           localField: 'childrenINF.author',
-//           foreignField: '_id',
-//           as: 'childrenINF.authorINF',
-//         },
-//       },
-//       { $unwind: { path: '$childrenINF.authorINF', preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: 'communities',
-//           localField: 'community',
-//           foreignField: '_id',
-//           as: 'community',
-//         },
-//       },
-//       { $unwind: { path: '$community', preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: 'users',
-//           localField: 'react.user',
-//           foreignField: '_id',
-//           as: 'reactUsers',
-//         },
-//       },
-//       { $unwind: { path: '$reactUsers', preserveNullAndEmptyArrays: true } },
-//       {
-//         $group: {
-//           _id: '$_id',
-//           text: { $first: '$text' },
-//           isAchievement: { $first: '$isAchievement' },
-//           video: { $first: '$video' },
-//           image: { $first: '$image' },
-//           author: { $first: '$author' },
-//           react: {
-//             $push: {
-//               user: '$reactUsers',
-//               createdAt: '$createdAt',
-//             },
-//           },
-//           createdAt: { $first: '$createdAt' },
-//           community: { $first: '$community' },
-//           parentId: { $first: '$parentId' },
-//           children: {
-//             $push: {
-//               author: {
-//                 _id: '$childrenINF.authorINF._id',
-//                 sport: '$childrenINF.authorINF.sport',
-//                 id: '$childrenINF.authorINF.id',
-//                 name: '$childrenINF.authorINF.name',
-//                 username: '$childrenINF.authorINF.username',
-//                 image: '$childrenINF.authorINF.image',
-//                 parentId: '$childrenINF.authorINF.parentId',
-//               },
-//             },
-//           },
-//         },
-//       },
-//     ]).toArray();
-
-//     // حساب إجمالي عدد المنشورات لتحديد ما إذا كان هناك صفحات إضافية
-//     const totalPosts = await postsCollection.countDocuments({
-//       parentId: { $in: [null, undefined] },
-//     });
-
-//     // تحديد ما إذا كانت هناك صفحة تالية بناءً على العدد الإجمالي للمنشورات وعدد المنشورات في الصفحة الحالية
-//     const hasMore = totalPosts > pageNum * pageSize + posts.length;
-
-//     return { posts, hasMore, nextPage: pageNum + 1 };
-//   } catch (error: any) {
-//     console.error('Failed to fetch posts:', error.message);
-//     throw error; // رمي الخطأ لتمريره إلى الأعلى
-//   } finally {
-//     if (db) await closeConnection(); // تأكد من إغلاق الاتصال بعد الانتهاء
-//   }
-// }
-
-
-// export async function fetchPosts(pageNum = 0, pageSize = 20) {
-//   await connectDB();
-
-//   try {
-//     // حساب عدد المنشورات التي سيتم تخطيها بناءً على رقم الصفحة وحجم الصفحة
-//     const skipAmount = pageNum * pageSize;
-
-//     // استعلام تجميع للمنشورات
-//     const postQ = Post.aggregate([
-//       { $match: { parentId: { $in: [null, undefined] } } },
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "author",
-//           foreignField: "_id",
-//           as: "author",
-//         },
-//       },
-//       { $unwind: "$author" },
-//       {
-//         $lookup: {
-//           from: "posts",
-//           localField: "children",
-//           foreignField: "_id",
-//           as: "childrenINF",
-//         },
-//       },
-//       { $unwind: { path: "$childrenINF", preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "childrenINF.author",
-//           foreignField: "_id",
-//           as: "childrenINF.authorINF",
-//         },
-//       },
-//       { 
-//         $unwind: { 
-//           path: "$childrenINF.authorINF", 
-//           preserveNullAndEmptyArrays: true 
-//         } 
-//       },
-//       {
-//         $lookup: {
-//           from: "communities",
-//           localField: "community",
-//           foreignField: "_id",
-//           as: "community",
-//         },
-//       },
-//       { $unwind: { path: "$community", preserveNullAndEmptyArrays: true } },
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "react.user",
-//           foreignField: "_id",
-//           as: "reactUsers",
-//         },
-//       },
-//       { $unwind: { path: "$reactUsers", preserveNullAndEmptyArrays: true } },
-//       {
-//         $group: {
-//           _id: "$_id",
-//           text: { $first: "$text" },
-//           isAchievement: { $first: "$isAchievement" },
-//           video: { $first: "$video" },
-//           image: { $first: "$image" },
-//           author: { $first: "$author" },
-//           react: {
-//             $push: {
-//               user: "$reactUsers",
-//               createdAt: "$createdAt", // Include createdAt for each reaction
-//             },
-//           },
-//           createdAt: { $first: "$createdAt" },
-//           community: { $first: "$community" },
-//           parentId: { $first: "$parentId" },
-//           children: {
-//             $push: {
-//               author: {
-//                 _id: "$childrenINF.authorINF._id",
-//                 sport: "$childrenINF.authorINF.sport",
-//                 id: "$childrenINF.authorINF.id",
-//                 name: "$childrenINF.authorINF.name",
-//                 username: "$childrenINF.authorINF.username",
-//                 image: "$childrenINF.authorINF.image",
-//                 parentId: "$childrenINF.authorINF.parentId",
-//               },
-//             },
-//           },
-//         },
-//       },
-//       { $sort: { createdAt: -1 } }, // ترتيب المنشورات بناءً على تاريخ الإنشاء
-//       { $skip: skipAmount },
-//       { $limit: pageSize },
-//     ]);
-
-//     // حساب إجمالي عدد المنشورات لتحديد ما إذا كان هناك صفحات إضافية
-//     const totalPosts = await Post.countDocuments({
-//       parentId: { $in: [null, undefined] },
-//     });
-
-//     // الحصول على المنشورات من الاستعلام
-//     const posts: PostData[] = await postQ;
-
-//     // تحديد ما إذا كانت هناك صفحة تالية بناءً على العدد الإجمالي للمنشورات وعدد المنشورات في الصفحة الحالية
-//     const isNext = totalPosts > pageNum * pageSize + posts.length;
-
-//     return { posts, hasMore: isNext, nextPage: pageNum + 1 };
-//   } catch (error: any) {
-//     console.error("Failed to fetch posts:", error.message);
-//     throw error; // رمي الخطأ لتمريره إلى الأعلى
-//   }
-// }
-
 
 export async function deletePost(
   postId: string,

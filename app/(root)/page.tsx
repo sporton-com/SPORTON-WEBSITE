@@ -87,7 +87,7 @@ export default function HOME() {
     };
   }, [loadMorePosts, hasNextPage, isFetchingNextPage]);
 
-  if (userError || postsError) return <div>Error loading data...</div>;
+  if ( postsError) return <div>Error loading data...</div>;
   if (!userInfo || !postsData) return <Loader is />;
 
   // Explicitly cast postsData.pages to FetchPostsResponse[]

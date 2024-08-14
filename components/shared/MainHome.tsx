@@ -12,8 +12,8 @@ export default function Home({
   userInfo2,
   setAction,
 }: {
-  FPosts2: string;
-  userInfo2: string;
+  FPosts2: any;
+  userInfo2: any;
   setAction: any;
 }) {
   const userInfo: UserData = JSON.parse(userInfo2);

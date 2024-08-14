@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+
 import React from "react";
 const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "react-toastify";
+import InfintyProvider from "@/components/providers/InfintyProvider";
 export const metadata: Metadata = {
   title: {
     default:
@@ -40,7 +42,6 @@ export const metadata: Metadata = {
     ],
   },
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -48,14 +49,17 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <div className=" w-full">{children}
-          <ToastContainer />
-          </div>
-          <Analytics />
-        </body>
-      </html>
+      <InfintyProvider>
+        <html lang="en">
+          <body className={inter.className}>
+            <div className=" w-full">
+              {children}
+              <ToastContainer />
+            </div>
+            <Analytics />
+          </body>
+        </html>
+      </InfintyProvider>
     </ClerkProvider>
   );
 }

@@ -1,10 +1,12 @@
 "use client";
+import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
-import { reactToPost } from "@/lib/actions/post.actions";
+import { deletePost, reactToPost } from "@/lib/actions/post.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AiFillDelete } from "react-icons/ai";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -41,8 +43,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { Button } from "../ui/button";
 import FriendCarousel from "./FriendCarousel";
+import { Button } from "@/components/ui/button";
 
 interface parms {
   isAchievement?: string;
@@ -77,7 +79,7 @@ interface parms {
     };
   }[];
   isComment?: boolean;
-  setAction?:any;
+  setAction?: any;
 }
 
 const CardPost = ({
@@ -96,8 +98,10 @@ const CardPost = ({
   isComment,
   video,
   image,
-  setAction
+  setAction,
 }: parms) => {
+  const date = new Date(createdAt);
+  const formattedDate = formatDistanceToNow(date, { addSuffix: true });
   let pathname = usePathname();
   let [copy, setCopy] = useState(false);
   let isFriend = Team?.filter((friend) => friend.id === author.id).length === 1;
@@ -106,17 +110,25 @@ const CardPost = ({
     commentsFilter.filter((e) => e.author.id === currentId).length >= 1;
   let commLen = isReplay ? commentsFilter.length - 1 : commentsFilter.length;
   let isReact =
-    react !== undefined && react.filter((e:any) => e?.user?._id === userId).length >= 1;
-    let handleHeart = async () => {
-      console.log(react)
-      await reactToPost({
-        postId: id,
-        react: isReact,
-        userId: userId,
-        path: pathname,
-      });
-      setAction&& setAction(Math.random())
-    };
+    react !== undefined &&
+    react.filter((e: any) => e?.user?._id === userId).length >= 1;
+  let handleHeart = async () => {
+    console.log(react);
+    await reactToPost({
+      postId: id,
+      react: isReact,
+      userId: userId,
+      path: pathname,
+    });
+    setAction && setAction(Math.random());
+  };
+  let handelDeletePost = async () => {
+    try {
+      await deletePost(id, author._id, parentId, isComment, pathname);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   //!!!!!!!! SocialShare
   //?????????? SocialShare
   const SocialShare = ({ url, title }: { url: string; title: string }) => {
@@ -228,42 +240,36 @@ const CardPost = ({
   }) => (
     <div className={`${isComment && "mb-10"} flex flex-col `}>
       <div className="flex flex-row-reverse items-center justify-between">
-      {react&&react.length > 0 ? (
-                <div className="mt-1 flex flex-row items-center">
-        <p
-        className={` text-subtle-medium  ${
-          isWhite ? " text-[#ffffff]" : "text-gray-1"
-        }`}>
-        
-        {react.length} 
-        </p>
-        <Image
-          src={
-"/assets/heart-filled.svg"
-
-          }
-          alt="heart"
-          height={20}
-          width={20}
-          className="  object-contain"
-        />
-        </div>
-      ) : null}
-      {!isComment && commentsFilter.length > 0 && (
-        <Link href={`/post/${id}`}>
-          {commLen > 0 ? (
+        {react && react.length > 0 ? (
+          <div className="mt-1 flex flex-row items-center">
             <p
-              className={`mt-1 text-subtle-medium  ${
+              className={` text-subtle-medium  ${
                 isWhite ? " text-[#ffffff]" : "text-gray-1"
               }`}>
-              {isReplay && "you and "}
-              {commLen} repl{commLen > 1 ? "ies" : "y"}
+              {react.length}
             </p>
-          ) : null}
-        </Link>
-      )}
-      
-      
+            <Image
+              src={"/assets/heart-filled.svg"}
+              alt="heart"
+              height={20}
+              width={20}
+              className="  object-contain"
+            />
+          </div>
+        ) : null}
+        {!isComment && commentsFilter.length > 0 && (
+          <Link href={`/post/${id}`}>
+            {commLen > 0 ? (
+              <p
+                className={`mt-1 text-subtle-medium  ${
+                  isWhite ? " text-[#ffffff]" : "text-gray-1"
+                }`}>
+                {isReplay && "you and "}
+                {commLen} repl{commLen > 1 ? "ies" : "y"}
+              </p>
+            ) : null}
+          </Link>
+        )}
       </div>
       <div className="mt-3 flex flex-row items-center gap-6">
         <Image
@@ -292,14 +298,18 @@ const CardPost = ({
               </Link>
             </TooltipTrigger>
             <TooltipContent className="bg-[#ffffff]">
-              <p className="text-primary-500">replay</p>
+              <p className="text-primary-500">reply</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Link href={`/new-post?p=${content}`} className="">
+              <Link
+                href={`/new-post?p=${content}${
+                  image || video ? "&sh=true" : ""
+                }${video ? `&video=${video}` : image ? `&image=${image}` : ""}`}
+                className="">
                 <Image
                   src={`/assets/repost${isWhite ? "-white" : ""}.svg`}
                   alt="repost"
@@ -319,7 +329,9 @@ const CardPost = ({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Link href={"/messaging/"+userId+"-"+ author._id} className="">
+                <Link
+                  href={"/messaging/" + userId + "-" + author._id}
+                  className="">
                   <Image
                     src={`/assets/messnger${isWhite ? "-white" : ""}.svg`}
                     alt="repost"
@@ -373,18 +385,20 @@ const CardPost = ({
               </div>
             </DrawerHeader>
             <DrawerFooter>
-              {Team.length>0&&(
+              {Team.length > 0 && (
                 <>
-              <h2 className="text-body-bold">Send to friends?</h2>
-            <FriendCarousel url={`/post/${id}`}
-                title={content} friends={Team}/>
+                  <h2 className="text-body-bold">Send to friends?</h2>
+                  <FriendCarousel
+                    url={`/post/${id}`}
+                    title={content}
+                    friends={Team}
+                  />
                 </>
-                )}
+              )}
               <SocialShare
                 url={`https://www.sporton.website/post/${id}`}
                 title={content}
               />
-
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
@@ -416,14 +430,23 @@ const CardPost = ({
               <p>Edit post</p>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Button
+              variant={"outline"}
+              className={
+                "w-full mx-0 flex outline-none gap-4 border-none justify-start text-start"
+              }
+              onClick={() => handelDeletePost()}>
+              <AiFillDelete color="#ff0000" /> delete
+            </Button>
+          </DropdownMenuItem>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuItem>Subscription</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
   );
-  
+
   return (
     <article
       className={` flex w-full flex-col rounded-xl ${
@@ -433,13 +456,13 @@ const CardPost = ({
         <div className=" flex w-full flex-1 flex-row gap-4 ">
           <div className=" text-white hidden flex-col items-center lg:flex ">
             <Link href={"/profile/" + author.id} className="relative w-11 h-11">
-            <div className="relative   aspect-square h-10 w-10  ">
-                      <img
-                        src={author.image}
-                        alt={author.name}
-                        className="absolute inset-0 w-full h-full rounded-full object-cover"
-                      />
-                    </div>
+              <div className="relative   aspect-square h-10 w-10  ">
+                <img
+                  src={author.image}
+                  alt={author.name}
+                  className="absolute inset-0 w-full h-full rounded-full object-cover"
+                />
+              </div>
               {/* <Image
                 src={author.image}
                 alt={author.name}
@@ -585,7 +608,8 @@ const CardPost = ({
           </div>
         </div>
       </div>
-      {!isComment && community?.name && (
+      
+      {/* {!isComment && community?.name && (
         <Link
           href={`/communities/${community.id}`}
           className="mt-5 items-center flex text-gray-50">
@@ -600,7 +624,7 @@ const CardPost = ({
             className=" ml-1 rounded-full object-fill"
           />
         </Link>
-      )}
+      )} */}
       {!isComment && commentsFilter.length > 0 && (
         <div className="ml-2 mt-3 flex items-center gap-2">
           {commentsFilter.map((comment, index, arr) => {
@@ -619,26 +643,28 @@ const CardPost = ({
               return null;
             }
             return (
-              <Image
+              <div
                 key={index}
-                src={comment?.author.image}
-                alt={`user_${index}`}
-                width={24}
-                height={24}
-                className={`${
-                  count !== 0 && index !== 0
-                    ? "-ml-5"
-                    : count === 0 && index !== 0
-                    ? ""
-                    : index !== 0
-                    ? "-ml-5"
-                    : ""
-                } rounded-full object-cover `}
-              />
+                className="relative aspect-square   w-10 h-10  shadow-2xl rounded-full">
+                <img
+                  src={comment?.author.image}
+                  alt={`user_${index}`}
+                  className={`${
+                    count !== 0 && index !== 0
+                      ? "-ml-5"
+                      : count === 0 && index !== 0
+                      ? ""
+                      : index !== 0
+                      ? "-ml-5"
+                      : ""
+                  } absolute inset-0 w-full h-full rounded-full object-cover`}
+                />
+              </div>
             );
           })}
         </div>
       )}
+      <div className="mt-2 text-gray-400 text-xs">{formattedDate}</div>
     </article>
   );
 };

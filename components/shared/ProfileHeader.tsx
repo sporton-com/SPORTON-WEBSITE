@@ -57,45 +57,48 @@ const ProfileHeader = ({
       <div className="flex flex-col justify-start">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            
-          <div className="relative aspect-square  max-sm:w-16 max-sm:h-16 w-24 h-24  shadow-2xl rounded-full">
-                      <img
-                        src={image}
-                        alt={name}
-                        className="absolute inset-0 w-full h-full rounded-full object-cover"
-                      />
-                    </div>
-              {/* <img
+            <div className="relative aspect-square  max-sm:w-16 max-sm:h-16 w-24 h-24  shadow-2xl rounded-full">
+              <img
+                src={image}
+                alt={name}
+                className="absolute inset-0 w-full h-full rounded-full object-cover"
+              />
+            </div>
+            {/* <img
                 src={image}
                 alt={name}
                 // width={90}
                 // height={90}
                 className="rounded-full max-sm:w-16 max-sm:h-16 w-24 h-24 object-cover shadow-2xl"
               /> */}
-              <div className="flex flex-col gap-3">
-              <Image src={'/'+sport.split(' ')[0]+".svg"} alt={sport}  height={30} width={30} className="-translate-x-4"/>
-                <div className="flex gap-[3px]">
-                
-                  <h3 className="text-white text-body-bold " style={{whiteSpace: 'nowrap',zIndex:'1000'}}>
-                    
-                    {name}</h3>
-                    <Image
-                src={"/golden.svg"}
-                alt={'golden'}
-                height={20}
-                width={20}
-                className=" max-sm:scale-150"
+            <div className="flex flex-col gap-3">
+              <Image
+                src={"/" + sport.split(" ")[0] + ".svg"}
+                alt={sport}
+                height={30}
+                width={30}
+                className="-translate-x-4"
               />
-                </div>
-                <p className=" text-subtle-medium max-sm:text-[9px] text-gray-1">
-                  {"@" + username}
-                </p>
+              <div className="flex gap-[3px]">
+                <h3
+                  className="text-white text-body-bold "
+                  style={{ whiteSpace: "nowrap", zIndex: "1000" }}>
+                  {name}
+                </h3>
+                <Image
+                  src={"/golden.svg"}
+                  alt={"golden"}
+                  height={20}
+                  width={20}
+                  className=" max-sm:scale-150"
+                />
               </div>
+              <p className=" text-subtle-medium max-sm:text-[9px] text-gray-1">
+                {"@" + username}
+              </p>
             </div>
-            <div className="flex items-end h-full">
-              
-            </div>
-        
+          </div>
+          <div className="flex items-end h-full"></div>
         </div>
         <p className="mt-6 max-w-lg text-subtle-medium grow text-gray-1">
           {bio.split(" ").map((e) =>
@@ -205,15 +208,16 @@ const ProfileHeader = ({
           {friends &&
             friends.map((friend, index) => {
               return (
-                <Image
+                <div
                   key={index}
-                  src={friend.image}
-                  alt={`user_${index}`}
-                  width={30}
-                  height={30}
-                  style={{ zIndex: `${399 - index}` }}
-                  className={`-ml-4 cursor-pointer rounded-full object-cover`}
-                />
+                  className="relative -ml-4 aspect-square  w-8 h-8  shadow-2xl rounded-full">
+                  <img
+                    src={friend.image}
+                    alt={`user_${index}`}
+                    style={{ zIndex: `${399 - index}` }}
+                    className="absolute inset-0 w-full h-full rounded-full object-cover"
+                  />
+                </div>
               );
             })}
         </div>

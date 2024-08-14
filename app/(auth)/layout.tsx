@@ -41,10 +41,9 @@ export default function RootLayout({
 }) {
   return (
     <div
-      className=" min-h-screen flex w-full items-center justify-center "
+      className=" min-h-screen flex w-full bg-[length:100%_100%] items-center justify-center "
       style={{
-        background: "url(/assets/bg.jpg) ",
-        backgroundSize: "100% 100%",
+        background: "url(/assets/bg.jpg)",
       }}>
       {children}
     </div>

@@ -1,19 +1,28 @@
-
 import { fetchAllUser } from '@/lib/actions/user.actions';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { searchString, pageNum, pageSize, sortBy } = req.query;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  
+  const searchString = searchParams.get('searchString') || '';
+  const pageNum = parseInt(searchParams.get('pageNum') || '1', 10);
+  const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
 
   try {
     const users = await fetchAllUser({
-      searchString: searchString as string,
-      pageNum: parseInt(pageNum as string) || 1,
-      pageSize: parseInt(pageSize as string) || 20,
-      sortBy: sortBy as any || 'desc',
+      searchString,
+      pageNum,
+      pageSize,
     });
-    res.status(200).json({ users:users?.users,isNext: users?.isNext });
+
+    return NextResponse.json({ users: users?.users, isNext: users?.isNext }, { status: 200 });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch users' });
+    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: false, // Adjust depending on your needs
+  },
+};

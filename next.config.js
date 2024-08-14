@@ -17,11 +17,19 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "mimg6cdn.haraj.com.sa",
+      },
+      {
+        protocol: "https",
         hostname: "utfs.io",
       },
       {
         protocol: "https",
         hostname: "images.clerk.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "images.dubizzle.com.eg",
       },
       {
         protocol: "https",

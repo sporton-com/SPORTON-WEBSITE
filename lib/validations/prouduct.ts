@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const productSchema = z.object({
+  userId: z.string().min(1, "Name is required"),
     name: z.string().min(1, "Name is required"),
     price: z.number().positive("Price must be a positive number"),
     condition: z.string().min(1, "Condition is required"),

@@ -6,6 +6,11 @@ const productSchema = new mongoose.Schema({
   condition: { type: String, required: true, enum: ["new", "used"] },
   description: { type: String, trim: true },
   images: [{ type: String }],
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

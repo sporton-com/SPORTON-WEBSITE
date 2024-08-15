@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json(); // Parse the JSON body
     console.log("Received body:", body);
-    const { name, price, condition, description, images } = body;
+    const {userId, name, price, condition, description, images } = body;
 
     // Validate data
     if (!name || typeof name !== 'string') {
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
 
     // Create a new product
     const product = new Product({
+      author:userId,
       name,
       price: parseFloat(price),
       condition,

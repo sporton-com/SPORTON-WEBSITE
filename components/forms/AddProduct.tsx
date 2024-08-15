@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Input, Typography, InputNumber, message } from "antd";
+
 import { UploadOutlined } from "@ant-design/icons";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
-import { z } from "zod";
 import {
     Select,
     SelectContent,
@@ -15,11 +15,14 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select";
+ import {Button as Button2} from "@/components/ui/button";
 import { ProductFormData, productSchema } from "@/lib/validations/prouduct";
-import { isBase64Image } from "@/lib/utils";
 
+interface AddProductFormProps {
+  userId: string;
+}
 
-const AddProductForm: React.FC = () => {
+const AddProductForm: React.FC<AddProductFormProps> = ({ userId }) => {
   const {
     control,
     handleSubmit,
@@ -29,13 +32,11 @@ const AddProductForm: React.FC = () => {
     resolver: zodResolver(productSchema),
     defaultValues: {
       images: [],
+      userId, // إضافة userId هنا
     },
   });
 
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [hasImage, setHasImage] = useState<boolean>();
-  const [images, setImages] = useState<File[]>([]);
-
   const onDrop = async (acceptedFiles: File[]) => {
     const previews = acceptedFiles.map((file) => URL.createObjectURL(file));
     setImagePreviews(previews);
@@ -51,8 +52,6 @@ const AddProductForm: React.FC = () => {
         })
       )
     );
-
-    setImages(acceptedFiles);
     setValue("images", base64Images);
   };
 
@@ -109,11 +108,11 @@ const AddProductForm: React.FC = () => {
     render={({ field }) => (
         <Select name={field.name} disabled={field.disabled}  onValueChange={field.onChange}   defaultValue={field.value}>
         <SelectTrigger className=" account-form_input">
-          <SelectValue className="flex flex-row gap-5" placeholder="Select your sport" />
+          <SelectValue className="flex flex-row gap-5" placeholder="Select condition" />
         </SelectTrigger>
         <SelectContent className="account-form_input">
           <SelectGroup>
-            <SelectLabel>Select your sport</SelectLabel>
+            <SelectLabel>Select condition</SelectLabel>
        
             <SelectItem   value={"new"}>
             New
@@ -174,9 +173,9 @@ const AddProductForm: React.FC = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button2  className="bg-primary-500 hover:bg-primary-500/80 w-full" type="submit">
           Add Product
-        </Button>
+        </Button2>
       </Form.Item>
     </Form>
   );

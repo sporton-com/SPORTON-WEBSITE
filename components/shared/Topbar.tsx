@@ -33,9 +33,9 @@ const Topbar = () => {
   if (show) {
     return null;
   }
-  // if (!userInfo) {
-  //   return null;
-  // }
+  if (!userInfo) {
+    return null;
+  }
 
   return (
     <section className="topbar">

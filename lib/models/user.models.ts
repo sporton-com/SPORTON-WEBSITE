@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Room'
     }],
+    cart: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
     updatedAt: {
         type: Date,
         default: Date.now,

@@ -1,5 +1,8 @@
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
+import { MdAddShoppingCart } from "react-icons/md";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -57,7 +60,16 @@ const StoreCard = ({
   video,
   image,
 }: Params) => {
-
+  const date = new Date(createdAt);
+  const formattedDate = formatDistanceToNow(date, { addSuffix: true });
+  const [isContentExpanded, setIsContentExpanded] = useState(false);
+let maxCharacters=100
+  const toggleContent = () => {
+    setIsContentExpanded(!isContentExpanded);
+  };
+  const truncatedContent = content.length > maxCharacters
+    ? content.slice(0, maxCharacters) + "..."
+    : content;
   const SocialShare = ({ url, title }: { url: string; title: string }) => {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
@@ -81,7 +93,7 @@ const StoreCard = ({
                   alt="copy"
                   height={30}
                   width={30}
-                  className="hover:scale-110 transition-transform cursor-pointer object-contain"
+                  className="transition-transform cursor-pointer object-contain"
                 />
               </div>
             </TooltipTrigger>
@@ -102,7 +114,7 @@ const StoreCard = ({
                   alt="facebook"
                   height={40}
                   width={40}
-                  className="hover:scale-110 transition-transform cursor-pointer object-contain"
+                  className="transition-transform cursor-pointer object-contain"
                 />
               </a>
             </TooltipTrigger>
@@ -123,7 +135,7 @@ const StoreCard = ({
                   alt="twitter"
                   height={30}
                   width={30}
-                  className="hover:scale-110 transition-transform cursor-pointer object-contain"
+                  className="transition-transform cursor-pointer object-contain"
                 />
               </a>
             </TooltipTrigger>
@@ -144,7 +156,7 @@ const StoreCard = ({
                   alt="whatsapp"
                   height={30}
                   width={30}
-                  className="hover:scale-110 transition-transform cursor-pointer object-contain"
+                  className="transition-transform cursor-pointer object-contain"
                 />
               </a>
             </TooltipTrigger>
@@ -156,10 +168,7 @@ const StoreCard = ({
       </div>
     );
   };
- 
 
-
-  
   let IconsFooter = ({
     isMessenger,
     isWhite,
@@ -169,6 +178,19 @@ const StoreCard = ({
   }) => (
     <div className="flex flex-col">
       <div className="mt-3 flex flex-row items-center gap-6">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              {/* <Link href={"/messaging/" + userId + "-" + author._id}> */}
+              <MdAddShoppingCart color="#5C5C7B" size={20} />
+              {/* </Link> */}
+            </TooltipTrigger>
+            <TooltipContent className="bg-[#ffffff] text-primary-500">
+              <p>add to cart</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         {!isMessenger && (
           <TooltipProvider>
             <Tooltip>
@@ -179,11 +201,11 @@ const StoreCard = ({
                     alt="messenger"
                     height={20}
                     width={20}
-                    className="hover:scale-110 transition-transform cursor-pointer object-contain"
+                    className="transition-transform cursor-pointer object-contain"
                   />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent className="bg-white text-primary-500">
+              <TooltipContent className="bg-[#ffffff] text-primary-500">
                 <p>Messaging {author.name}</p>
               </TooltipContent>
             </Tooltip>
@@ -196,7 +218,7 @@ const StoreCard = ({
               alt="share"
               height={20}
               width={20}
-              className="hover:scale-110 transition-transform cursor-pointer object-contain"
+              className="transition-transform cursor-pointer object-contain"
             />
           </DrawerTrigger>
           <DrawerContent>
@@ -211,7 +233,7 @@ const StoreCard = ({
                           alt="close"
                           height={30}
                           width={30}
-                          className="hover:scale-110 transition-transform cursor-pointer object-contain"
+                          className="transition-transform cursor-pointer object-contain"
                         />
                       </TooltipTrigger>
                       <TooltipContent className="bg-white text-primary-500">
@@ -250,12 +272,7 @@ const StoreCard = ({
       <DropdownMenuContent className="bg-dark-2 text-white">
         <DropdownMenuItem>
           <Link href={"/profile/" + author.id} className="flex gap-2">
-            <Image
-              src={"/assets/edit.svg"}
-              alt="edit"
-              height={20}
-              width={20}
-            />
+            <Image src={"/assets/edit.svg"} alt="edit" height={20} width={20} />
             <p>Edit Post</p>
           </Link>
         </DropdownMenuItem>
@@ -267,61 +284,69 @@ const StoreCard = ({
   );
 
   return (
-    <article className="flex w-full flex-col mb-10 rounded-xl bg-dark-2 p-5 shadow-lg transition-transform hover:scale-105">
+    <article className="flex w-full flex-col mb-10 rounded-xl bg-dark-2 p-3 shadow-lg relative">
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4">
-          <div className="text-white hidden flex-col items-center lg:flex">
-            <Link href={"/profile/" + author.id} className="relative w-11 h-11">
-              <div className="relative aspect-square h-10 w-10">
-                <img
-                  src={author.image}
-                  alt={author.name}
-                  className="absolute inset-0 w-full h-full rounded-full object-cover"
+
+          <div className="text-white flex flex-col gap-4 w-full">
+            {image && (
+              <div className="relative w-full h-80  rounded-lg">
+                <Image
+                  src={image}
+                  alt="Image"
+                  fill
+                  className="object-cover rounded-lg"
                 />
               </div>
-            </Link>
-            <div className="thread-card_bar" />
-          </div>
-          <div className="text-white flex flex-col gap-4 w-full">
-            <div className="flex w-full flex-1 flex-row gap-4">
-              <div className="flex w-full flex-col">
-                <div className="flex justify-between gap-2">
-                  <Link href={"/profile/" + author.id} className="text-xl font-semibold text-white">
-                    {author.name}
-                  </Link>
-                  <IconsFooter />
-                </div>
-                <p className="text-gray-700 mt-1 text-sm">{content}</p>
-                {image && (
-                  <div className="relative w-full h-80 mt-4 rounded-lg">
-                    <Image
-                      src={image}
-                      alt="post image"
-                      layout="fill"
-                      className="object-cover rounded-lg"
+            )}
+            {video && (
+              <div className="relative w-full h-80 mt-4 rounded-lg">
+                <video
+                  controls
+                  className="w-full h-full object-cover rounded-lg">
+                  <source src={video} type="video/mp4" />
+                </video>
+              </div>
+            )}
+            <div className="flex flex-col">
+              <div className="flex  gap-2">
+                <Link
+                  href={"/profile/" + author.id}
+                  className="relative w-11 h-11">
+                  <div className="relative aspect-square h-10 w-10">
+                    <img
+                      src={author.image}
+                      alt={author.name}
+                      className="absolute inset-0 w-full h-full rounded-full object-cover"
                     />
                   </div>
-                )}
-                {video && (
-                  <video
-                    controls
-                    className="w-full h-80 mt-4 rounded-lg"
-                  >
-                    <source src={video} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-                <div className="flex w-full justify-between mt-3">
-                  <p className="text-gray-500 text-xs">
-                    {new Date(createdAt).toLocaleDateString()} {new Date(createdAt).toLocaleTimeString()}
-                  </p>
-                  <DropDown />
-                </div>
-                <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
-                  Add to Cart
-                </button>
+                </Link>
+                <Link
+                  href={"/profile/" + author.id}
+                  className="text-xl font-semibold text-white">
+                  {author.name}
+                </Link>
+               
               </div>
+              <p
+                className={`text-white font-light text-sm mt-4 ${
+                  isContentExpanded ? "" : "truncate"
+                }`}>
+                 {isContentExpanded ? content : truncatedContent}
+                {content.length > maxCharacters && (
+                  <span
+                    onClick={toggleContent}
+                    className="mt-2 cursor-pointer text-blue-500">
+                    {isContentExpanded ?<span> <br/> Show Less </span> : "Show More"}
+                  </span>
+                )}
+              </p>
             </div>
+            <div className=" flex justify-between ">
+            <p className="text-gray-600 mt-2 text-xs">{formattedDate}</p>
+            <IconsFooter />
+            </div>
+            {/* <DropDown /> */}
           </div>
         </div>
       </div>

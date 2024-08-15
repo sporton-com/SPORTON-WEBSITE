@@ -1,5 +1,5 @@
 "use client"
-import { fetchUser } from "@/lib/actions/user.actions";
+import { UserData, fetchUser } from "@/lib/actions/user.actions";
 import  Image  from "next/image";
 import  Link  from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,8 @@ const Page = () => {
     async function fetchData() {
       try {
         const userInfo = await fetchUser();
-        if (!userInfo?.onboarding) router.replace("/onboarding");
-        userInfo && setId(userInfo.id);
+        if (!(userInfo as UserData)?.onboarding) router.replace("/onboarding");
+        userInfo && setId((userInfo as UserData)?.id);
         // && setUserInfo(JSON.stringify(userInfo))
       } catch (error) {
         console.error("Error fetching data:", error);

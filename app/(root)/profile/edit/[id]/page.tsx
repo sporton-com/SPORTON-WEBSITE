@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-import { fetchUser } from "@/lib/actions/user.actions";
+import { UserData, fetchUser } from "@/lib/actions/user.actions";
 import AccountProfile from "@/components/forms/AccountProfile";
 
 interface userData{
@@ -23,19 +23,19 @@ async function Page({params}:{params:{id:string}}) {
 
   const userData:userData = {
     id: user?.id,
-    objectID: userInfo?._id,
-    username: userInfo ? userInfo?.username : user.username,
-    name: userInfo ? userInfo?.name : user.firstName ?? "",
-    bio: userInfo ? userInfo?.bio : "",
-    image: userInfo ? userInfo?.image : user.imageUrl,
-    sport: userInfo ? userInfo?.sport : "",
-    type:userInfo ? userInfo?.type : "player",
-    phone:userInfo ? userInfo?.phone : "",
+    objectID: (userInfo as UserData)?._id,
+    username: userInfo ? (userInfo as UserData)?.username : user.username,
+    name: userInfo ? (userInfo as UserData)?.name : user.firstName ?? "",
+    bio: userInfo ? (userInfo as UserData)?.bio : "",
+    image: userInfo ? (userInfo as UserData)?.image : user.imageUrl,
+    sport: userInfo ? (userInfo as UserData)?.sport : "",
+    type:userInfo ? (userInfo as UserData)?.type : "player",
+    phone:userInfo ? (userInfo as UserData)?.phone : "",
   };
 
   return (
     <>
-      <h1 className="head-text">Edit Profile {userInfo?.name}</h1>
+      <h1 className="head-text">Edit Profile {(userInfo as UserData)?.name}</h1>
       <p className="mt-3 text-base-regular text-light-2">Make any changes</p>
       <section className="mt-12">
         <AccountProfile userData={userData} />

@@ -25,17 +25,19 @@ const Page = ({ params }: { params: { id: string } }) => {
       try {
         let userJson = sessionStorage.getItem("id");
         const user = userJson;
-        const userInfo: UserData | null | undefined = await fetchUser(
+        const userInfo: UserData | null | undefined | {
+          redirect:string
+        } = await fetchUser(
           params.id
         );
         if (!user) return router.replace("/sign-in");
-        if (!userInfo?.onboarding) router.replace("/onboarding");
-        userInfo && setUserInfo(userInfo);
+        if (!(userInfo as UserData)?.onboarding) router.replace("/onboarding");
+        userInfo && setUserInfo(userInfo as UserData);
         let MyInfo = await fetchUser(user);
-        MyInfo && setUserMyInfo(MyInfo);
+        MyInfo && setUserMyInfo(MyInfo as UserData);
         let friends =
-          params.id === user ? MyInfo?.friends : userInfo?.friends;
-        let result = userInfo && await fetchUserPosts(userInfo?.id);
+          params.id === user ? (MyInfo as UserData)?.friends : (userInfo as UserData)?.friends;
+        let result = userInfo && await fetchUserPosts((userInfo as UserData)?.id);
         let postsAchievements = result?.posts?.filter(
           (e) => e?.isAchievement === "1"
         );
@@ -74,7 +76,7 @@ postsAchievements?
         sport={userInfo.sport}
         name={userInfo.name}
         username={userInfo.username}
-        image={userInfo?.image}
+        image={userInfo.image}
         bio={userInfo.bio}
         type={"User"}
       />
@@ -94,7 +96,7 @@ postsAchievements?
                 {tab.label !== "Analytics"&&
                 <p className=" bg-dark-3 border border-light-1 rounded-full px-2 text-base-regular">
                   {tab.label === "Posts"
-                    ? userInfo?.posts?.length
+                    ? (userInfo as UserData)?.posts?.length
                     : tab.label === "Team"
                     ? friends?.length
                     : tab.label === "Achievements"?

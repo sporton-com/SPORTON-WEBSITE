@@ -1,5 +1,6 @@
 "use client"
 import StoreCard from '@/components/cards/StoreCard'
+import AddProductForm from '@/components/forms/AddProduct';
 import React from 'react'
 interface Author {
   _id: string;
@@ -78,12 +79,14 @@ let arr=[exampleParms, exampleParms2,exampleParms3]
 const Page = () => {
 
   return (
+      <>
+      <AddProductForm/>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 p-4">
-      <></>
         {arr.map(page =>
     <StoreCard key={page.id} {...page} />
-        )}
+  )}
     </div>
+  </>
   )
 }
 

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { fetchUser, getActivity } from "@/lib/actions/user.actions";
+import { UserData, fetchUser, getActivity } from "@/lib/actions/user.actions";
 
 const Page = () => {
   const router = useRouter();
@@ -24,8 +24,8 @@ const Page = () => {
     error: activityError,
     isLoading: activityLoading,
   } = useQuery({
-    queryKey: ["activity", userInfo?._id],
-    queryFn: () => getActivity(userInfo ? userInfo._id : ""),
+    queryKey: ["activity", (userInfo as UserData)?._id],
+    queryFn: () => getActivity(userInfo ? (userInfo as UserData)._id : ""),
     enabled: !!userInfo, // فقط اجلب النشاطات إذا كانت معلومات المستخدم متاحة
   });
 
@@ -39,8 +39,14 @@ const Page = () => {
 
   // التحقق من بيانات المستخدم
   if (!userInfo) return <Loader is />;
-  if (!userInfo.onboarding) router.replace("/onboarding");
-
+  interface redirectType {
+    redirect: string;
+  }
+  if ((userInfo as redirectType ).redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
+  }
+  
   // دمج الأنشطة والردود
   const combinedList = activitys
     ? [...activitys.activity, ...activitys.reacts].sort(

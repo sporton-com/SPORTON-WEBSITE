@@ -6,8 +6,11 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Loader from "@/components/shared/Loader";
 import { PostData } from '@/lib/actions/post.actions';
-import { fetchUser } from '@/lib/actions/user.actions';
+import { UserData, fetchUser } from '@/lib/actions/user.actions';
 import { currentUser } from "@clerk/nextjs/server";
+import { setUser } from "@/lib/redux/userSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/lib/redux/store";
 
 
 
@@ -31,7 +34,7 @@ export default function HOME() {
   const router = useRouter();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [action, setAction] = useState();
-  
+  const dispatch = useDispatch<AppDispatch>();
   // Fetch user information
   const {
     data: userInfo,
@@ -71,6 +74,12 @@ export default function HOME() {
     }
   };
   
+  useEffect(() => {
+    dispatch(setUser(
+     (userInfo as UserData)
+
+    ));
+  },[userInfo])
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {

@@ -18,12 +18,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     const postEntries = posts.posts.map((post: any) => ({
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/posts/${post.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/post/${post._id}`,
       lastModified: post.updatedAt || post.createdAt,
     }));
 
     const userEntries = users.map((user: any) => ({
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/profile/${user.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/profile/${user._id}`,
       lastModified: user.updatedAt || user.createdAt,
     }));
 

@@ -24,21 +24,22 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { selectUser } from "@/lib/redux/userSlice";
+import { UserData } from "@/lib/actions/user.actions";
 
 const Topbar = () => {
   const path = usePathname();
   const show = path.split("/").pop() === "new-post";
-  const userInfo = useSelector(selectUser);
+  const userInfo:UserData = useSelector(selectUser);
 
   if (show) {
-    return null;
+    return <></>;
   }
   if (!userInfo) {
-    return null;
+    return <></>;
   }
 
   return (
-    <section className="topbar">
+    <div className="topbar">
       <div className="container p-0">
         <div className="flex flex-row justify-between">
           <Link
@@ -66,7 +67,7 @@ const Topbar = () => {
                       Fill out the form below to add a new product.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AddProductForm userId={userInfo._id} />
+                  <AddProductForm userId={userInfo?._id} />
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                   </AlertDialogFooter>
@@ -91,24 +92,24 @@ const Topbar = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            {userInfo.image && (
+            {userInfo?.image ? (
               <Link
-                href={`/profile/${userInfo._id ? userInfo._id : ""}`}
+                href={`/profile/${userInfo?._id ? userInfo._id : ""}`}
                 className="p-0">
                 <Image
-                  src={userInfo.image}
+                  src={userInfo?.image}
                   alt="Profile"
                   height={40}
                   width={40}
                   className="rounded-full object-contain"
                 />
               </Link>
-            )}
+            ):<></>}
             {/* <ModeToggle/> */}
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

@@ -23,7 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     const userEntries = users.map((user: any) => ({
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/users/${user.id}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/profile/${user.id}`,
       lastModified: user.updatedAt || user.createdAt,
     }));
 

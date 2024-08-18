@@ -24,17 +24,17 @@ export async function generateMetadata({ params }: { params: { id: string } },pa
   const previousImages = (await parent).openGraph?.images || []
 
   return {
-    title: post?.author.name || 'Post',
+    title: `${post?.author.name} is ${post?.author.sport} | SPORTON ` || 'Post',
     description: post?.text || 'Description for the post',
     openGraph: {
-      title: post?.author.name || 'Post',
+      title: `${post?.author.name} is ${post?.author.sport} | SPORTON `|| 'Post',
       description: post?.text || 'Description for the post',
       images: [
         {
           url: post?.image || post?.video || 'https://www.sporton.website/logo.png',
           width: 800,
           height: 600,
-          alt: post?.author.name || 'Title',
+          alt: `${post?.author.name} is ${post?.author.sport} | SPORTON `|| 'Title',
         },
        ... previousImages
       ],

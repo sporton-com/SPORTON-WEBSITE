@@ -66,7 +66,7 @@ const Topbar = () => {
                       Fill out the form below to add a new product.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AddProductForm userId={userInfo._id}/>
+                  <AddProductForm userId={userInfo._id} />
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                   </AlertDialogFooter>
@@ -91,8 +91,10 @@ const Topbar = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            { userInfo.image&&(
-              <Link href={`/profile/${userInfo._id?userInfo._id:""}`} className="p-0">
+            {userInfo.image && (
+              <Link
+                href={`/profile/${userInfo._id ? userInfo._id : ""}`}
+                className="p-0">
                 <Image
                   src={userInfo.image}
                   alt="Profile"

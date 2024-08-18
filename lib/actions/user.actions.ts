@@ -150,6 +150,16 @@ export async function fetchAllUser({
     console.log(`not found user: ${error.message}`);
   }
 }
+export async function fetchUsers(
+) {
+  try {
+    connectDB();
+    let users = await User.find()
+    return  users ;
+  } catch (error: any) {
+    console.log(`not found user: ${error.message}`);
+  }
+}
 export async function fetchUserPosts(userId: string) {
   connectDB();
   try {

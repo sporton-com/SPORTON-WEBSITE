@@ -329,7 +329,16 @@ export async function fetchPosts(
     throw error; // رمي الخطأ لتمريره إلى الأعلى
   }
 }
+export async function fetchPostsSiteMap(){
 
+  connectDB();
+  try {
+    return await Post.find();
+  }catch(e:any){
+    console.log(`Failed to delete post: ${e.message}`);
+
+  }
+}
 export async function deletePost(
   postId: string,
   authorId: string,

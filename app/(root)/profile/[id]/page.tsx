@@ -21,19 +21,19 @@ export async function generateMetadata({
 
   // Fetch user data
   const user = await fetchUser(userId);
-
+  
   return {
-    title: (user as UserData)?.name || "User Profile",
+    title:  `${(user as UserData)?.name } is ${(user as UserData)?.sport} | SPORTON ` || "User Profile",
     description: `${(user as UserData)?.phone} \n ${(user as UserData)?.bio} ` || "User profile page",
     openGraph: {
-      title: (user as UserData)?.name || "User Profile",
+      title:  `${(user as UserData)?.name } is ${(user as UserData)?.sport} | SPORTON ` || "User Profile",
       description: `${(user as UserData)?.phone} \n ${(user as UserData)?.bio} ` || "User profile page",
       images: [
         {
           url: (user as UserData)?.image || "https://www.sporton.website/logo.png",
           width: 800,
           height: 600,
-          alt: (user as UserData)?.name || "User Profile Picture",
+          alt:  `${(user as UserData)?.name } is ${(user as UserData)?.sport} | SPORTON ` || "User Profile Picture",
         },
       ],
       url: `https://${process.env.NEXT_PUBLIC_SITE_URL}/profile/${(user as UserData)?._id}`,

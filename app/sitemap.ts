@@ -1,14 +1,14 @@
 import { MetadataRoute } from 'next';
-import { fetchPosts } from '@/lib/actions/post.actions';
+import { fetchPostsSiteMap } from '@/lib/actions/post.actions';
 import { fetchUsers } from '@/lib/actions/user.actions';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
-    const posts = await fetchPosts(1, 100);
+    const posts = await fetchPostsSiteMap();
     const users = await fetchUsers();
 
-    if (!Array.isArray(posts.posts)) {
-      console.error('Posts data is not an array:', posts.posts);
+    if (!Array.isArray(posts)) {
+      console.error('Posts data is not an array:', posts);
       return [];
     }
 
@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return [];
     }
 
-    const postEntries = posts.posts.map((post: any) => ({
+    const postEntries = posts.map((post: any) => ({
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/post/${post._id}`,
       lastModified: post.updatedAt || post.createdAt,
     }));
@@ -27,7 +27,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: user.updatedAt || user.createdAt,
     }));
 
-    return [...postEntries, ...userEntries];
+    return [...postEntries, ...userEntries,
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/activity`,
+      lastModified: new Date(),
+    },
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/search`,
+      lastModified: new Date(),
+    },
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/new-post`,
+      lastModified: new Date(),
+    },
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/store`,
+      lastModified: new Date(),
+    },
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/about`,
+      lastModified: new Date(),
+    },
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/contact-us`,
+      lastModified: new Date(),
+    },
+      {
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/messaging`,
+      lastModified: new Date(),
+    },
+  ];
 
   } catch (error) {
     console.error('Error generating sitemap:', error);

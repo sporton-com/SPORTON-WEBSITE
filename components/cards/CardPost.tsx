@@ -45,6 +45,7 @@ import {
 
 import FriendCarousel from "./FriendCarousel";
 import { Button } from "@/components/ui/button";
+import ReactionIcons from "./ReactionIcons";
 
 interface parms {
   isAchievement?: string;
@@ -102,17 +103,22 @@ const CardPost = ({
 }: parms) => {
   const date = new Date(createdAt);
   const formattedDate = formatDistanceToNow(date, { addSuffix: true });
+  const [isHovering, setIsHovering] = useState(false);
   let pathname = usePathname();
   let [copy, setCopy] = useState(false);
   let isFriend = Team?.filter((friend) => friend.id === author.id).length === 1;
   let commentsFilter = comments.filter((e) => e.author._id !== undefined);
   let isReplay =
-    commentsFilter.filter((e) => e.author.id === currentId).length >= 1;
+  commentsFilter.filter((e) => e.author.id === currentId).length >= 1;
   let commLen = isReplay ? commentsFilter.length - 1 : commentsFilter.length;
-  let isReact =
-    react !== undefined &&
-    react.filter((e: any) => e?.user?._id === userId).length >= 1;
+  let isReact2 =
+  react !== undefined &&
+  react.filter((e: any) => e?.user?._id === userId).length >= 1;
+  const [LenReact, setLenReact] = useState(react?.length);
+  const [isReact, setIsReact] = useState(isReact2);
   let handleHeart = async () => {
+    setIsReact(!isReact)
+    setLenReact(isReact===true?LenReact-1:LenReact+1)
     console.log(react);
     await reactToPost({
       postId: id,
@@ -151,7 +157,7 @@ const CardPost = ({
               <div onClick={copyToClipboard}>
                 <Image
                   src={`/assets/copy.svg`}
-                  alt="heart"
+                  alt="copy"
                   height={30}
                   width={30}
                   className=" hover:scale-125 cursor-pointer object-contain"
@@ -172,7 +178,7 @@ const CardPost = ({
                 rel="noopener noreferrer">
                 <Image
                   src={`/assets/facebook.svg`}
-                  alt="heart"
+                  alt="facebook"
                   height={40}
                   width={40}
                   className=" hover:scale-125 cursor-pointer object-contain"
@@ -193,7 +199,7 @@ const CardPost = ({
                 rel="noopener noreferrer">
                 <Image
                   src={`/assets/twitter.svg`}
-                  alt="heart"
+                  alt="twitter"
                   height={30}
                   width={30}
                   className=" hover:scale-125 cursor-pointer object-contain"
@@ -214,7 +220,7 @@ const CardPost = ({
                 rel="noopener noreferrer">
                 <Image
                   src={`/assets/whatsapp.svg`}
-                  alt="heart"
+                  alt="whatsapp"
                   height={30}
                   width={30}
                   className=" hover:scale-125 cursor-pointer object-contain"
@@ -238,15 +244,16 @@ const CardPost = ({
     isMessenger?: boolean;
     isWhite?: boolean;
   }) => (
+    
     <div className={`${isComment && "mb-10"} flex flex-col `}>
       <div className="flex flex-row-reverse items-center justify-between">
-        {react && react.length > 0 ? (
+        {LenReact && LenReact > 0 ? (
           <div className="mt-1 flex flex-row items-center">
             <p
               className={` text-subtle-medium  ${
                 isWhite ? " text-[#ffffff]" : "text-gray-1"
               }`}>
-              {react.length}
+              {LenReact}
             </p>
             <Image
               src={"/assets/heart-filled.svg"}
@@ -272,7 +279,22 @@ const CardPost = ({
         )}
       </div>
       <div className="mt-3 flex flex-row items-center gap-6">
-        <Image
+      <div
+          className="relative"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <Image
+            src={isReact ? '/assets/heart-filled.svg' : `/assets/heart${isWhite ? '-white' : '-gray'}.svg`}
+            alt="heart"
+            height={20}
+            width={20}
+            className="hover:scale-125 cursor-pointer object-contain"
+            onClick={handleHeart}
+          />
+          <ReactionIcons isVisible={isHovering} onReact={handleHeart} isWhite={isWhite} />
+        </div>
+        {/* <Image
           src={
             isReact
               ? "/assets/heart-filled.svg"
@@ -283,7 +305,7 @@ const CardPost = ({
           width={20}
           className=" hover:scale-125 cursor-pointer object-contain"
           onClick={handleHeart}
-        />
+        /> */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>

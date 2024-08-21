@@ -1,12 +1,15 @@
 'use client'
 import { SidebarLinks } from '@/constants/icons'
+import { clearUser } from '@/lib/redux/userSlice'
 import { SignedIn, SignOutButton,useAuth } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 
 const LeftSidebar = () => {
+  let dispatch= useDispatch();
   let pathname= usePathname();
   let {userId} = useAuth();
   return (
@@ -25,6 +28,7 @@ const LeftSidebar = () => {
       )}
         </div>
         <div className="px-10">
+          <div className="" onClick={()=>dispatch(clearUser())}>
           <SignedIn>
             <SignOutButton redirectUrl="/sign-in">
               <div className="flex gap-4 cursor-pointer">
@@ -33,6 +37,7 @@ const LeftSidebar = () => {
               </div>
             </SignOutButton>
           </SignedIn>
+          </div>
         </div>
     </section>
   )

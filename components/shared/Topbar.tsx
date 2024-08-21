@@ -2,11 +2,9 @@
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { MdAddBusiness } from "react-icons/md";
 import AddProductForm from "@/components/forms/AddProduct";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -23,21 +21,32 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { selectUser } from "@/lib/redux/userSlice";
+import { selectUser, setUser } from "@/lib/redux/userSlice";
 import { UserData } from "@/lib/actions/user.actions";
-
-const Topbar = () => {
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+interface redirectType {
+  redirect: string;
+}
+const Topbar = ({userInfo}:{userInfo:UserData|redirectType}) => {
   const path = usePathname();
+  let dispatch= useDispatch()
   const show = path.split("/").pop() === "new-post";
-  const userInfo:UserData = useSelector(selectUser);
-
+  const router = useRouter();
   if (show) {
     return <></>;
   }
   if (!userInfo) {
     return <></>;
   }
-
+  if ((userInfo as redirectType ).redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
+  }
+  useEffect(() => {
+    // dispatch(setUser(userInfo as UserData))
+  }, [userInfo])
+  
   return (
     <div className="topbar">
       <div className="container p-0">
@@ -67,7 +76,7 @@ const Topbar = () => {
                       Fill out the form below to add a new product.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
-                  <AddProductForm userId={userInfo?._id} />
+                  <AddProductForm userId={(userInfo as UserData)?._id} />
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                   </AlertDialogFooter>
@@ -92,12 +101,12 @@ const Topbar = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            {userInfo?.image ? (
+            {(userInfo as UserData)?.image ? (
               <Link
-                href={`/profile/${userInfo?._id ? userInfo._id : ""}`}
+                href={`/profile/${(userInfo as UserData)?._id ? (userInfo as UserData)._id : ""}`}
                 className="p-0">
                 <Image
-                  src={userInfo?.image}
+                  src={(userInfo as UserData)?.image}
                   alt="Profile"
                   height={40}
                   width={40}

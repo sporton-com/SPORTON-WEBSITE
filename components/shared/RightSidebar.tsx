@@ -10,14 +10,12 @@ interface Props {
   isxl?: boolean;
   islg?: boolean;
   setChat?: any;
+  userInfo:UserData|{redirect: string}
+
 }
 
-const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
+const RightSidebar = ({ isChat, userInfo , Ids, isxl, islg, setChat }: Props) => {
   // استخدام React Query لجلب بيانات المستخدمين
-  const { data: userInfo, error: userInfoError, isLoading: userInfoLoading } = useQuery({
-    queryKey: ["userInfo"],
-    queryFn: ()=> fetchUser(),
-  });
 
   const { data: users, error: usersError, isLoading: usersLoading } = useQuery({
     queryKey: ["users"],
@@ -28,9 +26,7 @@ const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
     }),
   });
   const router = useRouter();
-  if (userInfoLoading || usersLoading) {
-    return <div>Loading...</div>;
-  }
+
   interface redirectType {
     redirect: string;
   }
@@ -38,8 +34,8 @@ const RightSidebar = ({ isChat, Ids, isxl, islg, setChat }: Props) => {
     router.replace((userInfo as redirectType ).redirect);
     return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
   }
-  if (userInfoError || usersError) {
-    console.error('Error fetching data:', userInfoError || usersError);
+  if (  usersError) {
+    console.error('Error fetching data:', usersError);
     return <div>Error occurred while fetching data.</div>;
   }
 

@@ -1,15 +1,22 @@
 'use client'
 import { SidebarLinks } from '@/constants/icons'
+import { UserData } from '@/lib/actions/user.actions'
+import { setUser } from '@/lib/redux/userSlice'
 import { useAuth } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-const Bottombar = () => {
+const Bottombar = ({userInfo}:{userInfo:UserData|{redirect:string}}) => {
   let pathname= usePathname();
+  let dispatch= useDispatch();
   let {userId} = useAuth();
+  useEffect(() => {
+    // dispatch(setUser(userInfo as UserData))
+  }, [userInfo])
   return (
     <section className='bottombar'>
      <div className="bottombar_container">

@@ -13,17 +13,23 @@ const userFromLocalStorage = () => {
   return null;
 };
 
-const initialState = userFromLocalStorage();
+const initialState: UserData | null = userFromLocalStorage();
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     setUser(state, action: PayloadAction<UserData>) {
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
-      state = action.payload;
+      return action.payload;
+    },
+    clearUser(state) {
+      localStorage.removeItem("userInfo");
+      return null; // Reset the state to null
     },
   },
 });
-export const selectUser = (state: { user: UserData; }) => state.user;
-export const { setUser } = userSlice.actions;
+
+export const selectUser = (state: { user: UserData | null }) => state.user;
+export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

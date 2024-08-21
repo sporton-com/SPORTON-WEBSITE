@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     "Player Posts",
     "Achievements",
     "Contact Players",
-
     "Showcase Talent",
     "Connect with Clubs",
     "Gain Recognition",

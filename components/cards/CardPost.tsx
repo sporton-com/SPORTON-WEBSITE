@@ -46,7 +46,7 @@ import {
 import FriendCarousel from "./FriendCarousel";
 import { Button } from "@/components/ui/button";
 import ReactionIcons from "./ReactionIcons";
-
+import { Howl } from 'howler';
 interface parms {
   isAchievement?: string;
   id: string;
@@ -114,10 +114,24 @@ const CardPost = ({
   let isReact2 =
   react !== undefined &&
   react.filter((e: any) => e?.user?._id === userId).length >= 1;
-  const [LenReact, setLenReact] = useState(react?.length);
+  const [LenReact, setLenReact] = useState(react?react.length:0);
   const [isReact, setIsReact] = useState(isReact2);
-  let handleHeart = async () => {
-    setIsReact(!isReact)
+  const [reactionImg, setReactionImage] = useState("/assets/heart-filled.svg");
+  const sounds = {
+    like: new Howl({ src: ['/sounds/like.wav'] }),
+    love: new Howl({ src: ['/sounds/love.mp3'] }),
+    support: new Howl({ src: ['/sounds/like.wav'] }),
+    wow: new Howl({ src: ['/sounds/wow.wav'] }),
+    haha: new Howl({ src: ['/sounds/haha.wav'] }),
+    sad: new Howl({ src: ['/sounds/sad.wav'] }),
+    angry: new Howl({ src: ['/sounds/angry.wav'] }),
+    // click: new Howl({ src: ['/sounds/click.mp3'] }),
+  };
+  let handleHeart = async (reaction:string,img:string,isClick?:boolean) => {
+    //@ts-ignore
+    sounds[`${reaction}`].play();
+    setReactionImage(img);
+    isClick&& setIsReact(!isReact)
     setLenReact(isReact===true?LenReact-1:LenReact+1)
     console.log(react);
     await reactToPost({
@@ -285,12 +299,12 @@ const CardPost = ({
           onMouseLeave={() => setIsHovering(false)}
         >
           <Image
-            src={isReact ? '/assets/heart-filled.svg' : `/assets/heart${isWhite ? '-white' : '-gray'}.svg`}
+            src={isReact ? reactionImg : `/assets/heart${isWhite ? '-white' : '-gray'}.svg`}
             alt="heart"
             height={20}
             width={20}
             className="hover:scale-125 cursor-pointer object-contain"
-            onClick={handleHeart}
+            onClick={()=>handleHeart("love","/assets/heart-filled.svg",true)}
           />
           <ReactionIcons isVisible={isHovering} onReact={handleHeart} isWhite={isWhite} />
         </div>
@@ -328,9 +342,7 @@ const CardPost = ({
           <Tooltip>
             <TooltipTrigger>
               <Link
-                href={`/new-post?p=${content}${
-                  image || video ? "&sh=true" : ""
-                }${video ? `&video=${video}` : image ? `&image=${image}` : ""}`}
+                href={`/new-post?repost=${id}`}
                 className="">
                 <Image
                   src={`/assets/repost${isWhite ? "-white" : ""}.svg`}

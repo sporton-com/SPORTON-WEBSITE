@@ -1,11 +1,11 @@
-
-import { useRouter } from "next/router";
+"use client"
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
 export default function ReloadButton() {
   const router = useRouter();
   const handleReload = () => {
-    router.reload();
+    router.refresh();
   };
   return (
     <div className=" flex justify-center items-center min-h-screen">

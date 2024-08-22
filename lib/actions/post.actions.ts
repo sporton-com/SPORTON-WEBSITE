@@ -8,6 +8,7 @@ interface props {
   text: string;
   image?: string;
   video?: string;
+  repost?: string;
   author: string | undefined;
 }
 export interface PostData {
@@ -48,6 +49,7 @@ export async function createPost({
   video,
   author,
   isAchievement,
+  repost
 }: props) {
   connectDB();
   try {
@@ -57,6 +59,7 @@ export async function createPost({
         author,
         image,
         video,
+        repost,
         isAchievement,
       });
       let post = await User.findByIdAndUpdate(author, {

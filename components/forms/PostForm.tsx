@@ -62,6 +62,7 @@ const PostForm = ({
     queryKey: ["user",repost],
     queryFn: () => fetchPostById(repost!),
   });
+  
   const navigate = useRouter();
   const { toast } = useToast();
   const [fileType, setFileType] = useState<string>("");
@@ -119,7 +120,8 @@ const PostForm = ({
     const newPost = await createPost({
       ...isvideo,
       text: value.post,
-      author: id,
+      author: _id,
+      repost:PostInfo?PostInfo._id:undefined,
       isAchievement: value.isAchievement,
     });
 
@@ -153,7 +155,7 @@ const PostForm = ({
             Post
           </Button>
         </div>
-        <div className={`border-white border rounded-xl p-2`}>
+        <div className={`border-white ${PostInfo?"bg-dark-2 ":""} border rounded-xl p-2 flex flex-col gap-6`}>
         <div className=" flex  gap-4">
           <Image
             src={image}
@@ -188,11 +190,13 @@ const PostForm = ({
           )}
         />
        {PostInfo?
+       <div className={`border-white  border rounded-xl  `}>
        <CardPost
        setAction={()=>{}}
        Team={friends}
        isAchievement={PostInfo?.isAchievement}
        id={PostInfo?._id}
+       repost={PostInfo?.repost}
        video={PostInfo?.video}
        image={PostInfo?.image}
        parentId={PostInfo?.parentId}
@@ -204,6 +208,7 @@ const PostForm = ({
        createdAt={PostInfo?.createdAt}
        comments={[]}
        />
+       </div>
        : <div className="">
 
    

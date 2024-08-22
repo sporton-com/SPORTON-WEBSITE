@@ -39,16 +39,12 @@ const Topbar = ({userInfo}:{userInfo:UserData|redirectType}) => {
   if (!userInfo) {
     return <></>;
   }
-  if ((userInfo as redirectType ).redirect) {
-    router.replace((userInfo as redirectType ).redirect);
-    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
-  }
   useEffect(() => {
     // dispatch(setUser(userInfo as UserData))
   }, [userInfo])
   
   return (
-    <div className="topbar">
+    <div className="topbar z-[10000]">
       <div className="container p-0">
         <div className="flex flex-row justify-between">
           <Link

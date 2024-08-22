@@ -15,7 +15,7 @@ const Bottombar = ({userInfo}:{userInfo:UserData|{redirect:string}}) => {
   let dispatch= useDispatch();
   let {userId} = useAuth();
   useEffect(() => {
-    // dispatch(setUser(userInfo as UserData))
+    dispatch(setUser(userInfo as UserData))
   }, [userInfo])
   return (
     <section className='bottombar'>

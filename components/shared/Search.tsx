@@ -65,7 +65,7 @@ const Search = () => {
 
   return (
     <section className="">
-      <h1 className="text-white">{'Search'}</h1>
+      <h1 className="text-body-bold head-text text-[25px] text-white">{'Search'}</h1>
       <div className="w-full mt-3">
         <Input
           placeholder="Enter name or username or sport"
@@ -116,7 +116,7 @@ const Search = () => {
       {showC && (
         <div className={`mt-14 flex flex-1 ${'flex-col gap-9'}`}>
           { data?.pages.flatMap(page => page.users).length === 0 ? (
-            <h1>no result</h1>
+            <h2> no result </h2>
           ) : (
             data?.pages.flatMap(page => page.users).map((person: any) => (
               <UserCard

@@ -1,150 +1,151 @@
-"use client"
+"use client";
 import UserCard from "@/components/cards/UserCard";
 import PostTab from "@/components/shared/PostTab";
 import ProfileHeader from "@/components/shared/ProfileHeader";
 import Chart from "@/components/chart/chart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { profileTabs } from "@/constants/icons";
-import { fetchUser, Result, UserData } from "@/lib/actions/user.actions";
+import { UserData, fetchUser, fetchUserPosts } from "@/lib/actions/user.actions";
 import Image from "next/image";
-import {  useRouter } from "next/navigation";
-import { fetchUserPosts } from "@/lib/actions/user.actions";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Loader from "@/components/shared/Loader";
+import { useQuery } from "@tanstack/react-query";
+import ReloadButton from "@/components/shared/reload";
 const Profile = ({ params }: { params: { id: string } }) => {
-  const [userInfo, setUserInfo] = useState<UserData|null>(null);
-  const [MyInfo, setUserMyInfo] = useState<UserData|null>(null);
-  const [friends, setUserfriends] = useState<any[]|null>(null);
-  const [result, setResult] = useState<Result|null>(null);
-  const [result2, setResult2] = useState<any>(null);
-  const [postsAchievements, SetPostsAchievements] = useState<any[]|null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        let userJson = sessionStorage.getItem("id");
-        const user = userJson;
-        const userInfo: UserData | null | undefined | {
-          redirect:string
-        } = await fetchUser(
-          params.id
-        );
-        if (!user) return router.replace("/sign-in");
-        if (!(userInfo as UserData)?.onboarding) router.replace("/onboarding");
-        userInfo && setUserInfo(userInfo as UserData);
-        let MyInfo = await fetchUser(user);
-        MyInfo && setUserMyInfo(MyInfo as UserData);
-        let friends =
-          params.id === user ? (MyInfo as UserData)?.friends : (userInfo as UserData)?.friends;
-        let result = userInfo && await fetchUserPosts((userInfo as UserData)?.id);
-        let postsAchievements = result?.posts?.filter(
-          (e) => e?.isAchievement === "1"
-        );
+  const { data: userInfo, isLoading: isUserInfoLoading, error: userInfoError } = useQuery({
+    queryKey: ["user", params.id],
+    queryFn: () => fetchUser(params.id),
+  });
 
-        let result2 = {
-          ...result,
-          posts: postsAchievements ? postsAchievements : [],
-        };
-        friends && setUserfriends(friends);
-        result&&setResult(result);
-        result2&&setResult2(result2);
-        postsAchievements&& SetPostsAchievements(postsAchievements);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Handle error, perhaps show a message to the user
-      }
-    }
+  const { data: MyInfo, isLoading: isMyInfoLoading, error: myInfoError } = useQuery({
+    queryKey: ["myUser"],
+    queryFn:()=> fetchUser(),
+  });
 
-    fetchData();
-  }, []);
+  const { data: result, isLoading: isPostsLoading, error: postsError } = useQuery({
+    queryKey: ["posts", params.id],
+    queryFn: () => fetchUserPosts(params.id || ""),
+    enabled: !!userInfo, // Fetch posts only if userInfo is available
+  });
+
+  
+  const friends =
+    params.id === (MyInfo as UserData)?._id ?( MyInfo as UserData)?.friends : (userInfo as UserData)?.friends;
+
+  const postsAchievements = result?.posts?.filter(
+    (e) => e?.isAchievement === "1"
+  );
+
+  const result2 = {
+    ...result,
+    posts: postsAchievements || [],
+  };
+
+  if (isUserInfoLoading || isMyInfoLoading || isPostsLoading) {
+    return <Loader is />;
+  }
+
+  if (userInfoError || myInfoError || postsError) {
+    console.error("Error fetching data:", userInfoError || myInfoError || postsError);
+    // Handle error, perhaps show a message to the user
+    return <ReloadButton/>;
+  }
+
   return (
-    userInfo&&
-MyInfo&&
-friends&&
-result&&
-result2&&
-postsAchievements?
-    <section className="">
-      <h1 className="hidden">{userInfo.name}</h1>
-      <ProfileHeader
-        accountId={userInfo._id}
-        userId={userInfo.id}
-        myId={MyInfo?._id}
-        userAuthId={MyInfo.id}
-        friends={friends}
-        sport={userInfo.sport}
-        name={userInfo.name}
-        username={userInfo.username}
-        image={userInfo.image}
-        bio={userInfo.bio}
-        type={"User"}
-      />
-      <div className="mt-8">
-        <Tabs defaultValue="posts" className="w-full">
-          <TabsList className="tab">
+    userInfo &&
+    MyInfo &&
+    friends &&
+    result &&
+    result2 &&
+    postsAchievements ? (
+      <section className="">
+        <h1 className="hidden">{(userInfo as UserData).name}</h1>
+        <ProfileHeader
+          accountId={(userInfo as UserData)._id}
+          userId={(userInfo as UserData).id}
+          myId={(MyInfo as UserData)?._id}
+          userAuthId={(MyInfo as UserData).id}
+          friends={friends}
+          sport={(userInfo as UserData).sport}
+          name={(userInfo as UserData).name}
+          username={(userInfo as UserData).username}
+          image={(userInfo as UserData).image}
+          bio={(userInfo as UserData).bio}
+          type={"User"}
+        />
+        <div className="mt-8">
+          <Tabs defaultValue="posts" className="w-full">
+            <TabsList className="tab">
+              {profileTabs.map((tab) => (
+                <TabsTrigger key={tab.label} value={tab.value} className="tab1">
+                  <Image
+                    src={tab.icon}
+                    alt={tab.label}
+                    height={24}
+                    width={24}
+                    className="object-contain"
+                  />
+                  <p className="max-sm:hidden">{tab.label}</p>
+                  {tab.label !== "Analytics" && (
+                    <p className="bg-dark-3 border border-light-1 rounded-full px-2 text-base-regular">
+                      {tab.label === "Posts"
+                        ? (userInfo as UserData).posts?.length
+                        : tab.label === "Team"
+                        ? friends?.length
+                        : tab.label === "Achievements"
+                        ? postsAchievements?.length
+                        : null}
+                    </p>
+                  )}
+                </TabsTrigger>
+              ))}
+            </TabsList>
             {profileTabs.map((tab) => (
-              <TabsTrigger key={tab.label} value={tab.value} className="tab1">
-                <Image
-                  src={tab.icon}
-                  alt={tab.label}
-                  height={24}
-                  width={24}
-                  className="object-contain"
-                />
-                <p className=" max-sm:hidden">{tab.label}</p>
-                {tab.label !== "Analytics"&&
-                <p className=" bg-dark-3 border border-light-1 rounded-full px-2 text-base-regular">
-                  {tab.label === "Posts"
-                    ? (userInfo as UserData)?.posts?.length
-                    : tab.label === "Team"
-                    ? friends?.length
-                    : tab.label === "Achievements"?
-                    postsAchievements?.length
-                    : null
-                    }
-                </p>}
-              </TabsTrigger>
+              <TabsContent
+                key={`content-${tab.label}`}
+                value={tab.value}
+                className="w-full mt-8 text-light-1"
+              >
+                {tab.value === "friends" ? (
+                  <section className="flex flex-col gap-10">
+                    {(userInfo as UserData).friends.map((friend: any) => (
+                      <UserCard key={friend.id} person={JSON.stringify(friend)} />
+                    ))}
+                  </section>
+                ) : tab.value === "posts" ? (
+                  result && (
+                    <PostTab
+                      userId={(userInfo as UserData)._id}
+                      result2={JSON.stringify(result)}
+                      currentUserId={(MyInfo as UserData).id}
+                      Team={friends ? friends : []}
+                      accountType="User"
+                    />
+                  )
+                ) : tab.value === "analytics" ? (
+                  <Chart />
+                ) : (
+                  result2 && (
+                    <PostTab
+                      userId={(userInfo as UserData)._id}
+                      result2={JSON.stringify(result2)}
+                      currentUserId={(MyInfo as UserData).id}
+                      Team={friends ? friends : []}
+                      accountType="User"
+                    />
+                  )
+                )}
+              </TabsContent>
             ))}
-
-          </TabsList>
-          {profileTabs.map((tab) => (
-            <TabsContent
-              key={`content-${tab.label}`}
-              value={tab.value}
-              className="w-full mt-8 text-light-1">
-              {tab.value === "friends" ? (
-                <section className="flex flex-col gap-10">
-                  {userInfo.friends.map((friend: any) => (
-                    <UserCard person={JSON.stringify(friend)} />
-                  ))}
-                </section>
-              ) : tab.value === "posts" ? (
-                result && (
-                  <PostTab
-                    userId={userInfo._id}
-                    result2={JSON.stringify(result)}
-                    currentUserId={MyInfo.id}
-                    Team={friends ? friends : []}
-                    accountType="User"
-                  />
-                )
-              ) :tab.value === "analytics" ? <Chart/>:(
-                result2 && (
-                  <PostTab
-                    userId={userInfo._id}
-                    result2={JSON.stringify(result2)}
-                    currentUserId={MyInfo.id}
-                    Team={friends ? friends : []}
-                    accountType="User"
-                  />
-                )
-              )}
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
-    </section>:<Loader is />
+          </Tabs>
+        </div>
+      </section>
+    ) : (
+      <Loader is />
+    )
   );
 };
 

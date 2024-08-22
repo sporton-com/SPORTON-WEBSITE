@@ -13,6 +13,7 @@ interface props {
 }
 export interface PostData {
   isAchievement: string;
+  repost:PostData;
   _id: string;
   parentId: string | null;
   currentId: String | undefined;
@@ -268,6 +269,29 @@ export async function fetchPosts(
       },
       {
         $lookup: {
+          from: "posts",
+          localField: "repost",
+          foreignField: "_id",
+          as: "repostINF",
+        },
+      },
+      { $unwind: { path: "$repostINF", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "repostINF.author",
+          foreignField: "_id",
+          as: "repostINF.authorINF",
+        },
+      },
+      {
+        $unwind: {
+          path: "$repostINF.authorINF",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
           from: "communities",
           localField: "community",
           foreignField: "_id",
@@ -292,6 +316,16 @@ export async function fetchPosts(
           video: { $first: "$video" },
           image: { $first: "$image" },
           author: { $first: "$author" },
+          repost: {
+            $first: {
+              _id: "$repostINF._id",
+              text: "$repostINF.text",
+              image: "$repostINF.image",
+              video: "$repostINF.video",
+              author: "$repostINF.authorINF",
+              createdAt: "$repostINF.createdAt",
+            },
+          },
           react: {
             $push: {
               user: "$reactUsers",
@@ -332,6 +366,7 @@ export async function fetchPosts(
     throw error; // رمي الخطأ لتمريره إلى الأعلى
   }
 }
+
 export async function fetchPostsSiteMap(){
 
   connectDB();

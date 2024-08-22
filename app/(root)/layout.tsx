@@ -9,12 +9,22 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { useQuery } from "@tanstack/react-query";
 import ReloadButton from "@/components/shared/reload";
 import Loader from "@/components/shared/Loader";
-
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+interface redirectType {
+  redirect: string;
+}
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [size, setSize] = useState<number>()
+  const router = useRouter();
+  useEffect(() => {
+    setSize(window.innerWidth)
+    window.addEventListener('resize',()=>{setSize(window.innerWidth)})
+}, [size])
   const {
     data: userInfo,
     error: userError,
@@ -23,6 +33,10 @@ export default function RootLayout({
     queryKey: ["user"],
     queryFn: () => fetchUser(),
   });
+  if ((userInfo as redirectType )?.redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
+  }
   if(userError) return <ReloadButton/>;
   if(userLoading) return <Loader is/>;
 
@@ -36,10 +50,10 @@ export default function RootLayout({
             {children}
             </div>
         </section>
-        {userInfo &&  <RightSidebar  userInfo={userInfo}  />}
+        { size&&size>=1280&&userInfo &&  <RightSidebar  userInfo={userInfo}  />}
      <ToastContainer />
       </main>
-      {userInfo && <BottomSidebar />}
+      { size&&size<1280&&userInfo && <BottomSidebar userInfo={userInfo} />}
     </>
   );
 }

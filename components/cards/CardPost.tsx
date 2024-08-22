@@ -1,7 +1,7 @@
 "use client";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
-import { deletePost, reactToPost } from "@/lib/actions/post.actions";
+import { PostData, deletePost, reactToPost } from "@/lib/actions/post.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -79,7 +79,8 @@ interface parms {
       name: string;
     };
   }[];
-  isComment?: boolean;
+  repost?:PostData;
+    isComment?: boolean;
   setAction?: any;
 }
 
@@ -99,7 +100,7 @@ const CardPost = ({
   isComment,
   video,
   image,
-  setAction,
+  setAction,repost
 }: parms) => {
   const date = new Date(createdAt);
   const formattedDate = formatDistanceToNow(date, { addSuffix: true });
@@ -630,6 +631,23 @@ const CardPost = ({
                 </AlertDialogContent>
               </AlertDialog>
             )}
+            {repost &&repost?.createdAt && <CardPost
+                   setAction={()=>{}}
+                   Team={[]}
+                   isAchievement={repost?.isAchievement}
+                   id={repost?._id}
+                   repost={repost?.repost}
+                   video={repost?.video}
+                   image={repost?.image}
+                   parentId={repost?.parentId}
+                   react={[]}
+                   currentId={currentId}
+                   userId={userId}
+                   author={repost?.author}
+                   content={repost?.text}
+                   createdAt={repost?.createdAt}
+                   comments={[]}
+            />}
             {video && (
               <video
                 src={video}

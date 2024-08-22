@@ -36,7 +36,7 @@ async function Page({params}:{params:{id:string}}) {
   return (
     <>
       <h1 className="head-text">Edit Profile {(userInfo as UserData)?.name}</h1>
-      <p className="mt-3 text-base-regular text-light-2">Make any changes</p>
+      {/* <p className="mt-3 text-base-regular text-light-2">Make any changes</p> */}
       <section className="mt-12">
         <AccountProfile userData={userData} />
       </section>

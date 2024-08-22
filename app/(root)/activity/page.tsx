@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserData, fetchUser, getActivity } from "@/lib/actions/user.actions";
+import ReloadButton from "@/components/shared/reload";
 
 const Page = () => {
   const router = useRouter();
 
-  // استخدام useQuery للحصول على معلومات المستخدم
   const {
     data: userInfo,
     error: userError,
@@ -34,7 +34,7 @@ const Page = () => {
   // التعامل مع الأخطاء
   if (userError || activityError) {
     console.error("Error fetching data:", userError || activityError);
-    return <p>Error loading data.</p>;
+    return <ReloadButton/>;
   }
 
   // التحقق من بيانات المستخدم
@@ -58,7 +58,7 @@ const Page = () => {
   // عرض المحتوى
   return combinedList ? (
     <section className="">
-      <h1 className="mt-5 text-white text-body-bold text-[20px]">
+      <h1 className="mt-5 text-body-bold head-text text-[25px] text-white">
         Notifications
       </h1>
       <section className="mt-5 flex flex-col gap-8">

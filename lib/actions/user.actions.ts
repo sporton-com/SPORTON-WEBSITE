@@ -117,7 +117,7 @@ export async function fetchUser(userId?: string | undefined) {
 export async function fetchAllUser({
   searchString = "",
   pageNum = 1,
-  pageSize = 20,
+  pageSize = 5,
   sortBy = "desc",
 }: {
   searchString: string;
@@ -126,11 +126,12 @@ export async function fetchAllUser({
   sortBy?: SortOrder;
 }) {
   try {
-    connectDB();
-    let user = await currentUser();
-    let skipAmount = (pageNum - 1) * pageSize;
-    let regex = new RegExp(searchString, "i");
-    let query: FilterQuery<typeof User> = { id: { $ne: user?.id } };
+    await connectDB(); // تأكد من أنك تقوم بالاتصال بقاعدة البيانات
+    const user = await currentUser();
+    const skipAmount = (pageNum - 1) * pageSize;
+    const regex = new RegExp(searchString, "i");
+    const query: FilterQuery<typeof User> = { id: { $ne: user?.id } };
+
     if (searchString.trim() !== "") {
       query.$or = [
         { name: { $regex: regex } },
@@ -138,14 +139,30 @@ export async function fetchAllUser({
         { sport: { $regex: regex } },
       ];
     }
-    let users = await User.find(query )
-      .sort({ createdAt: "desc" })
+
+    const users = await User.find(query)
+      .sort({ createdAt: sortBy })
       .skip(skipAmount)
-      .limit(pageSize).lean()
+      .limit(pageSize)
+      .lean() // تحويل المستندات إلى كائنات جافا سكريبت عادية
       .exec();
+
     const totalUsers = await User.countDocuments(query);
-    let isNext = +totalUsers > skipAmount + users.length;
-    return { users, isNext };
+    const isNext = totalUsers > skipAmount + users.length;
+
+    return { users, isNext, pageNum };
+  } catch (error: any) {
+    console.error(`Failed to fetch users: ${error.message}`);
+    return { users: [], isNext: false, pageNum };
+  }
+}
+
+export async function fetchUsers(
+) {
+  try {
+    connectDB();
+    let users = await User.find()
+    return  users ;
   } catch (error: any) {
     console.log(`not found user: ${error.message}`);
   }

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const reactSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  type:{ type:String },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -21,6 +22,8 @@ const postSchema = new mongoose.Schema({
   },
   react: [reactSchema],
   parentId: { type: String },
+  repost: { type: mongoose.Schema.Types.ObjectId,
+    ref: "Post", },
   children: [
     {
       type: mongoose.Schema.Types.ObjectId,

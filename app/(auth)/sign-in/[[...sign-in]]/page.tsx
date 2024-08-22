@@ -1,5 +1,7 @@
 "use client";
+//@ts-ignore
 import * as Clerk from "@clerk/elements/common";
+//@ts-ignore
 import * as SignIn from "@clerk/elements/sign-in";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,12 +9,14 @@ import {useEffect} from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@clerk/nextjs";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/lib/redux/userSlice";
 export default  function SignInPage() {
+  let user =useSelector(selectUser)
   let { isSignedIn}=useAuth()
   let router=useRouter()
   useEffect(()=>{
-if(isSignedIn) router.replace('/')
-
+if(isSignedIn||user) router.replace('/')
   },[])
   return (
     <div className="grid w-full flex-grow items-center  px-4 sm:justify-center">

@@ -1,63 +1,59 @@
-import type { Metadata } from "next";
+"use client"
 import "../globals.css";
 import Topbar from "@/components/shared/Topbar";
 import BottomSidebar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import { ToastContainer } from "react-toastify";
-export const metadata: Metadata = {
-  title: {
-    default:
-      "SPORTON | Home - Player Posts, Achievements, and Contact Players ",
-    template: "%s - SPORTON ",
-  },
-  keywords: [
-    "SPORTON",
-    "Home",
-    "Player Posts",
-    "Achievements",
-    "Contact Players",
-    "Showcase Talent",
-    "Connect with Clubs",
-    "Gain Recognition",
-    "Sports Platform",
-  ],
-  description:
-    "SPORTON is a sports community platform that includes all athletes from Egypt in various sports, and on the other hand, player agents and clubs and institutions that will receive their talents will be present.",
-  openGraph: {
-    type: "website",
-    url: "https://www.sporton.website/",
-    title: "SPORTON",
-    description:
-      "SPORTON is a sports community platform that includes all athletes from Egypt in various sports, and on the other hand, player agents and clubs and institutions that will receive their talents will be present.",
-    images: [
-      {
-        url: "https://www.sporton.website/logo.png",
-        alt: "SPORTON LOGO",
-      },
-    ],
-  },
-};
-
+import { fetchUser } from "@/lib/actions/user.actions";
+import { useQuery } from "@tanstack/react-query";
+import ReloadButton from "@/components/shared/reload";
+import Loader from "@/components/shared/Loader";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+interface redirectType {
+  redirect: string;
+}
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [size, setSize] = useState<number>()
+  const router = useRouter();
+  useEffect(() => {
+    setSize(window.innerWidth)
+    window.addEventListener('resize',()=>{setSize(window.innerWidth)})
+}, [size])
+  const {
+    data: userInfo,
+    error: userError,
+    isLoading: userLoading,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => fetchUser(),
+  });
+  if ((userInfo as redirectType )?.redirect) {
+    router.replace((userInfo as redirectType ).redirect);
+    return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
+  }
+  if(userError) return <ReloadButton/>;
+  if(userLoading) return <Loader is/>;
+
   return (
     <>
-      <Topbar />
+     {userInfo &&<Topbar userInfo={userInfo} />}
       <main className=" flex flex-row w-full">
-        <LeftSidebar />
+      {userInfo &&<LeftSidebar />}
         <section className="main-container">
           <div className=" w-full max-w-4xl">
             {children}
             </div>
         </section>
-        <RightSidebar />
-        <ToastContainer />
+        { size&&size>=1280&&userInfo &&  <RightSidebar  userInfo={userInfo}  />}
+     <ToastContainer />
       </main>
-      <BottomSidebar />
+      { size&&size<1280&&userInfo && <BottomSidebar userInfo={userInfo} />}
     </>
   );
 }

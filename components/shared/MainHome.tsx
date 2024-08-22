@@ -31,6 +31,7 @@ export default function Home({
         <LocalStore {...userInfo} />
         {FPosts?.map((post,i) => (
           <CardPost
+          repost={post.repost}
             setAction={setAction}
             Team={friends}
             key={i}

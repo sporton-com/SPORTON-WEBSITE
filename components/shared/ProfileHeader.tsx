@@ -4,6 +4,7 @@ import { SignedIn, SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import { useState } from "react";
 interface props {
   accountId: string;
   userAuthId: string | undefined;
@@ -38,11 +39,13 @@ const ProfileHeader = ({
 }: props) => {
   let router = useRouter();
   let pathname = usePathname();
-  let isFriend =
-    friends?.filter(
-      (friend) => friend.id === userId || friend.id === userAuthId
-    ).length === 1;
+  let isFriend2 =
+  friends?.filter(
+    (friend) => friend.id === userId || friend.id === userAuthId
+  ).length === 1;
+  const [isFriend, setIsFrind] = useState<boolean>(isFriend2);
   let handleAddFriend = async () => {
+    setIsFrind(!isFriend)
     await addFriend({
       friendId: accountId,
       userId: myId,
@@ -116,7 +119,7 @@ const ProfileHeader = ({
           )}
         </p>
         <div className="mt-12"></div>
-        <Link
+        {type === "User" && userId === userAuthId&&<Link
           href="/boosting"
           className="text-primary-500 hover:opacity-75 flex">
           <Image
@@ -127,7 +130,7 @@ const ProfileHeader = ({
             height={24}
           />
           Boosting Profile
-        </Link>
+        </Link>}
       </div>
       <div className="flex flex-col w-1/2 justify-between items-end gap-8">
         {userId === userAuthId || myId?.includes("org") ? (

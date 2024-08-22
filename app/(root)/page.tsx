@@ -5,9 +5,14 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Loader from "@/components/shared/Loader";
+import PostCardSkeleton from "@/components/cards/PostCardSkeleton";
 import { PostData } from '@/lib/actions/post.actions';
-import { fetchUser } from '@/lib/actions/user.actions';
+import { UserData, fetchUser } from '@/lib/actions/user.actions';
 import { currentUser } from "@clerk/nextjs/server";
+import { setUser } from "@/lib/redux/userSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/lib/redux/store";
+import ReloadButton from "@/components/shared/reload";
 
 
 
@@ -31,7 +36,7 @@ export default function HOME() {
   const router = useRouter();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [action, setAction] = useState();
-  
+  const dispatch = useDispatch<AppDispatch>();
   // Fetch user information
   const {
     data: userInfo,
@@ -59,7 +64,7 @@ export default function HOME() {
     queryKey: ['posts'],
     queryFn: fetchPosts,
     getNextPageParam: (lastPage) => {
-      console.log(lastPage); // Debugging statement
+      // console.log(lastPage); // Debugging statement
       return lastPage.hasMore ? lastPage.nextPage : undefined;
     },
     initialPageParam: 0,
@@ -71,6 +76,12 @@ export default function HOME() {
     }
   };
   
+  useEffect(() => {
+    dispatch(setUser(
+     (userInfo as UserData)
+
+    ));
+  },[userInfo])
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -97,8 +108,8 @@ export default function HOME() {
     };
   }, [loadMorePosts, hasNextPage, isFetchingNextPage]);
   
-  if (userError|| postsError) return <div>Error loading data...</div>;
-  if ( userLoading|| !postsData) return <Loader is />;
+  if (userError|| postsError) return <ReloadButton/>;
+  if ( userLoading|| !postsData) return <PostCardSkeleton is/>;
   
   // Explicitly cast postsData.pages to FetchPostsResponse[]
   const posts = postsData.pages.flatMap((page) => (page as FetchPostsResponse).posts);
@@ -117,7 +128,7 @@ export default function HOME() {
         setAction={setAction}
       />
       {hasNextPage && !isFetchingNextPage && <div ref={sentinelRef} style={{ height: "1px" }} />}
-      {isFetchingNextPage && <Loader is />}
+      {isFetchingNextPage && <PostCardSkeleton is/>}
     </div>
   );
 }

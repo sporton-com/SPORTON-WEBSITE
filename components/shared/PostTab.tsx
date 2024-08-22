@@ -26,7 +26,7 @@ function PostTab({result2, userId,currentUserId, Team, accountType }: props) {
       
        {  result?.posts?.map((post: PostData,i:number) => (
        <CardPost
-       
+       repost={post.repost}
           key={i}
           id={post._id}
           image={post?.image}

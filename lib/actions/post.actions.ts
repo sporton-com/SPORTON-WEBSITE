@@ -8,10 +8,12 @@ interface props {
   text: string;
   image?: string;
   video?: string;
+  repost?: string;
   author: string | undefined;
 }
 export interface PostData {
   isAchievement: string;
+  repost:PostData;
   _id: string;
   parentId: string | null;
   currentId: String | undefined;
@@ -48,6 +50,7 @@ export async function createPost({
   video,
   author,
   isAchievement,
+  repost
 }: props) {
   connectDB();
   try {
@@ -57,6 +60,7 @@ export async function createPost({
         author,
         image,
         video,
+        repost,
         isAchievement,
       });
       let post = await User.findByIdAndUpdate(author, {
@@ -265,6 +269,29 @@ export async function fetchPosts(
       },
       {
         $lookup: {
+          from: "posts",
+          localField: "repost",
+          foreignField: "_id",
+          as: "repostINF",
+        },
+      },
+      { $unwind: { path: "$repostINF", preserveNullAndEmptyArrays: true } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "repostINF.author",
+          foreignField: "_id",
+          as: "repostINF.authorINF",
+        },
+      },
+      {
+        $unwind: {
+          path: "$repostINF.authorINF",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
           from: "communities",
           localField: "community",
           foreignField: "_id",
@@ -289,6 +316,16 @@ export async function fetchPosts(
           video: { $first: "$video" },
           image: { $first: "$image" },
           author: { $first: "$author" },
+          repost: {
+            $first: {
+              _id: "$repostINF._id",
+              text: "$repostINF.text",
+              image: "$repostINF.image",
+              video: "$repostINF.video",
+              author: "$repostINF.authorINF",
+              createdAt: "$repostINF.createdAt",
+            },
+          },
           react: {
             $push: {
               user: "$reactUsers",
@@ -330,6 +367,16 @@ export async function fetchPosts(
   }
 }
 
+export async function fetchPostsSiteMap(){
+
+  connectDB();
+  try {
+    return await Post.find();
+  }catch(e:any){
+    console.log(`Failed to delete post: ${e.message}`);
+
+  }
+}
 export async function deletePost(
   postId: string,
   authorId: string,

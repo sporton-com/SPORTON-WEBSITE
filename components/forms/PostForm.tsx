@@ -20,33 +20,49 @@ import { useToast } from "@/components/ui/use-toast";
 import FileUploader from "@/components/shared/FileUploader";
 import Loader from "@/components/shared/Loader";
 import { PostValidation2 } from "../../lib/validations/post";
-import { createPost } from "@/lib/actions/post.actions";
+import { createPost, fetchPostById } from "@/lib/actions/post.actions";
 import { useUploadThing } from "@/uploadthing";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
+import { useQuery } from "@tanstack/react-query";
+import CardPost from "../cards/CardPost";
 
 type PostFormProps = {
   post?: any;
   action?: "Create" | "Update";
   id: string;
+  _id: string;
   image: string;
   name: string;
   username: string;
+  friends: {
+    _id: string;
+    id: string;
+    name: string;
+    username: string;
+    image: string;
+}[];
 };
 
 const PostForm = ({
   post,
   action,
   id,
+  _id,
   image,
   name,
   username,
+  friends,
 }: PostFormProps) => {
   let SearchParams = useSearchParams();
   let sh = SearchParams.get("sh");
-  let video = SearchParams.get("video");
   let imageSh = SearchParams.get("image");
-  let content = SearchParams.get("p");
+  let repost = SearchParams.get("repost");
+  const { data: PostInfo, error: Posterror,isLoading: PostisLoading } = useQuery({
+    queryKey: ["user",repost],
+    queryFn: () => fetchPostById(repost!),
+  });
+  
   const navigate = useRouter();
   const { toast } = useToast();
   const [fileType, setFileType] = useState<string>("");
@@ -54,7 +70,7 @@ const PostForm = ({
   const form = useForm<z.infer<typeof PostValidation2>>({
     resolver: zodResolver(PostValidation2),
     defaultValues: {
-      post: content ? content : "",
+      post: "",
       file: [],
       // location: post ? post.location : "",
       // tags: post ? post.tags.join(",") : "",
@@ -104,7 +120,8 @@ const PostForm = ({
     const newPost = await createPost({
       ...isvideo,
       text: value.post,
-      author: id,
+      author: _id,
+      repost:PostInfo?PostInfo._id:undefined,
       isAchievement: value.isAchievement,
     });
 
@@ -138,6 +155,7 @@ const PostForm = ({
             Post
           </Button>
         </div>
+        <div className={`border-white ${PostInfo?"bg-dark-2 ":""} border rounded-xl p-2 flex flex-col gap-6`}>
         <div className=" flex  gap-4">
           <Image
             src={image}
@@ -171,6 +189,29 @@ const PostForm = ({
             </FormItem>
           )}
         />
+       {PostInfo?
+       <div className={`border-white  border rounded-xl  `}>
+       <CardPost
+       setAction={()=>{}}
+       Team={friends}
+       isAchievement={PostInfo?.isAchievement}
+       id={PostInfo?._id}
+       repost={PostInfo?.repost}
+       video={PostInfo?.video}
+       image={PostInfo?.image}
+       parentId={PostInfo?.parentId}
+       react={[]}
+       currentId={id}
+       userId={_id}
+       author={PostInfo?.author}
+       content={PostInfo?.text}
+       createdAt={PostInfo?.createdAt}
+       comments={[]}
+       />
+       </div>
+       : <div className="">
+
+   
         <FormField
           control={form.control}
           name="isAchievement"
@@ -233,6 +274,8 @@ const PostForm = ({
               className={"rounded-full object-contain"}
             />
           </Button>
+        </div>
+        </div>}
         </div>
         {/* <FormField
           control={form.control}

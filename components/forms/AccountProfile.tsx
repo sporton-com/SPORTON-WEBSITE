@@ -193,6 +193,10 @@ const AccountProfile = ({ userData }: props) => {
     <Label htmlFor="option-one">Player</Label>
   </div>
   <div className="flex items-center space-x-2">
+    <RadioGroupItem value={'coach'} id="option-onee" />
+    <Label htmlFor="option-onee">Coach</Label>
+  </div>
+  <div className="flex items-center space-x-2">
     <RadioGroupItem value={'agent'} id="option-two"/>
     <Label htmlFor="option-two">Agent</Label>
   </div>
@@ -290,7 +294,7 @@ const AccountProfile = ({ userData }: props) => {
             </FormItem>
           )}
         />
-        {Type==='player'?
+        {Type==='player'||Type==="coach"?
         <FormField
           control={form.control}
           name="sport"

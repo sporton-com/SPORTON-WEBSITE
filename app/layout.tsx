@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "react-toastify";
 import InfintyProvider from "@/components/providers/InfintyProvider";
+import ReduxProvider from "@/components/providers/ReduxProvider";
 export const metadata: Metadata = {
   title: {
     default:
@@ -20,7 +21,6 @@ export const metadata: Metadata = {
     "Player Posts",
     "Achievements",
     "Contact Players",
-
     "Showcase Talent",
     "Connect with Clubs",
     "Gain Recognition",
@@ -50,15 +50,17 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <InfintyProvider>
-        <html lang="en">
-          <body className={inter.className}>
-            <div className=" w-full">
-              {children}
-              <ToastContainer />
-            </div>
-            <Analytics />
-          </body>
-        </html>
+        <ReduxProvider>
+          <html lang="en">
+            <body className={inter.className}>
+              <div className=" w-full">
+                {children}
+                <ToastContainer />
+              </div>
+              <Analytics />
+            </body>
+          </html>
+        </ReduxProvider>
       </InfintyProvider>
     </ClerkProvider>
   );

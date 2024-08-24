@@ -17,7 +17,7 @@ const ChatPage = ({ params }: { params: { id: string } }) => {
     error: userError,
     isLoading: userLoading,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["user"], 
     queryFn: () => fetchUser(),
   });
   if ((userInfo as redirectType )?.redirect) {

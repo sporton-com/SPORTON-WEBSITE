@@ -28,7 +28,7 @@ interface Props {
   isxl?: boolean;
   islg?: boolean;
   setChat?: any;
-  userInfo?: UserData | { redirect: string };
+  userInfo: UserData | { redirect: string };
 }
 
 const RightSidebar = ({ isChat, userInfo, Ids, isxl, islg, setChat }: Props) => {

@@ -1,5 +1,5 @@
 
-
+"use client"
 import ChatBox from '@/components/shared/ChatBox';
 import Loader from '@/components/shared/Loader';
 import RightSidebar from '@/components/shared/RightSidebar';

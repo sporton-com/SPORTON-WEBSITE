@@ -1,5 +1,5 @@
 
-
+"use client"
 import ChatBox from '@/components/shared/ChatBox';
 import Loader from '@/components/shared/Loader';
 import RightSidebar from '@/components/shared/RightSidebar';
@@ -17,7 +17,7 @@ const ChatPage = ({ params }: { params: { id: string } }) => {
     error: userError,
     isLoading: userLoading,
   } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["user"], 
     queryFn: () => fetchUser(),
   });
   if ((userInfo as redirectType )?.redirect) {

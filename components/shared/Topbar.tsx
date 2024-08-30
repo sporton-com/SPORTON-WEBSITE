@@ -99,7 +99,7 @@ const Topbar = ({userInfo}:{userInfo:UserData|redirectType}) => {
             </TooltipProvider>
             {(userInfo as UserData)?.image ? (
               <Link
-                href={`/profile/${(userInfo as UserData)?._id ? (userInfo as UserData)._id : ""}`}
+                href={`/profile/${(userInfo as UserData)?.id ? (userInfo as UserData).id : ""}`}
                 className="p-0">
                 <Image
                   src={(userInfo as UserData)?.image}

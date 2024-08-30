@@ -41,6 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <div
+    style={{direction:"rtl"}}
       className="
         min-h-screen flex w-full items-center justify-center
         bg-cover bg-center bg-no-repeat

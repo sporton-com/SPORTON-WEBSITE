@@ -4,7 +4,7 @@ import ChatBox from '@/components/shared/ChatBox';
 import Loader from '@/components/shared/Loader';
 import RightSidebar from '@/components/shared/RightSidebar';
 import ReloadButton from '@/components/shared/reload';
-import { fetchUser } from '@/lib/actions/user.actions';
+import { UserData, fetchUser } from '@/lib/actions/user.actions';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 interface redirectType{
@@ -29,7 +29,7 @@ const ChatPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="flex relative justify-center items-center overflow-hidden h-[100vh]  lg:h-[100vh] bg-[url(/assets/bg.jpg)] bg-center max-sm:bg-cover bg-[length:100%_100%] bg-no-repeat" >
-      <RightSidebar userInfo={userInfo!} isChat Ids={params.id}/>
+      <RightSidebar userInfo={(userInfo as UserData)!} isChat Ids={params.id}/>
       <ChatBox Ids={params.id}/>
     </div>
   );

@@ -48,6 +48,7 @@ import { Button } from "@/components/ui/button";
 import ReactionIcons from "./ReactionIcons";
 import { Howl } from 'howler';
 interface parms {
+  isRepost?:boolean,
   isAchievement?: string;
   id: string;
   Team: any[];
@@ -85,6 +86,7 @@ interface parms {
 }
 
 const CardPost = ({
+  isRepost,
   id,
   parentId,
   Team,
@@ -485,11 +487,13 @@ const CardPost = ({
   return (
     <article
       className={` flex w-full flex-col rounded-xl ${
-        isComment ? " px-0 xs:px-7" : "bg-dark-2 p-5"
+        isComment  ? " px-0 xs:px-7" : "bg-dark-2 p-5"
+      } ${
+       isRepost ? "border rounded-xl  px-0 xs:px-3 py-5" : ""
       }`}>
       <div className=" flex items-start justify-between">
         <div className=" flex w-full flex-1 flex-row gap-4 ">
-          <div className=" text-white hidden flex-col items-center lg:flex ">
+          <div className={` text-white flex-col items-center ${isRepost?"":"lg:flex"} hidden `}>
             <Link href={"/profile/" + author.id} className="relative w-11 h-11">
               <div className="relative   aspect-square h-10 w-10  ">
                 <img
@@ -505,12 +509,13 @@ const CardPost = ({
                 className="cursor-pointer rounded-full"
               /> */}
             </Link>
-            <div className="thread-card_bar" />
+            {!isRepost && <div className="thread-card_bar" />}
+            
           </div>
           <div className=" text-white flex flex-col gap-4 w-full  ">
             <div className="flex w-full flex-1 flex-row gap-4 ">
               <div className="flex w-full flex-1 flex-row gap-4 ">
-                <div className=" text-white flex flex-col items-center lg:hidden ">
+                <div className={` text-white flex flex-col items-center ${isRepost?"":"lg:hidden"}  `}>
                   <Link
                     href={"/profile/" + author.id}
                     className="relative w-11 h-11">
@@ -571,7 +576,7 @@ const CardPost = ({
             {image && (
               <AlertDialog>
                 <AlertDialogTrigger>
-                  <div className="max-sm:px-0 px-16">
+                  <div className={`max-sm:px-0 ${isRepost ?"":"px-16"} `}>
                     <div className="relative max-sm:aspect-square max-md:aspect-video aspect-square  mb-5">
                       <img
                         src={image}
@@ -632,6 +637,7 @@ const CardPost = ({
               </AlertDialog>
             )}
             {repost &&repost?.createdAt && <CardPost
+            isRepost
                    setAction={()=>{}}
                    Team={[]}
                    isAchievement={repost?.isAchievement}

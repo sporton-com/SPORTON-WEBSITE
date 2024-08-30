@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 // import { Metadata } from "next";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { fetchUser } from '@/lib/actions/user.actions';
+import { UserData, fetchUser } from '@/lib/actions/user.actions';
 import ReloadButton from '@/components/shared/reload';
 import Loader from '@/components/shared/Loader';
 
@@ -48,11 +48,11 @@ useEffect(() => {
     <div className=" bg-[url(/assets/bg.jpg)] bg-center max-sm:bg-cover bg-[length:100%_100%] bg-no-repeat">
       {/* sm and md */}
     { size&&size<1280&& <div className="flex relative justify-center items-center overflow-hidden h-[100vh] ">
-    <RightSidebar isChat isxl islg={false} userInfo={userInfo!}  />
+    <RightSidebar isChat isxl islg={false} userInfo={(userInfo as UserData)!}  />
       </div>}
       {/* lg */}
      { size&&size>=1280&& <div className="flex relative justify-center items-center overflow-hidden h-[100vh] ">
-    <RightSidebar isChat islg={true} userInfo={userInfo!} setChat={setChat} Ids={openChat}/>
+    <RightSidebar isChat islg={true} userInfo={(userInfo as UserData)!} setChat={setChat} Ids={openChat}/>
     <ChatBox Ids={openChat}/>
       </div>}
   </div>

@@ -1,6 +1,6 @@
 import { SignOutbutton } from "../../../components/cards/SignOutbutton";
 import AccountProfile from "../../../components/forms/AccountProfile";
-import { fetchUser } from "../../../lib/actions/user.actions";
+import { UserData, fetchUser } from "../../../lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { connectDB } from "@/mongoose";
@@ -26,28 +26,25 @@ const Onboarding = async () => {
   let user = await currentUser();
   const userInfo = await fetchUser();
   if (!user) redirect("/sign-in");
-  if (userInfo?.onboarding) redirect("/");
+  if ((userInfo as UserData)?.onboarding) redirect("/");
   let userData: usData = {
     id: user?.id,
-    objectID: userInfo?._id,
-    username: user?.username || userInfo?.username,
-    name: user?.firstName || userInfo?.name || "",
-    bio: userInfo?.bio || "",
-    sport: userInfo?.sport || "",
-    image: user?.imageUrl || userInfo?.image,
-    type: userInfo?.type,
-    phone: userInfo?.phone,
+    objectID: (userInfo as UserData)?._id,
+    username: user?.username || (userInfo as UserData)?.username,
+    name: user?.firstName || (userInfo as UserData)?.name || "",
+    bio: (userInfo as UserData)?.bio || "",
+    sport: (userInfo as UserData)?.sport || "",
+    image: user?.imageUrl || (userInfo as UserData)?.image,
+    type: (userInfo as UserData)?.type,
+    phone: (userInfo as UserData)?.phone,
   };
   return (
-    <main className=" px-1 mx-auto py-12 flex flex-col max-w-3xl">
-      <div className="px-10 fixed rounded-full lg:right-2  -right-4 top-10">
+    <main className=" px-1 max-sm:w-full w-2/3 mx-auto py-12 flex flex-col max-w-xl">
+      <div className="px-10 fixed rounded-full lg:left-2  -left-4 top-10">
         <SignOutbutton />
       </div>
-      <h1 className="font-bold text-white">Onboarding</h1>
-      <p className=" text-gray-500 my-6">
-        This is where you will be able to create a new account.
-      </p>
-      <div className=" bg-dark-2  lg:p-10 p-2 ">
+
+      <div className=" bg-dark-2  lg:p-10 p-2   w-full">
         <AccountProfile userData={userData} />
       </div>
     </main>

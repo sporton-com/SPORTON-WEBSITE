@@ -1,7 +1,9 @@
 "use client";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
-import { PostData, deletePost, reactToPost } from "@/lib/actions/post.actions";
+import { PostData,
+  //  deletePost,
+   reactToPost } from "@/lib/actions/post.actions";
 import { formatDateString } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -147,7 +149,7 @@ const CardPost = ({
   };
   let handelDeletePost = async () => {
     try {
-      await deletePost(id, author._id, parentId, isComment, pathname);
+      // await deletePost(id, author._id, parentId, isComment, pathname);
     } catch (e) {
       console.log(e);
     }

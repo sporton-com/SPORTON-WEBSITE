@@ -115,11 +115,11 @@ export default function SignInPage() {
             </p>
           </div>
           <div className="bg-[#ffffff] p-0 my-2  rounded-md">
-            <Link
+            {/* <Link
               href={"/sign-in-guest"}
               className="w-full gap-4 flex justify-center items-center rounded-md bg-primary-500 px-3.5 py-2 text-center text-sm font-medium text-[#ffffff] shadow outline-none ring-1 ring-inset ring-primary-500 hover:bg-primary-500/80 focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-primary-500 active:text-[#ffffff]/70">
               <FaUserAlt /> Sign In guest
-            </Link>
+            </Link> */}
           </div>
         </SignIn.Step>
       </SignIn.Root>

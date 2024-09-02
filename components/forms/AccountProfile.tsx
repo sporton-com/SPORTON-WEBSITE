@@ -166,27 +166,39 @@ const AccountProfile = ({ userData }: props) => {
       render={({ field }) => (
         <FormItem className="flex  justify-center gap-1">
           <FormLabel className="account-form_image-label">
+          <div className="relative aspect-square h-[96px] w-[96px]">
             {field.value ? (
-              <Image
-                src={field.value}
-                alt="profile_photo"
-                width={96}
-                height={96}
-                priority
-                className="rounded-full object-cover"
+               <img
+               src={field.value}
+               alt={"profile_photo"}
+               className="absolute inset-0 w-full h-full rounded-full object-cover"/>
+              // <Image
+              //   src={field.value}
+              //   alt="profile_photo"
+              //   width={96}
+              //   height={96}
+              //   priority
+              //   className="rounded-full object-cover"
+              //   />
+              ) : (
+                <img
+                src={"/assets/profile.svg"}
+                alt={"/assets/profile.svg"}
+                className="absolute inset-0 w-full h-full rounded-full object-cover"
               />
-            ) : (
-              <Image
-                className="rounded-full max-h-[24px] max-w-[24px]"
-                src="/assets/profile.svg"
-                alt="profile_photo"
-                width={24}
-                height={24}
-              />
-            )}
+                // <Image
+                // className="rounded-full max-h-[24px] max-w-[24px]"
+                // src="/assets/profile.svg"
+                // alt="profile_photo"
+                // width={24}
+                // height={24}
+                // />
+              )}
+              </div>
           </FormLabel>
           
           {/* زر "Edit" مع أيقونة */}
+          {/* <CloudinaryUpload/> */}
           <div
             onMouseOver={() => setImageOptionsVisible(true)} // toggle visibility
             onMouseOut={() => setImageOptionsVisible(false)} // toggle visibility
@@ -307,7 +319,7 @@ const AccountProfile = ({ userData }: props) => {
                   placeholder="ادخل اسم المستخدم"
                   name={field.name}
                   className=" account-form_input"
-                  disabled={Type === "company" || Type === "club"}
+                  // disabled={Type === "company" || Type === "club"}
                   value={
                     Type === "company" || Type === "club" ? Username : field.value
                   }
@@ -390,7 +402,7 @@ const AccountProfile = ({ userData }: props) => {
           )}
         />
 
-        <Button type="submit" className="w-full  bg-primary-500 hover:bg-primary-500/80 focus:bg-primary-500/80">
+        <Button type="submit" className="w-full flex justify-center gap-5  bg-primary-500 hover:bg-primary-500/80 focus:bg-primary-500/80">
           تحديث الملف الشخصي
         {isLoadingCreate && <Loader />}
         </Button>
@@ -436,6 +448,8 @@ export default AccountProfile;
 // import { RadioGroupItem,RadioGroup} from "../ui/radio-group";
 // import PhoneInput from "react-phone-number-input";
 // import "react-phone-number-input/style.css";
+import cloudinaryUpload from '../../lib/cloudinaryUpload';
+import CloudinaryUpload from "../../lib/cloudinaryUpload";
 
 // interface props {
 //   userData: {

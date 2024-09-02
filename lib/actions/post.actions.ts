@@ -377,36 +377,36 @@ export async function fetchPostsSiteMap(){
 
   }
 }
-export async function deletePost(
-  postId: string,
-  authorId: string,
-  parentId: string | null,
-  isComment: boolean | undefined,
-  path: string
-) {
-  connectDB();
-  try {
-    // Find and delete the post by its ID
-    const post = await Post.findByIdAndDelete(postId);
-    if (post) {
-      if (isComment) {
-        await User.findByIdAndUpdate(authorId, {
-          $pull: { comments: parentId },
-        });
-      } else {
-        await User.findByIdAndUpdate(authorId, {
-          $pull: { posts: postId },
-        });
-      }
-      console.log("Post deleted successfully 💥");
-      revalidatePath(path);
-      return true;
-    } else {
-      console.log("Post not found 😢");
-      return false;
-    }
-  } catch (error: any) {
-    console.log(`Failed to delete post: ${error.message}`);
-    return false;
-  }
-}
+// export async function deletePost(
+//   postId: string,
+//   authorId: string,
+//   parentId: string | null,
+//   isComment: boolean | undefined,
+//   path: string
+// ) {
+//   connectDB();
+//   try {
+//     // Find and delete the post by its ID
+//     const post = await Post.findByIdAndDelete(postId);
+//     if (post) {
+//       if (isComment) {
+//         await User.findByIdAndUpdate(authorId, {
+//           $pull: { comments: parentId },
+//         });
+//       } else {
+//         await User.findByIdAndUpdate(authorId, {
+//           $pull: { posts: postId },
+//         });
+//       }
+//       console.log("Post deleted successfully 💥");
+//       revalidatePath(path);
+//       return true;
+//     } else {
+//       console.log("Post not found 😢");
+//       return false;
+//     }
+//   } catch (error: any) {
+//     console.log(`Failed to delete post: ${error.message}`);
+//     return false;
+//   }
+// }

@@ -1,6 +1,9 @@
 "use client";
+//@ts-ignore
 import * as Clerk from "@clerk/elements/common";
+//@ts-ignore
 import * as SignUp from "@clerk/elements/sign-up";
+//@ts-ignore
 import * as SignIn from "@clerk/elements/sign-in";
 import Link from "next/link";
 import Image from "next/image";

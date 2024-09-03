@@ -5,6 +5,7 @@ import { SugCard } from '../cards/sugCard';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import UserCardSkeleton from "../cards/UserCardSkeleton";
+import { GuestEmail } from '@/constants/data';
 
 const useFetchUsers = () => {
   return useInfiniteQuery({
@@ -16,7 +17,6 @@ const useFetchUsers = () => {
         pageSize: 15,
       }),
     getNextPageParam: (lastPage) => {
-      console.log(lastPage); // Debugging statement
       return lastPage.isNext ? lastPage.pageNum + 1 : undefined;
     },
     initialPageParam: 1, // Start from the first page
@@ -77,7 +77,7 @@ const RightSidebar = ({ isChat, userInfo, Ids, isxl, islg, setChat }: Props) => 
 
 
   const users = data?.pages.flatMap((page) => page.users) || [];
-
+  let isGuest=(userInfo as UserData).email === GuestEmail
   return (
     <section
       className={`rightsidebar custom-scrollbar ${
@@ -89,6 +89,7 @@ const RightSidebar = ({ isChat, userInfo, Ids, isxl, islg, setChat }: Props) => 
         )}
         {users.length > 0 && userInfo && (
           <SugCard
+          isGuest={isGuest}
             result2={JSON.stringify(users)}
             userInfo2={JSON.stringify(userInfo as UserData)}
             type={"users"}

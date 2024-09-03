@@ -18,7 +18,7 @@ if(isSignedIn) router.replace('/')
   },[])
   return (
     <div className="grid w-full flex-grow items-center  px-4 sm:justify-center">
-       {/* <SignIn.Root>
+       <SignIn.Root>
         <SignIn.Step
           name="start"
           className="w-full space-y-6 rounded-2xl bg-[#fff] px-4 py-10 shadow-md ring-1 ring-black/5 sm:w-96 sm:px-8">
@@ -71,7 +71,7 @@ if(isSignedIn) router.replace('/')
           </SignIn.Action>
           
         </SignIn.Step>
-      </SignIn.Root> */}
+      </SignIn.Root>
       {/* <SignIn.Root>
         <SignIn.Step
           name="start"

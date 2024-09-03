@@ -14,7 +14,7 @@ interface userData{
     type:string,
     phone:string,
     sport:string
-
+    email:string
 }
 async function Page({params}:{params:{id:string}}) {
   const user = await currentUser();
@@ -23,6 +23,7 @@ async function Page({params}:{params:{id:string}}) {
 
   const userData:userData = {
     id: user?.id,
+    email:(userInfo as UserData).email ,
     objectID: (userInfo as UserData)?._id,
     username: userInfo ? (userInfo as UserData)?.username : user.username,
     name: userInfo ? (userInfo as UserData)?.name : user.firstName ?? "",

@@ -44,7 +44,7 @@ const Topbar = ({userInfo}:{userInfo:UserData|redirectType}) => {
   }, [userInfo])
   
   return (
-    <div className="topbar z-[10000]">
+    <div className="topbar z-[40]">
       <div className="container p-0">
         <div className="flex flex-row justify-between">
           <Link

@@ -163,7 +163,7 @@ const AccountProfile = ({ userData }: props) => {
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full ">
+      <form onSubmit={form.handleSubmit(onSubmit)} style={{direction:"rtl"}} className="space-y-4 w-full ">
       <FormField
       control={form.control}
       name="profile_photo"

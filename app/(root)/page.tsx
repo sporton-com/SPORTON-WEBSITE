@@ -27,8 +27,7 @@ interface FetchPostsResponse {
 
 const fetchPosts = async ({ pageParam = 0 }): Promise<FetchPostsResponse> => {
   const PAGE_SIZE = 4;
-  const response = await axios.get(`/api/posts/fetch?pageNum=${pageParam}&pageSize=${PAGE_SIZE}`);
-  console.log(response.data); // Debugging statement
+  const response = await axios.get(`/api/posts/fetch?pageNum=${pageParam}&pageSize=${PAGE_SIZE}`);// Debugging statement
   return response.data;
 };
 
@@ -64,7 +63,6 @@ export default function HOME() {
     queryKey: ['posts'],
     queryFn: fetchPosts,
     getNextPageParam: (lastPage) => {
-      // console.log(lastPage); // Debugging statement
       return lastPage.hasMore ? lastPage.nextPage : undefined;
     },
     initialPageParam: 0,

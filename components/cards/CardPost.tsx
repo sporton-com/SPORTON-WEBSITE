@@ -5,6 +5,7 @@ import { PostData,
   //  deletePost,
    reactToPost } from "@/lib/actions/post.actions";
 import { formatDateString } from "@/lib/utils";
+import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -108,7 +109,17 @@ const CardPost = ({
   image,
   setAction,repost
 }: parms) => {
-  let secretKey=process.env.secretKey;
+  const secretKey = process.env.SecretKey ? Buffer.from(process.env.SecretKey, 'base64') : randomBytes(32);
+  const iv = randomBytes(16); // نقطة البداية (initialization vector)
+  
+  // تشفير
+ function encryptId(text: string): string {
+    const cipher = createCipheriv('aes-256-cbc', secretKey, iv);
+    let encrypted = cipher.update(text, 'utf-8', 'hex');
+    encrypted += cipher.final('hex');
+    return `${iv.toString('hex')}555abc666def${text}555abc666def${encrypted}`
+}
+  
   const date = new Date(createdAt);
   const formattedDate = formatDistanceToNow(date, { addSuffix: true });
   const [isHovering, setIsHovering] = useState(false);
@@ -333,7 +344,7 @@ const CardPost = ({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Link href={`/post/${id}`}>
+              <Link href={`/post/${encryptId(id)}`}>
                 <Image
                   src={`/assets/reply${isWhite ? "-white" : ""}.svg`}
                   alt="heart"

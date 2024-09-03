@@ -9,20 +9,18 @@ import Comment from "@/components/forms/Comment";
 import Loader from "@/components/shared/Loader";
 import { useRouter } from "next/navigation";
 import { GuestEmail } from "@/constants/data";
-// import jwt from 'jsonwebtoken';
+
 const Post = ({ params }: { params: { id: string } }) => {
   let router= useRouter();
-  const postId = params.id;
+  let id= params.id.split("555abc666def")
+  const postId = id[1]
   // Fetch user info
+  console.log(id)
   const { data: userInfo, isLoading: userLoading, error: userError } = useQuery({
     queryKey: ["user"],
     queryFn: () => fetchUser(),
   });
-  let secretKey=process.env.secretKey;
-  // function encryptId(id) {
-  //   return jwt.sign({ id }, secretKey, { expiresIn: '1h' }); // يتم التوقيع مع فترة انتهاء
-  // }
-  // Fetch post data
+
   const { data: post, isLoading: postLoading, error: postError } = useQuery({
     queryKey: ["activity", (userInfo as UserData)?._id],
     queryFn: () => fetchPostById(postId),

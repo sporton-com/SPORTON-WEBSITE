@@ -121,6 +121,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
                 ) : tab.value === "posts" ? (
                   result && (
                     <PostTab
+                    isGuest={isGuest}
                       userId={(userInfo as UserData)._id}
                       result2={JSON.stringify(result)}
                       currentUserId={(MyInfo as UserData).id}
@@ -133,6 +134,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
                 ) : (
                   result2 && (
                     <PostTab
+                    isGuest={isGuest}
                       userId={(userInfo as UserData)._id}
                       result2={JSON.stringify(result2)}
                       currentUserId={(MyInfo as UserData).id}

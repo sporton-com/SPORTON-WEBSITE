@@ -38,6 +38,7 @@ import "react-phone-number-input/style.css";
 interface props {
   userData: {
     id: string | undefined;
+    email: string;
     objectID: string | undefined;
     username: string | null | undefined;
     name: string;
@@ -94,12 +95,14 @@ const AccountProfile = ({ userData }: props) => {
       phone: userData.phone || "",
     },
   });
+  let isGuest=userData.email === GuestEmail
 
   function handleImageChange(
     e: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
   ) {
     e.preventDefault();
+    if (isGuest) return
     let readfile = new FileReader();
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -112,8 +115,9 @@ const AccountProfile = ({ userData }: props) => {
       readfile.readAsDataURL(file);
     }
   }
-
+  
   async function onSubmit(values: z.infer<typeof UserValidation>) {
+    if (isGuest) return
     setIsLoadingCreate(true);
     try {
       console.log("Submit update user ");
@@ -126,6 +130,7 @@ const AccountProfile = ({ userData }: props) => {
         }
       }
       await updateUser({
+        email:userData.email,
         userId: userData.id,
         username: values.username,
         name: values.name,
@@ -156,7 +161,6 @@ const AccountProfile = ({ userData }: props) => {
       fileInputRef && fileInputRef.current && fileInputRef.current.click();
     }
   };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full ">
@@ -237,6 +241,7 @@ const AccountProfile = ({ userData }: props) => {
               accept="image/*"
               placeholder="تحميل صورة"
               className="account-form_image-input hidden"
+              disabled={isGuest}
               onChange={(e) => handleImageChange(e, field.onChange)}
             />
           </FormControl>
@@ -258,27 +263,27 @@ const AccountProfile = ({ userData }: props) => {
                 name={field.name}
                 onBlur={field.onBlur}
                 ref={field.ref}
-                disabled={field.disabled}
+                disabled={field.disabled || isGuest}
                 defaultValue={field.value}
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"player"} id="option-one" />
+                  <RadioGroupItem value={"player"} disabled={isGuest} id="option-one" />
                   <Label htmlFor="option-one">لاعب</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"coach"} id="option-onee" />
+                  <RadioGroupItem value={"coach"} disabled={isGuest} id="option-onee" />
                   <Label htmlFor="option-onee">مدرب</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"agent"} id="option-two" />
+                  <RadioGroupItem value={"agent"} disabled={isGuest} id="option-two" />
                   <Label htmlFor="option-two">وكيل</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"club"} id="option-three" />
+                  <RadioGroupItem value={"club"} disabled={isGuest} id="option-three" />
                   <Label htmlFor="option-three">نادي</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={"company"} id="option-four" />
+                  <RadioGroupItem value={"company"} disabled={isGuest} id="option-four" />
                   <Label htmlFor="option-four">شركة</Label>
                 </div>
               </RadioGroup>
@@ -296,7 +301,7 @@ const AccountProfile = ({ userData }: props) => {
                   placeholder={`ادخل اسم ${Type === "club" ? "النادي" : Type === "company" ? "الشركة" : "كامل"}`}
                   className=" account-form_input"
                   name={field.name}
-                  disabled={field.disabled}
+                  disabled={field.disabled||isGuest}
                   value={field.value}
                   onChange={(e) => {
                     field.onChange(e);
@@ -320,6 +325,7 @@ const AccountProfile = ({ userData }: props) => {
                   name={field.name}
                   className=" account-form_input"
                   // disabled={Type === "company" || Type === "club"}
+                  disabled={isGuest}
                   value={
                     Type === "company" || Type === "club" ? Username : field.value
                   }
@@ -342,6 +348,7 @@ const AccountProfile = ({ userData }: props) => {
                 value={field.value}
                 defaultCountry="EG"
                 onBlur={field.onBlur}
+                disabled={isGuest}
                 onChange={(value) => field.onChange(value ? value : "")}
               />
               <FormMessage />
@@ -359,6 +366,7 @@ const AccountProfile = ({ userData }: props) => {
                   placeholder={`اكتب نبذة عن${
                     Type === "club" ? " النادي" : Type === "company" ? " الشركة" : "ك"
                   }`}
+                  disabled={isGuest}
                   className="account-form_input h-24"
                   {...field}
                 />
@@ -377,6 +385,7 @@ const AccountProfile = ({ userData }: props) => {
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value || sports[0].ar}
+                disabled={isGuest}
               >
                 <FormControl>
                   <SelectTrigger className="account-form_input">
@@ -402,7 +411,7 @@ const AccountProfile = ({ userData }: props) => {
           )}
         />
 
-        <Button type="submit" className="w-full flex justify-center gap-5  bg-primary-500 hover:bg-primary-500/80 focus:bg-primary-500/80">
+        <Button type="submit" disabled={isGuest} className="w-full flex justify-center gap-5  bg-primary-500 hover:bg-primary-500/80 focus:bg-primary-500/80">
           تحديث الملف الشخصي
         {isLoadingCreate && <Loader />}
         </Button>
@@ -450,6 +459,7 @@ export default AccountProfile;
 // import "react-phone-number-input/style.css";
 import cloudinaryUpload from '../../lib/cloudinaryUpload';
 import CloudinaryUpload from "../../lib/cloudinaryUpload";
+import { GuestEmail } from "@/constants/data";
 
 // interface props {
 //   userData: {

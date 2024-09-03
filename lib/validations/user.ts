@@ -7,6 +7,6 @@ export const UserValidation = z.object({
   bio: z.string().min(3),
   sport: z.string(),
   type:z.string(),
-  phone:z.string(),
+  phone:z.string().min(10).nonempty(),
 });
 

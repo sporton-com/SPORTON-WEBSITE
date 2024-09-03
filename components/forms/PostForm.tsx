@@ -29,6 +29,7 @@ import CardPost from "../cards/CardPost";
 
 type PostFormProps = {
   post?: any;
+  isGuest:boolean;
   action?: "Create" | "Update";
   id: string;
   _id: string;
@@ -50,13 +51,14 @@ const PostForm = ({
   id,
   _id,
   image,
+  isGuest,
   name,
   username,
   friends,
 }: PostFormProps) => {
   let SearchParams = useSearchParams();
   let sh = SearchParams.get("sh");
-  let imageSh = SearchParams.get("image");
+  let idPost = SearchParams.get("id");
   let repost = SearchParams.get("repost");
   const { data: PostInfo, error: Posterror,isLoading: PostisLoading } = useQuery({
     queryKey: ["user",repost],
@@ -99,6 +101,7 @@ const PostForm = ({
     }
   }
   const onSubmit = async (value: z.infer<typeof PostValidation2>) => {
+    if (isGuest) return
     setIsLoadingCreate(true);
     console.log("-------ohgfdfghjhg--------");
     let post_photo = "";
@@ -150,6 +153,7 @@ const PostForm = ({
           </Button>
           <Button
             type="submit"
+            disabled={isGuest}
             className="bg-primary-500 h-8 hover:bg-primary-500 text-[#ffffff] flex gap-2 whitespace-nowrap">
             {isLoadingCreate && <Loader />}
             Post
@@ -192,6 +196,7 @@ const PostForm = ({
        {PostInfo?
        <div className={`border-white  border rounded-xl  `}>
        <CardPost
+       isGuest={isGuest}
        setAction={()=>{}}
        Team={friends}
        isAchievement={PostInfo?.isAchievement}

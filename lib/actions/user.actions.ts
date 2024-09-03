@@ -10,6 +10,7 @@ import Room from '../models/room.model';
 import { redirect } from 'next/navigation';
 import Message from "../models/messages.models";
 interface props {
+  email: string;
   userId: string | undefined;
   username: string;
   name: string;
@@ -21,7 +22,7 @@ interface props {
   path: string;
 }
 export interface UserData {
-
+email:string;
   redirect: string;
   _id: string;
   id: string;
@@ -54,6 +55,7 @@ export interface Result {
   posts: PostData[];
 }
 export async function updateUser({
+  email,
   userId,
   username,
   sport,
@@ -66,11 +68,10 @@ export async function updateUser({
 }: props): Promise<void> {
   connectDB();
   try {
-    const user = await currentUser();
     await User.findOneAndUpdate(
       { id: userId },
       {
-        email:user?.emailAddresses[0].emailAddress!,
+        email:email,
         username: username,
         bio: bio,
         sport: sport,

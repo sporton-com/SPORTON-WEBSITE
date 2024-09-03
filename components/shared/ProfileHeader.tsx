@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 interface props {
+  isGuest:boolean;
   accountId: string;
   userAuthId: string | undefined;
   name: string;
@@ -36,6 +37,7 @@ const ProfileHeader = ({
   friends,
   type,
   myId,
+  isGuest
 }: props) => {
   let router = useRouter();
   let pathname = usePathname();
@@ -45,6 +47,7 @@ const ProfileHeader = ({
   ).length === 1;
   const [isFriend, setIsFrind] = useState<boolean>(isFriend2);
   let handleAddFriend = async () => {
+    if(isGuest)return
     setIsFrind(!isFriend)
     await addFriend({
       friendId: accountId,
@@ -205,11 +208,11 @@ const ProfileHeader = ({
                 border: "1px solid #ffffff",
                 opacity: ".6",
               }}>
-              +{friends?.length}
+              +{friends?.length!>6?friends?.length!-6:friends?.length}
             </p>
           )}
           {friends &&
-            friends.map((friend, index) => {
+            friends.slice(0,7).map((friend, index) => {
               return (
                 <div
                   key={index}

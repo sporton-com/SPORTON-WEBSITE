@@ -50,6 +50,7 @@ import { Button } from "@/components/ui/button";
 import ReactionIcons from "./ReactionIcons";
 import { Howl } from 'howler';
 interface parms {
+  isGuest:boolean;
   isRepost?:boolean,
   isAchievement?: string;
   id: string;
@@ -88,6 +89,7 @@ interface parms {
 }
 
 const CardPost = ({
+  isGuest,
   isRepost,
   id,
   parentId,
@@ -106,6 +108,7 @@ const CardPost = ({
   image,
   setAction,repost
 }: parms) => {
+  let secretKey=process.env.secretKey;
   const date = new Date(createdAt);
   const formattedDate = formatDistanceToNow(date, { addSuffix: true });
   const [isHovering, setIsHovering] = useState(false);
@@ -133,6 +136,7 @@ const CardPost = ({
     // click: new Howl({ src: ['/sounds/click.mp3'] }),
   };
   let handleHeart = async (reaction:string,img:string,isClick?:boolean) => {
+    if(isGuest) return
     //@ts-ignore
     sounds[`${reaction}`].play();
     setReactionImage(img);
@@ -149,6 +153,7 @@ const CardPost = ({
   };
   let handelDeletePost = async () => {
     try {
+      if(isGuest) return
       // await deletePost(id, author._id, parentId, isComment, pathname);
     } catch (e) {
       console.log(e);
@@ -639,6 +644,7 @@ const CardPost = ({
               </AlertDialog>
             )}
             {repost &&repost?.createdAt && <CardPost
+            isGuest={isGuest}
             isRepost
                    setAction={()=>{}}
                    Team={[]}

@@ -18,10 +18,11 @@ import {
 import { Input } from "../ui/input";
 interface props {
   postId: string;
+  isGuest: boolean;
   currentUserId: string;
   currentUserImg: string;
 }
-const Comment = ({ postId, currentUserId, currentUserImg }: props) => {
+const Comment = ({ postId, currentUserId, currentUserImg ,isGuest}: props) => {
     let pathname= usePathname()
   let form = useForm<z.infer<typeof CommentValidation>>({
     resolver: zodResolver(CommentValidation),
@@ -30,6 +31,7 @@ const Comment = ({ postId, currentUserId, currentUserImg }: props) => {
     },
   });
   async function onSubmit(values: z.infer<typeof CommentValidation>) {
+    if(isGuest)return
     await createCommentToPost({postId:postId,commentText: values.comment,userId:currentUserId,path:pathname})
     form.reset();
   }
@@ -48,13 +50,14 @@ const Comment = ({ postId, currentUserId, currentUserImg }: props) => {
                 <Input
                   placeholder="Add comment...."
                   {...field}
+                  disabled={field.disabled || isGuest}
                   className=" no-focus border-none bg-dark-1 text-white"
                 />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button type="submit" className=" comment-form_btn">
+        <Button type="submit" disabled={isGuest} className=" comment-form_btn">
           reply
         </Button>
       </form>

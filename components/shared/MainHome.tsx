@@ -6,6 +6,7 @@ import LocalStore from "@/components/cards/LocalStore";
 import { PostData } from "@/lib/actions/post.actions";
 import { UserData } from "@/lib/actions/user.actions";
 import Loader from "./Loader";
+import { GuestEmail } from "@/constants/data";
 
 export default function Home({
   FPosts2,
@@ -23,6 +24,7 @@ export default function Home({
   useEffect(() => {
     userInfo && sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
   }, [userInfo]);
+  let isGuest=(userInfo as UserData).email === GuestEmail
   return friends && userInfo && FPosts ? (
     <main>
       <h1 className="hidden">SPORTON Home</h1>
@@ -31,6 +33,7 @@ export default function Home({
         <LocalStore {...userInfo} />
         {FPosts?.map((post,i) => (
           <CardPost
+          isGuest={isGuest}
           repost={post.repost}
             setAction={setAction}
             Team={friends}

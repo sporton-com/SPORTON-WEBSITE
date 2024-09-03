@@ -12,6 +12,7 @@ import React from "react";
 // };
 interface usData {
   id: string | undefined;
+  email: string;
   objectID: string | undefined;
   username: string | null | undefined;
   name: string;
@@ -29,6 +30,7 @@ const Onboarding = async () => {
   if ((userInfo as UserData)?.onboarding) redirect("/");
   let userData: usData = {
     id: user?.id,
+    email:(userInfo as UserData)?.email|| user.emailAddresses[0].emailAddress,
     objectID: (userInfo as UserData)?._id,
     username: user?.username || (userInfo as UserData)?.username,
     name: user?.firstName || (userInfo as UserData)?.name || "",

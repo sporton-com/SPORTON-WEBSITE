@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/shared/Loader";
 import { useQuery } from "@tanstack/react-query";
 import ReloadButton from "@/components/shared/reload";
+import { GuestEmail } from "@/constants/data";
 const Profile = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
 
@@ -53,6 +54,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
     // Handle error, perhaps show a message to the user
     return <ReloadButton/>;
   }
+  let isGuest=(userInfo as UserData).email === GuestEmail
 
   return (
     userInfo &&
@@ -64,6 +66,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
       <section className="">
         <h1 className="hidden">{(userInfo as UserData).name}</h1>
         <ProfileHeader
+        isGuest={isGuest}
           accountId={(userInfo as UserData)._id}
           userId={(userInfo as UserData).id}
           myId={(MyInfo as UserData)?._id}
@@ -118,6 +121,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
                 ) : tab.value === "posts" ? (
                   result && (
                     <PostTab
+                    isGuest={isGuest}
                       userId={(userInfo as UserData)._id}
                       result2={JSON.stringify(result)}
                       currentUserId={(MyInfo as UserData).id}
@@ -130,6 +134,7 @@ const Profile = ({ params }: { params: { id: string } }) => {
                 ) : (
                   result2 && (
                     <PostTab
+                    isGuest={isGuest}
                       userId={(userInfo as UserData)._id}
                       result2={JSON.stringify(result2)}
                       currentUserId={(MyInfo as UserData).id}

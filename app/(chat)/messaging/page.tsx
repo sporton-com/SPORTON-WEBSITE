@@ -32,18 +32,18 @@ const ChatPage = () => {
     router.replace((userInfo as redirectType ).redirect);
     return null; // تأكد من عدم إرجاع أي محتوى أثناء التوجيه
   }
-  if(userError) return <ReloadButton/>;
-  if(userLoading) return <Loader is/>;
-
+  
   let searchParams=useSearchParams();
   let ids=searchParams.get('ids');
   let hasIds=searchParams.has('ids');
   const [size, setSize] = useState<number>()
   const [openChat, setChat] = useState<string>(hasIds?ids!:"");
-useEffect(() => {
+  useEffect(() => {
     setSize(window.innerWidth)
     window.addEventListener('resize',()=>{setSize(window.innerWidth)})
-}, [size])
+  }, [size])
+  if(userError) return <ReloadButton/>;
+  if(userLoading) return <Loader is/>;
   return (
     <div className=" bg-[url(/assets/bg.jpg)] bg-center max-sm:bg-cover bg-[length:100%_100%] bg-no-repeat">
       {/* sm and md */}

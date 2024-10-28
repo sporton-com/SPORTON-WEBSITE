@@ -10,7 +10,7 @@ const CardToster = ({link,content,image,name}:{image:string,name:string,link:str
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden my-4"
+      className="max-w-md mx-auto bg-[#ffffff] shadow-lg rounded-lg overflow-hidden my-4"
     >
       <Link href={link} className="flex items-center p-4 hover:bg-gray-100 transition-colors duration-200">
           <div className="flex-shrink-0">

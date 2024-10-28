@@ -132,12 +132,12 @@ let ResultMap=({result,userInfo,i,setChat,isChat,islg,Ids,navigate,handleAddMemb
                 className=" max-sm:scale-150"
               />
             </div>
-
             <p className=" text-small-semibold text-gray-1">
               @
               {result?.username?.length > 11
                 ? result?.username?.slice(0, 11) + "..."
-                : result?.username}
+                : result?.username
+                }
             </p>
           </div>
         </div>

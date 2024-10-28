@@ -7,6 +7,7 @@ import React from "react";
 const inter = Inter({ subsets: ["latin"] });
 import { Analytics } from "@vercel/analytics/react";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import InfintyProvider from "@/components/providers/InfintyProvider";
 import ReduxProvider from "@/components/providers/ReduxProvider";
 export const metadata: Metadata = {
@@ -48,11 +49,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider >
       <InfintyProvider>
         <ReduxProvider>
           <html lang="en">
-            <body className={inter.className}>
+            <body>
               <div className=" w-full">
                 {children}
                 <ToastContainer />

@@ -7,8 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import Loader from "@/components/shared/Loader";
 import PostCardSkeleton from "@/components/cards/PostCardSkeleton";
 import { PostData } from '@/lib/actions/post.actions';
-import { UserData, fetchUser } from '@/lib/actions/user.actions';
-import { currentUser } from "@clerk/nextjs/server";
+import { UserData, currentUserFun, fetchUser } from '@/lib/actions/user.actions';
 import { setUser } from "@/lib/redux/userSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/redux/store";
@@ -49,7 +48,7 @@ export default function HOME() {
     data: user,
   } = useQuery({
     queryKey: ["user"],
-    queryFn: () => currentUser(),
+    queryFn: () => currentUserFun(),
   });
   
   // Fetch posts using useInfiniteQuery

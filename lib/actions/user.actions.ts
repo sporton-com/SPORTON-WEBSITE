@@ -91,6 +91,10 @@ export async function updateUser({
     console.log(`failed to update user: ${error.message}`);
   }
 }
+
+export async function currentUserFun() {
+  return await currentUser();
+}
 export async function fetchUser(userId?: string | undefined) {
   try {
      await connectDB();

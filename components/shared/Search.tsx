@@ -18,10 +18,11 @@ const useFetchUsers = (searchString: string) => {
         pageSize: 15,
       }),
     getNextPageParam: (lastPage) => {
-      console.log(lastPage); // Debugging statement
+      console.log(lastPage);
       return lastPage.isNext ? lastPage.pageNum + 1 : undefined;
     },
-    initialPageParam: 1, // Start from the first page
+    initialPageParam: 1, 
+    staleTime: 0,
   });
 };
 const Search = () => {
@@ -39,7 +40,7 @@ const Search = () => {
   } = useFetchUsers(searchString);
 
   useEffect(() => {
-    refetch(); // Fetch data when searchString changes
+    refetch();
   }, [searchString, refetch]);
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const Search = () => {
   const handelOnChange = async (e: string) => {
     setSearchString(e);
     setShow(e === '');
-    setShowC(e === '');
+    // setShowC(e === '');
   };
 
   return (

@@ -5,12 +5,13 @@ import BottomSidebar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import { ToastContainer } from "react-toastify";
-import { fetchUser } from "@/lib/actions/user.actions";
+import { UserData, fetchUser } from "@/lib/actions/user.actions";
 import { useQuery } from "@tanstack/react-query";
 import ReloadButton from "@/components/shared/reload";
 import Loader from "@/components/shared/Loader";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
 interface redirectType {
   redirect: string;
 }
@@ -50,7 +51,7 @@ export default function RootLayout({
             {children}
             </div>
         </section>
-        { size&&size>=1280&&userInfo &&  <RightSidebar  userInfo={userInfo}  />}
+        { size&&size>=1280&&userInfo &&  <RightSidebar  userInfo={(userInfo as UserData)}  />}
      <ToastContainer />
       </main>
       { size&&size<1280&&userInfo && <BottomSidebar userInfo={userInfo} />}

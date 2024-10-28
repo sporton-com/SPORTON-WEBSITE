@@ -124,10 +124,9 @@ const AccountProfile = ({ userData }: props) => {
       const blob = values.profile_photo;
       const hasImage = isBase64Image(blob);
       if (hasImage) {
-        const imageRes = await startUpload(files);
-        if (imageRes && imageRes[0].fileUrl) {
-          values.profile_photo = imageRes[0].fileUrl;
-        }
+    const ImageFileName = `img_${userData.id}_${Date.now()}.jpeg`; 
+      await uploadToS3(files[0] , ImageFileName,`profiles`);
+      values.profile_photo = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/profiles/${ImageFileName}`; 
       }
       await updateUser({
         email:userData.email,
@@ -460,6 +459,7 @@ export default AccountProfile;
 import cloudinaryUpload from '../../lib/cloudinaryUpload';
 import CloudinaryUpload from "../../lib/cloudinaryUpload";
 import { GuestEmail } from "@/constants/data";
+import { uploadToS3 } from "@/lib/aws";
 
 // interface props {
 //   userData: {

@@ -43,7 +43,6 @@
     "axios": "^1.7.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "crypto": "^1.0.1",
     "date-fns": "^3.6.0",
     "emoji-mart": "^5.6.0",
     "framer-motion": "^11.3.21",

@@ -1,7 +1,18 @@
 /**
- * @type {import('next').NextConfig} 
- */
+* @type {import('next').NextConfig} 
+*/
+//next.config.js
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/(.*)',
+        has: [{ type: 'host', value: 'sporton.website' }],
+        destination: 'https://sporton.website/:path*',
+        permanent: true,
+      },
+    ];
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

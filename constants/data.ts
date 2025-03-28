@@ -1,1 +1,0 @@
-export const GuestEmail="guest@sporton.website"
